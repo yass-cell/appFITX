@@ -19,10 +19,15 @@ DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
   if(!e.m)return;
   const id=slug(e.name);
   if(!EX[id]) EX[id]={name:e.name,grp:G[e.m]||'Otros'};
-  if(e.base||b.t==='Fuerza') BASIC.add(id);
+  if(e.base||b.t.indexOf('Fuerza')===0) BASIC.add(id);
 })));
 BASIC.forEach(id=>{ if(EX[id]) EX[id].grp='Básicos'; });
+/* marcas antiguas de rutinas anteriores: se conservan en el grupo Archivo */
+Object.keys(DB().prs||{}).forEach(id=>{
+  if(!EX[id])EX[id]={name:id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase()),grp:'Archivo'};
+});
 const GROUPS=['Básicos','Pecho','Espalda','Hombro','Brazo','Pierna','Core y skills'];
+if(Object.values(EX).some(e=>e.grp==='Archivo'))GROUPS.push('Archivo');
 
 /* ================= métricas ================= */
 const epley=(kg,r)=>kg*(1+r/30);
@@ -54,7 +59,7 @@ function rail(){
     const b=document.createElement('button');
     b.className='wk'+(w===week?' on':'');b.textContent=w;
     if(w===4)b.dataset.phase='deload';
-    b.onclick=()=>{week=w;rail();sesh()};
+    b.onclick=()=>{week=w;rail();sesh();volume()};
     el.appendChild(b);
   }
   document.getElementById('phase').textContent=PH[week].toUpperCase()+'  ·  BÁSICOS A '+SR[week];
@@ -73,15 +78,23 @@ function dayTabs(){
 function sesh(){
   readBases();
   const d=DAYS.find(x=>x.id===day),host=document.getElementById('sesh');
+  let total=0;d.blocks.forEach(b=>total+=b.ex.length);
+  const dnote=week===4?' · descarga: accesorios −40%':week===8?' · test: accesorios −30%':'';
   let h=`<div class="seshhead"><h3>${d.s}</h3><span class="tag${d.wet?' wet':''}">${d.tag}</span></div>
-    <p class="seshnote">${d.note}</p>`;
+    <p class="seshnote">${d.note}</p>
+    <p class="count">${total} ejercicios · ${d.blocks.length} bloques${dnote}</p>`;
   d.blocks.forEach((blk,bi)=>{
     h+=`<div class="blk" data-tone="${blk.tone||''}"><div class="blkhead"><h4>${blk.t}</h4><span class="rule"></span></div>`;
     blk.ex.forEach((e,ei)=>{
+      const ph=e.dyn==='dragon'?DRAGON[dragonPhase(week)]:null;
+      const dispName=ph?ph.name:e.name;
+      const dispSets=e.base&&!e.pct?SR[week]:(ph?ph.sets:e.sets);
+      const dispCue=ph?ph.cue:e.cue;
+      const dispWhy=ph?ph.why:e.why;
       const id=e.m?slug(e.name):null;
       let loadHtml='';
       if(e.base){
-        const kg=e.round(bases[e.base]*F[week]*(e.mult||1));
+        const kg=e.round(bases[e.base]*(e.pct||F[week]*(e.mult||1)));
         loadHtml=`<div class="load"><span class="kg">${kg%1?kg.toFixed(2).replace(/0$/,''):kg}</span>
           <span class="u">${e.base==='bp'?'kg barra':'kg lastre'}</span></div>`;
       }
@@ -89,11 +102,12 @@ function sesh(){
       const prBtn=id?`<button class="prbtn${best?' has':''}" data-pr="${bi}-${ei}">
           ${best?`<b>${best.kg>0?best.kg+'×'+best.r:best.r}</b>marca`:`<b>+</b>marca`}</button>`:'';
       h+=`<div class="ex"><div class="exrow">
-        <div class="dia">${DIA[e.d]}</div>
+        <div class="dia">${DIA[e.d]}<small>${e.move||''}</small></div>
         <div class="exbody">
-          <p class="exname">${e.name}</p>
-          <p class="exmeta">${e.base?SR[week]:e.sets}</p>${loadHtml}
-          <p class="cue">${e.cue}</p>
+          <p class="exname">${dispName}</p>
+          <p class="exmeta">${dispSets}</p>${loadHtml}
+          <p class="cue">${dispCue}</p>
+          ${dispWhy?`<p class="why">↳ ${dispWhy}</p>`:''}
         </div>${prBtn}</div>
         ${id?`<div class="prform" id="prf-${bi}-${ei}">
           <div class="r">
@@ -129,6 +143,28 @@ function sesh(){
     const d=DB(); d.bases=d.bases||{}; d.bases[k]=el.value; put(d); sesh();
   });
 });
+
+/* ================= series por semana ================= */
+const nsets=s=>{const m=String(s).match(/^\s*(\d+)\s*[×x]/);return m?parseInt(m[1]):0};
+function volume(){
+  const tot={};
+  DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
+    if(!e.m)return;
+    let s=e.base&&!e.pct?nsets(SR[week]):nsets(e.sets);
+    if(week===4&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.6));
+    if(week===8&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.7));
+    tot[e.m]=(tot[e.m]||0)+s;
+  })));
+  const order=['dl','dpo','da','pec','esp','bi','tri','pie','ham','cal','core'];
+  const max=Math.max(...order.map(k=>tot[k]||0))||1;
+  document.getElementById('volwk').textContent='Semana '+week;
+  document.getElementById('vrows').innerHTML=order.map(k=>{
+    const v=tot[k]||0,key=(k==='dl'||k==='dpo');
+    return `<div class="vrow${key?' key':''}"><span class="vname">${MUS[k]}</span>
+      <span class="vbar"><i style="width:${Math.round(v/max*100)}%"></i></span>
+      <span class="vnum">${v}</span></div>`;
+  }).join('');
+}
 
 /* ================= progreso ================= */
 const COLORS=['#FF6B35','#2FC2D6','#7B5CFF','#C9A227','#5FD68B','#E5484D','#EEF4F3'];
@@ -263,7 +299,7 @@ document.getElementById('file').addEventListener('change',ev=>{
 (function(){
   const d=DB();
   if(d.bases)['bp','pu','dp','bw'].forEach(k=>{if(d.bases[k])document.getElementById(k).value=d.bases[k];});
-  rail();dayTabs();sesh();buildGroups();buildExList();drawChart();
+  rail();dayTabs();sesh();volume();buildGroups();buildExList();drawChart();
 })();
 
 /* ================= PWA: instalación ================= */

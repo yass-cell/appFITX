@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>V-Shape Strength · Heavy + Pump · v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--base:#0A1015;--panel:#121C24;--panel2:#0E171E;--line:#22333F;
+ --heat:#FF6B35;--water:#2FC2D6;--pump:#C9A227;--wide:#7B5CFF;--chalk:#EEF4F3;--dim:#7B94A2;--ok:#5FD68B}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--base);color:var(--chalk);font-family:"Space Grotesk",system-ui,sans-serif;
+ font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:60px}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+header{padding:26px 0 18px;border-bottom:1px solid var(--line)}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--wide);margin:0 0 10px}
+h1{font-family:"Anton",sans-serif;font-weight:400;font-size:clamp(38px,12vw,62px);line-height:.86;margin:0;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--wide)}
+.leadin{color:var(--dim);font-size:14px;margin:14px 0 0;max-width:46ch}
+.setup{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:16px 14px;margin:20px 0 8px}
+.setup h2{font-family:"Anton",sans-serif;font-weight:400;font-size:19px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 3px}
+.setup p{font-size:13px;color:var(--dim);margin:0 0 14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field label{display:block;font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:0 0 5px}
+.field input{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--chalk);font-family:"JetBrains Mono",monospace;font-size:17px;font-weight:700;padding:9px 10px;border-radius:2px;outline:none}
+.field input:focus{border-color:var(--heat)}
+
+/* volumen semanal — el panel del ancho */
+.vol{margin:22px 0 4px;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.vol .vh{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+.vol .vh h2{font-family:"Anton",sans-serif;font-weight:400;font-size:16px;letter-spacing:.05em;text-transform:uppercase;margin:0}
+.vol .vh span{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim)}
+.vrows{padding:12px 14px 14px}
+.vrow{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.vrow:last-child{margin-bottom:0}
+.vname{flex:0 0 108px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.05em;color:var(--dim);text-transform:uppercase}
+.vbar{flex:1;height:9px;background:var(--panel2);border-radius:1px;overflow:hidden}
+.vbar i{display:block;height:100%;background:var(--dim);transition:width .3s ease}
+.vrow.key .vname{color:var(--chalk)}
+.vrow.key .vbar i{background:var(--wide)}
+.vnum{flex:0 0 30px;text-align:right;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700}
+.vrow.key .vnum{color:var(--wide)}
+.vfoot{font-size:12px;color:var(--dim);padding:0 14px 14px;margin:0}
+
+.railwrap{position:sticky;top:0;z-index:20;background:var(--base);padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.raillabel{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 8px}
+.raillabel span{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
+.rail{display:flex;gap:5px}
+.wk{flex:1;background:transparent;border:1px solid var(--line);color:var(--dim);font-family:"Anton",sans-serif;font-size:15px;padding:8px 0 6px;border-radius:2px;cursor:pointer;transition:.14s}
+.wk:hover{border-color:var(--dim)}
+.wk[data-phase="deload"]{border-style:dashed}
+.wk.on{background:var(--heat);border-color:var(--heat);color:#0A1015}
+.phase{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--heat);margin:9px 0 0;letter-spacing:.05em}
+.days{display:flex;gap:6px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none;-ms-overflow-style:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:9px 12px 8px;cursor:pointer;transition:.14s;min-width:80px;text-align:left;position:relative}
+.day b{display:block;font-family:"Anton",sans-serif;font-weight:400;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--chalk)}
+.day s{display:block;text-decoration:none;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.08em;color:var(--dim);margin-top:2px}
+.day.on{border-color:var(--heat);background:#1A1712}
+.day.on s{color:var(--heat)}
+.day.wet.on{border-color:var(--water);background:#0F1D22}
+.day.wet.on s{color:var(--water)}
+.day.delt::after{content:"";position:absolute;top:6px;right:6px;width:5px;height:5px;border-radius:50%;background:var(--wide)}
+.sesh{padding:18px 0 0;animation:in .22s ease}
+@keyframes in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.seshhead{display:flex;align-items:baseline;gap:10px;margin:0 0 4px;flex-wrap:wrap}
+.seshhead h3{font-family:"Anton",sans-serif;font-weight:400;font-size:25px;margin:0;text-transform:uppercase}
+.tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px 2px;border-radius:2px;background:#2A1A12;color:var(--heat);white-space:nowrap}
+.tag.wet{background:#0F2429;color:var(--water)}
+.seshnote{font-size:13px;color:var(--dim);margin:0 0 10px}
+.count{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin:0 0 14px}
+.blk{margin:20px 0 0}
+.blkhead{display:flex;align-items:center;gap:9px;margin:0 0 2px}
+.blkhead h4{font-family:"Anton",sans-serif;font-weight:400;font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:var(--heat)}
+.blkhead .rule{flex:1;height:1px;background:var(--line)}
+.blkhead .n{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--dim);letter-spacing:.1em}
+.blk[data-tone="pump"] .blkhead h4{color:var(--pump)}
+.blk[data-tone="wide"] .blkhead h4{color:var(--wide)}
+.blk[data-tone="wet"] .blkhead h4{color:var(--water)}
+.blk[data-tone="calm"] .blkhead h4{color:var(--dim)}
+.ex{border-top:1px solid var(--line);padding:14px 0 13px;display:flex;gap:12px}
+.blk .ex:last-child{border-bottom:1px solid var(--line)}
+.dia{flex:0 0 66px;height:62px;position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:2px;display:grid;place-items:center}
+.dia svg{width:58px;height:52px}.dia small{position:absolute;right:3px;bottom:2px;font-family:"JetBrains Mono",monospace;font-size:6.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--heat)}
+.exbody{flex:1;min-width:0}
+.exname{font-weight:700;font-size:14.5px;margin:0 0 3px;line-height:1.25}
+.exmeta{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.03em;margin:0}
+.load{display:flex;align-items:baseline;gap:6px;margin-top:6px}
+.load .kg{font-family:"Anton",sans-serif;font-size:26px;line-height:1;color:var(--heat)}
+.load .u{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.load .rpe{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--dim)}
+.cue{font-size:12.5px;color:var(--dim);margin:6px 0 0;padding-left:9px;border-left:2px solid var(--line)}.why{font-size:11px;color:#607987;margin:5px 0 0}
+.log{margin-top:8px;display:flex;gap:6px;align-items:center}
+.log input{width:62px;background:var(--panel2);border:1px solid var(--line);color:var(--chalk);font-family:"JetBrains Mono",monospace;font-size:13px;padding:6px 8px;border-radius:2px;outline:none}
+.log input:focus{border-color:var(--heat)}
+.log span{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.saved{color:var(--ok)!important}
+.notes{margin:28px 0 0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.notes h4{font-family:"Anton",sans-serif;font-weight:400;font-size:15px;letter-spacing:.05em;text-transform:uppercase;margin:0;padding:12px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+.notes ul{margin:0;padding:13px 14px 15px 30px;font-size:13.5px;color:var(--dim)}
+.notes li{margin-bottom:9px}.notes li:last-child{margin-bottom:0}
+.notes b{color:var(--chalk);font-weight:700}
+.foot{font-size:11.5px;color:#4A606D;margin:22px 0 0;line-height:1.6}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">V2 · Enjoy! Silos · fuerza + V-shape + core</p>
+  <h1>V-Shape<br><em>Heavy + Pump</em></h1>
+  <p class="leadin">Dos exposiciones semanales reales para pecho y espalda: una pesada y otra de bombeo/tensión. Dominadas y fondos como métricas, press inclinado con mancuernas como básico de pecho, remos que disfrutas, hombro ancho y core progresivo hacia dragon flag. Día 4: reset de movilidad + skills.</p>
+</header>
+
+<section class="setup">
+  <h2>Tus marcas de partida</h2>
+  <p>Registra tus 5RM limpios de dominada y fondo. El resto progresa por doble progresión: primero repeticiones, luego peso.</p>
+  <div class="fields">
+    <div class="field"><label for="bp">Press hombro máquina · referencia</label><input id="bp" type="number" inputmode="decimal" value="30" min="0" step="2.5"></div>
+    <div class="field"><label for="pu">Dominada · lastre 5RM</label><input id="pu" type="number" inputmode="decimal" value="10" min="0" step="1"></div>
+    <div class="field"><label for="dp">Fondos · lastre 5RM</label><input id="dp" type="number" inputmode="decimal" value="15" min="0" step="1"></div>
+    <div class="field"><label for="bw">Peso corporal</label><input id="bw" type="number" inputmode="decimal" value="75" min="0" step="0.5"></div>
+  </div>
+</section>
+
+
+<section class="setup" style="margin-top:10px">
+  <h2>Frecuencia que manda</h2>
+  <p style="margin-bottom:10px">La semana ya no mezcla estímulos: cada gran grupo tiene un propósito claro.</p>
+  <div class="fields">
+    <div class="field"><label>Pecho</label><input value="D1 HEAVY · D5 PUMP" readonly></div>
+    <div class="field"><label>Espalda</label><input value="D2 HEAVY · D6 PUMP" readonly></div>
+    <div class="field"><label>Hombro</label><input value="D3 + laterales D5 + rear D6" readonly></div>
+    <div class="field"><label>Core</label><input value="D1/D2/D3 + Dragon D7" readonly></div>
+  </div>
+</section>
+
+<section class="vol">
+  <div class="vh"><h2>Series por semana</h2><span id="volwk"></span></div>
+  <div class="vrows" id="vrows"></div>
+  <p class="vfoot">Lateral y posterior son los dos que dan ancho. Van marcados porque son los que tienes que vigilar: si dejan de crecer o el hombro se resiente, se ajustan estos primero.</p>
+</section>
+
+<div class="railwrap">
+  <div class="raillabel"><span>Semana</span><span id="phaseTiny"></span></div>
+  <div class="rail" id="rail"></div>
+  <p class="phase" id="phase"></p>
+</div>
+
+<div class="days" id="days"></div>
+<div id="sesh"></div>
+
+<div class="notes">
+  <h4>Reglas de esta versión · Heavy + Pump</h4>
+  <ul>
+    <li><b>Pecho 2× y espalda 2×, sin discusión.</b> D1/D2 construyen fuerza y tensión mecánica; D5/D6 repiten los patrones con más repeticiones, estiramiento, aducción y bombeo.</li>
+    <li><b>Press inclinado con mancuernas 2×.</b> Uno más pesado y otro en 10–12 repeticiones. Es uno de tus movimientos centrales para upper chest.</li>
+    <li><b>Dos remos que te gustan.</b> Remo máquina convergente/pendular para progresar estable y remo a una mano con mancuerna para recorrido largo y trabajo unilateral.</li>
+    <li><b>Dominada/fondo tienen segunda exposición.</b> Pesados una vez; en pump aparecen a peso corporal o ligeros, lejos del fallo, para práctica + volumen sin freír articulaciones.</li>
+    <li><b>Día 4 = reset, no otra paliza.</b> L-sit, handstand asistido, control escapular y movilidad a RPE ~5–6; piscina y sauna/turco opcionales.</li>
+    <li><b>Core con dirección.</b> RKC plank → hanging raise → ab wheel → dragon negatives → one-leg → dragon flag. Mountain climbers = conditioning, no sustituto de fuerza.</li>
+    <li><b>Semana 4: descarga.</b> Baja accesorios ~40% y mantén las skills técnicas. Semana 8: test 3–5RM limpio, sin grinders.</li>
+  </ul>
+</div>
+
+<p class="foot">Las cargas sugeridas de dominadas/fondos parten del 5RM externo que escribas y son orientativas: el peso corporal también forma parte de la carga real. Prioriza siempre RIR y técnica. El gráfico cuenta el músculo principal y no pretende modelar toda la fatiga indirecta.</p>
+
+</div>
+
+<script>
+const S=(p)=>`<svg viewBox="0 0 40 40" fill="none" stroke="#EEF4F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const A='#FF6B35',W='#2FC2D6',V='#7B5CFF';
+const DIA={
+ pull:S(`<line x1="5" y1="6" x2="35" y2="6"/><circle cx="20" cy="15" r="3"/><path d="M20 18 V29 M20 21 L11 7 M20 21 L29 7 M20 29 L14 38 M20 29 L26 38"/><circle cx="20" cy="33" r="2.5" fill="${A}" stroke="${A}"/><path d="M34 31 V16 M31 19 L34 16 L37 19" stroke="${A}"/><path d="M15 20 Q20 25 25 20" stroke="${V}" stroke-width="2.5"/>`),
+ dip:S(`<path d="M4 12 H14 M26 12 H36 M7 12 V35 M33 12 V35"/><circle cx="20" cy="17" r="3"/><path d="M20 20 V30 M20 22 L13 25 M20 22 L27 25 M13 25 V15 M27 25 V15 M20 30 L15 38 M20 30 L25 38"/><circle cx="20" cy="34" r="2.5" fill="${A}" stroke="${A}"/><path d="M36 14 V29 M33 26 L36 29 L39 26" stroke="${A}"/>`),
+ incl:S(`<path d="M4 34 L33 17 M4 34 H37"/><circle cx="17" cy="24" r="3"/><path d="M20 25 L28 30 M15 27 L10 32 M15 21 L7 15 M20 20 L31 13"/><circle cx="6" cy="14" r="2.5" fill="${A}" stroke="${A}"/><circle cx="32" cy="12" r="2.5" fill="${A}" stroke="${A}"/><path d="M35 31 V16 M32 19 L35 16 L38 19" stroke="${A}"/><path d="M15 22 Q20 18 25 21" stroke="${V}" stroke-width="2.5"/>`),
+ fly:S(`<path d="M4 34 L33 17 M4 34 H37"/><circle cx="17" cy="24" r="3"/><path d="M20 25 L28 30 M15 27 L10 32 M16 20 L6 14 M19 20 L34 15"/><circle cx="5" cy="13" r="2.5" fill="${A}" stroke="${A}"/><circle cx="35" cy="14" r="2.5" fill="${A}" stroke="${A}"/><path d="M6 10 Q20 2 34 10" stroke="${A}" stroke-dasharray="2 2"/><path d="M15 22 Q20 18 25 21" stroke="${V}" stroke-width="2.5"/>`),
+ cable:S(`<path d="M4 5 V37 M36 5 V37"/><circle cx="4" cy="10" r="2" fill="${A}"/><circle cx="36" cy="10" r="2" fill="${A}"/><circle cx="20" cy="13" r="3"/><path d="M20 16 V29 M20 18 L11 23 M20 18 L29 23 M11 23 L4 10 M29 23 L36 10 M20 29 L15 38 M20 29 L25 38"/><path d="M11 23 Q20 31 29 23" stroke="${A}" stroke-dasharray="2 2"/><path d="M15 18 H25" stroke="${V}" stroke-width="2.5"/>`),
+ row:S(`<path d="M5 35 H35 M9 35 V22 H15"/><path d="M31 7 L35 35 M31 7 L38 6"/><circle cx="38" cy="6" r="2.5" fill="${A}"/><circle cx="17" cy="18" r="3"/><path d="M17 21 L14 29 M17 21 L25 23 M25 23 L31 18 M14 29 L10 36 M14 29 L20 35"/><path d="M31 18 L25 23" stroke="${A}" stroke-width="2.5"/><path d="M16 21 L20 17" stroke="${V}" stroke-width="2.5"/>`),
+ rowdb:S(`<path d="M4 35 H36 M8 35 V26 H21"/><circle cx="20" cy="15" r="3"/><path d="M20 18 L27 24 M27 24 L24 34 M27 24 L34 20 M20 19 L12 27 M12 27 L8 34"/><circle cx="36" cy="20" r="3" fill="${A}" stroke="${A}"/><path d="M34 20 Q29 14 25 19" stroke="${A}" stroke-dasharray="2 2"/><path d="M21 19 L27 24" stroke="${V}" stroke-width="2.6"/><path d="M37 31 V20 M34 23 L37 20 L40 23" stroke="${A}"/>`),
+ straight:S(`<path d="M5 5 H35 M8 5 V38 M32 5 V38"/><circle cx="20" cy="17" r="3"/><path d="M20 20 V31 M20 22 L12 17 M20 22 L28 17 M20 31 L15 38 M20 31 L25 38"/><path d="M12 17 L8 8 M28 17 L32 8" stroke="${A}"/><path d="M11 16 Q20 29 29 16" stroke="${A}" stroke-dasharray="2 2"/><path d="M15 21 Q20 25 25 21" stroke="${V}" stroke-width="2.6"/>`),
+ lsit:S(`<path d="M5 11 H35 M8 11 V34 M32 11 V34"/><circle cx="20" cy="18" r="3"/><path d="M20 21 V28 M20 23 L13 14 M20 23 L27 14 M20 28 L34 28"/><path d="M21 27 H34" stroke="${V}" stroke-width="2.7"/><path d="M34 34 V27 M31 30 L34 27 L37 30" stroke="${A}"/>`),
+ handstand:S(`<path d="M35 4 V38" stroke="${W}"/><circle cx="28" cy="30" r="3"/><path d="M28 27 V16 M28 23 L22 31 M28 23 L34 31 M28 16 L24 7 M28 16 L32 7"/><path d="M22 18 H34" stroke="${V}" stroke-width="2.5"/><path d="M10 30 V15 M7 18 L10 15 L13 18" stroke="${A}"/>`),
+ scap:S(`<path d="M5 5 H35"/><circle cx="20" cy="14" r="3"/><path d="M20 17 V29 M20 19 L13 5 M20 19 L27 5 M20 29 L15 38 M20 29 L25 38"/><path d="M14 18 Q20 23 26 18" stroke="${V}" stroke-width="2.7"/><path d="M35 25 V15 M32 18 L35 15 L38 18" stroke="${A}"/>`),
+ lat:S(`<path d="M5 5 H35 M8 5 V38 M32 5 V38 M14 8 H26"/><circle cx="20" cy="18" r="3"/><path d="M20 21 V31 M20 23 L14 13 M20 23 L26 13 M20 31 L15 38 M20 31 L25 38"/><path d="M36 11 V25 M33 22 L36 25 L39 22" stroke="${A}"/><path d="M15 23 Q20 28 25 23" stroke="${V}" stroke-width="2.5"/>`),
+ press:S(`<path d="M5 36 H35 M10 36 V23 H16 M31 36 V9 L38 6"/><circle cx="38" cy="6" r="2.5" fill="${A}"/><circle cx="19" cy="18" r="3"/><path d="M19 21 V31 M19 23 L27 18 M19 23 L12 19 M19 31 L15 37 M19 31 L23 37 M27 18 L31 14"/><path d="M36 29 V13 M33 16 L36 13 L39 16" stroke="${A}"/><path d="M15 20 H23" stroke="${V}" stroke-width="2.5"/>`),
+ lateral:S(`<circle cx="20" cy="10" r="3"/><path d="M20 13 V28 M20 17 L8 21 M20 17 L32 21 M20 28 L15 38 M20 28 L25 38"/><circle cx="6" cy="21" r="2.5" fill="${A}"/><circle cx="34" cy="21" r="2.5" fill="${A}"/><path d="M9 18 L6 15 M31 18 L34 15" stroke="${A}"/><path d="M14 15 L11 21 M26 15 L29 21" stroke="${V}" stroke-width="2.5"/>`),
+ rear:S(`<path d="M5 36 H35 M9 36 L18 20"/><circle cx="18" cy="16" r="3"/><path d="M18 19 L24 27 M18 20 L12 27 M24 27 L34 25 M12 27 L4 25"/><circle cx="3" cy="25" r="2.5" fill="${A}"/><circle cx="36" cy="25" r="2.5" fill="${A}"/><path d="M15 20 L12 25 M21 20 L24 25" stroke="${V}" stroke-width="2.5"/>`),
+ curl:S(`<circle cx="20" cy="10" r="3"/><path d="M20 13 V28 M20 17 L13 23 M20 17 L27 23 M20 28 L15 38 M20 28 L25 38 M13 23 L10 30"/><circle cx="9" cy="31" r="2.5" fill="${A}"/><path d="M11 24 Q7 18 11 14" stroke="${A}" stroke-dasharray="2 2"/><path d="M14 18 L12 24" stroke="${V}" stroke-width="2.5"/>`),
+ tri:S(`<circle cx="19" cy="10" r="3"/><path d="M19 13 V28 M19 17 L27 22 M27 22 L31 14 M19 17 L12 23 M19 28 L14 38 M19 28 L24 38"/><circle cx="32" cy="13" r="2.5" fill="${A}"/><path d="M36 14 V28 M33 25 L36 28 L39 25" stroke="${A}"/><path d="M25 19 L28 23" stroke="${V}" stroke-width="2.5"/>`),
+ core:S(`<path d="M4 35 H37"/><circle cx="10" cy="22" r="3"/><path d="M13 23 L27 26 L36 31 M16 24 L11 32 M27 26 L23 34"/><path d="M15 21 L28 24" stroke="${V}" stroke-width="3"/><path d="M21 17 V30" stroke="${A}" stroke-dasharray="2 2"/>`),
+ hang:S(`<path d="M5 5 H35"/><circle cx="20" cy="14" r="3"/><path d="M20 17 V28 M20 19 L14 5 M20 19 L26 5 M20 28 L12 31 M20 28 L28 31"/><path d="M12 31 H28" stroke="${A}" stroke-width="2.5"/><path d="M36 36 V23 M33 26 L36 23 L39 26" stroke="${A}"/>`),
+ abwheel:S(`<path d="M3 36 H38"/><circle cx="10" cy="22" r="3"/><path d="M13 23 L24 27 L33 32 M16 24 L11 32 M24 27 L20 34"/><circle cx="36" cy="34" r="3.5" stroke="${A}" stroke-width="2.5"/><path d="M26 20 L35 24" stroke="${A}"/><path d="M18 24 L25 27" stroke="${V}" stroke-width="2.5"/>`),
+ dragon:S(`<path d="M5 7 H35 M9 7 V17"/><circle cx="11" cy="20" r="3"/><path d="M14 20 L25 16 L36 11 M14 22 L10 15 M20 18 L23 27"/><path d="M18 18 L29 14" stroke="${V}" stroke-width="3"/><path d="M37 31 V15 M34 18 L37 15 L40 18" stroke="${A}"/>`),
+ legpress:S(`<path d="M4 36 H35 M8 36 V23 H16 M31 36 V8 L38 6"/><circle cx="38" cy="6" r="2.5" fill="${A}"/><circle cx="17" cy="18" r="3"/><path d="M17 21 L24 24 M24 24 L31 18 M17 22 L12 31"/><path d="M23 23 L29 19" stroke="${V}" stroke-width="2.5"/><path d="M36 30 L39 20" stroke="${A}" stroke-width="2.5"/>`),
+ legext:S(`<path d="M4 36 H35 M8 36 V22 H19"/><circle cx="17" cy="17" r="3"/><path d="M17 20 V29 M17 22 L11 25 M17 29 L27 30 M27 30 L35 23"/><circle cx="36" cy="22" r="2.5" fill="${A}"/><path d="M36 34 V22" stroke="${A}"/><path d="M22 29 L27 30" stroke="${V}" stroke-width="2.5"/>`),
+ legcurl:S(`<path d="M4 36 H37 M8 36 V23 H28"/><circle cx="15" cy="20" r="3"/><path d="M18 21 L28 24 M28 24 L36 31 M36 31 L39 26"/><circle cx="39" cy="25" r="2.5" fill="${A}"/><path d="M31 25 L36 30" stroke="${V}" stroke-width="2.5"/>`),
+ leg:S(`<circle cx="20" cy="9" r="3"/><path d="M20 12 V24 M20 17 L10 21 M20 17 L30 21 M20 24 L14 31 L14 38 M20 24 L31 28 L38 28"/><path d="M17 24 L14 31" stroke="${V}" stroke-width="2.5"/><path d="M6 13 V27 M3 24 L6 27 L9 24" stroke="${A}"/>`),
+ jump:S(`<circle cx="15" cy="12" r="3"/><path d="M15 15 L20 25 M18 19 L10 23 M18 19 L27 15 M20 25 L14 33 M20 25 L29 32"/><path d="M3 38 H38 M30 38 V27 H38"/><path d="M34 24 V12 M31 15 L34 12 L37 15" stroke="${A}"/>`),
+ mountain:S(`<path d="M3 36 H38"/><circle cx="9" cy="22" r="3"/><path d="M12 23 L26 26 M15 24 L10 32 M26 26 L36 33 M24 26 L19 34"/><path d="M19 34 L27 29" stroke="${A}" stroke-width="2.5"/><path d="M35 18 L28 25" stroke="${A}"/><path d="M16 23 L25 25" stroke="${V}" stroke-width="2.5"/>`),
+ carry:S(`<circle cx="20" cy="9" r="3"/><path d="M20 12 V27 M20 16 L12 22 M20 16 L28 22 M20 27 L15 38 M20 27 L25 38"/><rect x="6" y="23" width="6" height="8" stroke="${A}"/><rect x="28" y="23" width="6" height="8" stroke="${A}"/><path d="M18 15 V28" stroke="${V}" stroke-width="2.5"/>`),
+ swim:S(`<path d="M2 27 Q7 22 12 27 T22 27 T32 27 T40 27" stroke="${W}"/><path d="M2 34 Q7 29 12 34 T22 34 T32 34 T40 34" stroke="${W}"/><circle cx="19" cy="14" r="3"/><path d="M16 17 L11 22 M22 17 L29 19"/>`),
+ heat:S(`<path d="M20 36 C11 30 13 21 20 6 C27 21 29 30 20 36Z" stroke="${W}"/><path d="M20 31 C16 27 17 22 20 16" stroke="${A}"/>`),
+ mobility:S(`<circle cx="20" cy="10" r="3"/><path d="M20 13 V27 M20 17 L8 12 M20 17 L32 12 M20 27 L13 38 M20 27 L28 38"/><path d="M7 8 Q20 1 33 8" stroke="${W}" stroke-dasharray="2 2"/>`)
+}
+const MUS={dl:'Delt. lateral',dpo:'Delt. posterior',da:'Delt. anterior',pec:'Pecho',esp:'Espalda',bi:'Bíceps',tri:'Tríceps',tra:'Trapecio',pie:'Cuádriceps',ham:'Isquios',core:'Core',ant:'Agarre'};
+const PH={1:'Base técnica',2:'Acumular reps',3:'Subir carga',4:'Descarga',5:'Intensificación',6:'Intensificación',7:'Pesado limpio',8:'Test 3–5RM'};
+const F={1:.88,2:.92,3:.96,4:.78,5:.96,6:1.00,7:1.03,8:1.05};
+const SR={1:'4 × 5',2:'4 × 6',3:'5 × 4',4:'2 × 5',5:'5 × 3-5',6:'5 × 4',7:'4 × 3',8:'Test 3-5RM'};
+const r125=v=>Math.round(v/1.25)*1.25,r1=v=>Math.round(v);
+
+const DAYS=[
+{id:'d1',n:'Día 1',s:'Pecho HEAVY + tríceps + core',tag:'Carga / tensión',short:'Pecho H',delt:false,
+ note:'Primer estímulo de pecho: pocas variantes, cargas altas, descansos largos. Fondos + press inclinado mandan; el fly inclinado completa el rango largo.',
+ blocks:[
+  {t:'Fuerza',ex:[
+   {base:'dp',round:r1,d:'dip',move:'sube ↑',name:'Fondos lastrados',m:'pec',cue:'4–6 reps limpias, 3–4 min. Mismo rango cada semana; nunca rebotes en el fondo.',why:'KPI de empuje y fuerza relativa.'}]},
+  {t:'Upper chest · tensión',tone:'wide',ex:[
+   {d:'incl',move:'empuja ↗',name:'Press inclinado con mancuernas · 25–35°',sets:'3 × 6-8',m:'pec',cue:'RIR 1–2. Baja profundo con control y empuja sin juntar violentamente las mancuernas.',why:'Uno de tus básicos principales; upper chest + mucha tensión mecánica.'},
+   {d:'fly',move:'abre / cierra',name:'Fly inclinado con mancuernas',sets:'2 × 10-12',m:'pec',cue:'Codo semiflexionado fijo. Baja hasta un estiramiento fuerte pero cómodo. 90–120 s.',why:'Mantiene el movimiento que disfrutas y complementa el press con rango largo.'}]},
+  {t:'Tríceps',tone:'pump',ex:[
+   {d:'tri',move:'extiende',name:'Extensión sobre cabeza en polea',sets:'3 × 8-12',m:'tri',cue:'Costillas abajo y codos estables. RIR 1–2.',why:'Cabeza larga sin añadir otro press pesado.'}]},
+  {t:'Core · base',tone:'wide',ex:[
+   {d:'core',move:'bloquea',name:'RKC plank / plancha frontal fuerte',sets:'3 × 30-45 s',m:'core',cue:'Retroversión pélvica + glúteos + costillas abajo. Genera tensión máxima, no solo “aguantes”.',why:'Anti-extensión sólida para futuras dragon flags.'}]}
+ ]},
+
+{id:'d2',n:'Día 2',s:'Espalda HEAVY + bíceps + core',tag:'Carga / tirón',short:'Espalda H',
+ note:'Dominada lastrada como KPI. Después dos remos distintos: máquina pendular estable + mancuerna unilateral con recorrido largo.',
+ blocks:[
+  {t:'Fuerza',ex:[
+   {base:'pu',round:r1,d:'pull',move:'tira ↑',name:'Dominada lastrada',m:'esp',cue:'4–6 reps, 3–4 min. Sin patada; pecho hacia la barra y descenso controlado.',why:'KPI principal de tirón y weighted calisthenics.'}]},
+  {t:'Espalda · tensión',tone:'wide',ex:[
+   {d:'row',move:'rema ←',name:'Remo máquina convergente / pendular con pecho apoyado',sets:'3 × 6-8',m:'esp',cue:'Pecho contra el soporte. Tira con codos y deja volver las palancas en 2–3 s.',why:'Tu máquina favorita para meter carga con mínima fatiga lumbar.'},
+   {d:'rowdb',move:'remo 1 brazo',name:'Remo a una mano con mancuerna',sets:'2 × 8-10 / lado',m:'esp',cue:'Apoyo estable. Deja estirar el dorsal abajo y lleva el codo hacia la cadera, sin rotar todo el tronco.',why:'Trabajo unilateral, recorrido largo y fácil de sentir/progresar.'}]},
+  {t:'Bíceps',tone:'pump',ex:[
+   {d:'curl',move:'flexiona',name:'Curl inclinado con mancuernas',sets:'3 × 8-12',m:'bi',cue:'Brazo detrás del torso, sin adelantar hombro. 90 s.',why:'Bíceps en posición larga.'},
+   {d:'curl',move:'martillo',name:'Curl martillo',sets:'2 × 10-15',m:'bi',cue:'Muñeca neutra; cero balanceo.',why:'Braquial + antebrazo para brazo más grueso y agarre.'}]},
+  {t:'Core · compresión',tone:'wide',ex:[
+   {d:'hang',move:'piernas ↑',name:'Elevación de piernas / rodillas colgado',sets:'3 × 8-12',m:'core',cue:'Termina con retroversión pélvica; si empiezas a balancear, para la serie.',why:'Compresión y pelvis para L-sit + dragon.'}]}
+ ]},
+
+{id:'d3',n:'Día 3',s:'Hombro + brazos + core',tag:'V-shape',short:'Hombro',delt:true,
+ note:'Día específico de hombro: press de máquina que te gusta, mucha calidad lateral/posterior y brazos. Nada de inflar el deltoide anterior con cinco presses.',
+ blocks:[
+  {t:'Fuerza hombro',ex:[
+   {d:'press',move:'empuja ↑',name:'Press hombro máquina convergente inclinada',sets:'4 × 5-8',m:'da',cue:'Espalda pegada al respaldo; asas a altura cómoda del hombro. 2.5–3 min.',why:'Tu press estable para progresar en fuerza sin gastar equilibrio.'}]},
+  {t:'Ancho',tone:'wide',ex:[
+   {d:'lateral',move:'abre ↗',name:'Elevación lateral en polea',sets:'4 × 10-15',m:'dl',cue:'Plano escapular, sin encoger trapecio. 60–90 s.',why:'Prioridad estética para hacer la cintura parecer más estrecha.'},
+   {d:'rear',move:'abre ←→',name:'Reverse pec deck / pájaro máquina',sets:'3 × 12-20',m:'dpo',cue:'Pecho fijo y pausa breve atrás.',why:'Profundidad de hombro y parte alta de la espalda.'}]},
+  {t:'Brazos',tone:'pump',ex:[
+   {d:'curl',move:'flexiona',name:'Curl barra Z / polea',sets:'3 × 8-12',m:'bi',cue:'Torso inmóvil. 90 s.',why:'Trabajo directo de bíceps sin redundancia.'},
+   {d:'tri',move:'extiende',name:'Pressdown con cuerda',sets:'3 × 10-15',m:'tri',cue:'Codos quietos y extensión completa.',why:'Tríceps con poca fatiga articular.'}]},
+  {t:'Core · fuerza',tone:'wide',ex:[
+   {d:'abwheel',move:'rueda →',name:'Ab wheel',sets:'3 × 6-10',m:'core',cue:'Desde rodillas. Avanza rango antes que repeticiones basura.',why:'Anti-extensión más exigente que la plancha.'},
+   {d:'core',move:'lateral',name:'Plancha lateral',sets:'2 × 30-45 s / lado',m:'core',cue:'Cadera alta y pelvis neutra.',why:'Estabilidad frontal no basta: añade control lateral.'}]}
+ ]},
+
+{id:'d4',n:'Día 4',s:'RESET · movilidad + body skills',tag:'Recuperación activa',short:'RESET',wet:true,
+ note:'No es un día de fuerza. Practicas habilidades con el cuerpo a RPE 5–6 y paras mucho antes del fallo. El objetivo es llegar más fresco al segundo bloque semanal.',
+ blocks:[
+  {t:'Body skills · técnica',tone:'wide',ex:[
+   {d:'lsit',move:'sostén',name:'L-sit / tuck L-sit técnico',sets:'4 × 10-20 s',m:'',cue:'Escápulas deprimidas, brazos bloqueados. Termina cada serie con 4–5 s “en reserva”.',why:'Control escapular + compresión sin convertirlo en otra sesión dura de core.'},
+   {d:'handstand',move:'equilibra',name:'Handstand en pared / wall walk suave',sets:'4-5 × 20-30 s',m:'',cue:'Costillas abajo, glúteos activos. Nada de intentos máximos.',why:'Skill corporal, control de hombro y propiocepción.'},
+   {d:'scap',move:'escápula ↑↓',name:'Scapular pull-ups + dead hang cómodo',sets:'2 × 8-10 + 2 × 20-30 s',m:'',cue:'Brazos rectos; mueve solo escápulas. Dead hang sin dolor.',why:'Control escapular útil para dominadas sin fatigar bíceps.'}]},
+  {t:'Movilidad',tone:'calm',ex:[
+   {d:'mobility',move:'mueve',name:'Movilidad hombro, dorsal, muñeca, cadera y tobillo',sets:'15-20 min',m:'',cue:'Movimientos lentos: rotación torácica, flexión hombro, squat hold, Cossack suave y dorsiflexión.',why:'Mantiene rangos para calisthenics, press, pistol y natación.'}]},
+  {t:'Agua / calor',tone:'wet',ex:[
+   {d:'swim',move:'suave',name:'Piscina técnica',sets:'15-25 min',m:'',cue:'Muy fácil. Si la respiración o técnica empeoran, descansa.',why:'Cardio de bajo impacto que no debe dejar agujetas.'},
+   {d:'heat',move:'opcional',name:'Sauna O baño turco',sets:'10-15 min',m:'',cue:'Solo hidratado. Sal ante mareo, cefalea o palpitaciones.',why:'Relajación; no lo conviertas en prueba de resistencia.'}]}
+ ]},
+
+{id:'d5',n:'Día 5',s:'Pecho PUMP + lateral + tríceps',tag:'Volumen / tensión',short:'Pecho P',delt:true,
+ note:'Segunda exposición real de pecho: más reps, estiramiento, aducción y control. El mismo press inclinado aparece de nuevo, pero con otra función.',
+ blocks:[
+  {t:'Upper chest · volumen',tone:'wide',ex:[
+   {d:'incl',move:'empuja ↗',name:'Press inclinado con mancuernas · pump',sets:'3 × 10-12',m:'pec',cue:'RIR 1–2, 90–120 s. Misma técnica del día 1, bastante menos carga.',why:'Repite tu básico favorito con más tiempo bajo tensión.'},
+   {d:'fly',move:'abre / cierra',name:'Fly inclinado con mancuernas',sets:'2 × 12-15',m:'pec',cue:'Eccéntrica 2–3 s; estira y cierra sin chocar las mancuernas.',why:'Tensión continua y rango largo.'},
+   {d:'cable',move:'junta ↗',name:'Cruce de polea bajo → alto',sets:'2 × 15-20',m:'pec',cue:'Pausa 1 s con manos juntas y ligeramente arriba.',why:'Aducción completa para bombeo de upper chest.'},
+   {d:'dip',move:'reps ↑',name:'Fondos a peso corporal / lastre muy ligero',sets:'1 × 12-20',m:'pec',cue:'Deja 2 reps en reserva. No es un test.',why:'Segunda práctica del patrón de fondo sin repetir un día pesado.'}]},
+  {t:'Deltoide lateral',tone:'wide',ex:[
+   {d:'lateral',move:'abre ↗',name:'Elevación lateral máquina o polea',sets:'3 × 15-20',m:'dl',cue:'Tensión continua y cero balanceo.',why:'Segundo estímulo semanal para el ancho.'}]},
+  {t:'Tríceps pump',tone:'pump',ex:[
+   {d:'tri',move:'extiende',name:'Pressdown / extensión cuerda',sets:'3 × 12-20',m:'tri',cue:'Descanso 60–75 s; busca contracción, no récord.',why:'Bombeo con bajo coste de recuperación.'}]}
+ ]},
+
+{id:'d6',n:'Día 6',s:'Espalda PUMP + posterior + bíceps',tag:'Volumen / dorsal',short:'Espalda P',delt:true,
+ note:'Segundo estímulo de espalda: repeticiones altas, control y congestión. Aquí no hace falta demostrar fuerza; hace falta sentir dorsal y espalda trabajar.',
+ blocks:[
+  {t:'Espalda · volumen',tone:'wide',ex:[
+   {d:'lat',move:'tira ↓',name:'Jalón neutro / semiancho al pecho',sets:'3 × 10-15',m:'esp',cue:'Depresión escapular primero. Eccéntrica controlada.',why:'Dorsal en rango alto de reps para sumar anchura.'},
+   {d:'row',move:'rema ←',name:'Remo máquina pendular · pump',sets:'2 × 12-15',m:'esp',cue:'Menos carga que D2; pausa 1 s atrás y estira completamente.',why:'Segunda exposición a una máquina que disfrutas, ahora con tensión continua.'},
+   {d:'straight',move:'brazos ↓',name:'Pullover / jalón de brazos rectos en polea',sets:'2 × 15-20',m:'esp',cue:'Codos casi fijos; lleva manos hacia los muslos sin tirar con tríceps.',why:'Aísla mejor la extensión de hombro del dorsal.'},
+   {d:'pull',move:'reps ↑',name:'Dominadas a peso corporal',sets:'1 × 8-15',m:'esp',cue:'Deja 2 reps en reserva; cero kipping.',why:'Segunda práctica específica del patrón de dominada.'}]},
+  {t:'Deltoide posterior',tone:'wide',ex:[
+   {d:'rear',move:'abre ←→',name:'Reverse pec deck / pájaro',sets:'3 × 15-20',m:'dpo',cue:'Ligero, pausa atrás y vuelta lenta.',why:'Segundo estímulo semanal para hombro posterior.'}]},
+  {t:'Bíceps pump',tone:'pump',ex:[
+   {d:'curl',move:'flexiona',name:'Curl polea + martillo alternado',sets:'3 × 12-15',m:'bi',cue:'Elige la variante que mejor sientas ese día; no necesitas ambas.',why:'Completa el brazo sin interferir con las dominadas pesadas.'}]}
+ ]},
+
+{id:'d7',n:'Día 7',s:'Pierna atlética + Dragon Core',tag:'Pierna / conditioning',short:'Pierna',
+ note:'Pierna completa pero contenida: cuádriceps e isquios reciben trabajo suficiente; después core específico y conditioning. No buscamos inflar más la pierna.',
+ blocks:[
+  {t:'Potencia',ex:[
+   {d:'jump',move:'salta ↑',name:'Box jump / salto vertical',sets:'4 × 3',m:'',cue:'Hazlo fresco. Para en cuanto baje claramente la altura o velocidad.',why:'Potencia con poco volumen de hipertrofia.'}]},
+  {t:'Pierna',tone:'wide',ex:[
+   {d:'legpress',move:'empuja',name:'Prensa horizontal / sentada',sets:'3 × 8-12',m:'pie',cue:'Pelvis pegada al asiento; rodillas siguen a los pies.',why:'Cuádriceps estable y dosificable.'},
+   {d:'legext',move:'extiende',name:'Extensión de rodilla / leg extension',sets:'3 × 12-15',m:'pie',cue:'Pausa arriba, baja 2 s.',why:'Trabajo directo de cuádriceps sin cargar columna.'},
+   {d:'legcurl',move:'flexiona',name:'Curl femoral sentado o tumbado',sets:'3 × 10-15',m:'ham',cue:'Cadera fija y rango completo.',why:'Mantiene fuerte la cadena posterior y equilibra la rodilla.'},
+   {d:'leg',move:'pistol',name:'Pistol squat · progresión',sets:'2 × 4-8 / lado',m:'pie',cue:'Caja/apoyo si hace falta. Controla la bajada.',why:'Fuerza relativa, movilidad y estabilidad unilateral.'}]},
+  {t:'Dragon Core',tone:'wide',ex:[
+   {d:'dragon',move:'baja 3–5 s',name:'Dragon flag · progresión actual',sets:'4 × 3-6',m:'core',cue:'Tuck negative primero. Solo avanza si costillas/pelvis se mantienen bloqueadas.',why:'Trabajo específico hacia tu skill objetivo.'},
+   {d:'mountain',move:'rápido ↔',name:'Mountain climbers',sets:'6 × 20 s / 40 s suave',m:'core',cue:'Cadera quieta; rodillas rápidas sin hundir la lumbar.',why:'Core dinámico + cardio/conditioning.'}]}
+ ]}
+]
+
+let week=1,day='d1';
+const bases={};
+const readBases=()=>['bp','pu','dp','bw'].forEach(k=>bases[k]=parseFloat(document.getElementById(k).value)||0);
+async function save(k,v){
+  try{
+    if(window.storage){await window.storage.set(k,v)}
+    else{localStorage.setItem(k,v)}
+  }catch(e){try{localStorage.setItem(k,v)}catch(_){}}
+}
+async function load(k){
+  try{
+    if(window.storage){const r=await window.storage.get(k);return r?r.value:null}
+    return localStorage.getItem(k)
+  }catch(e){try{return localStorage.getItem(k)}catch(_){return null}}
+}
+const nsets=s=>{const m=String(s).match(/^\s*(\d+)\s*[×x]/);return m?parseInt(m[1]):0};
+
+function volume(){
+  const tot={};
+  DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
+    if(!e.m)return;
+    let s=e.base?nsets(SR[week]):nsets(e.sets); if(week===4 && !e.base)s=Math.max(0,Math.round(s*.6)); if(week===8 && !e.base)s=Math.max(0,Math.round(s*.7));
+    tot[e.m]=(tot[e.m]||0)+s;
+  })));
+  const order=['dl','dpo','da','pec','esp','bi','tri','pie','ham','core','ant'];
+  const max=Math.max(...order.map(k=>tot[k]||0))||1;
+  document.getElementById('volwk').textContent='Semana '+week;
+  document.getElementById('vrows').innerHTML=order.map(k=>{
+    const v=tot[k]||0, key=(k==='dl'||k==='dpo');
+    return `<div class="vrow${key?' key':''}"><span class="vname">${MUS[k]}</span>
+      <span class="vbar"><i style="width:${Math.round(v/max*100)}%"></i></span>
+      <span class="vnum">${v}</span></div>`;
+  }).join('');
+}
+function rail(){
+  const el=document.getElementById('rail');el.innerHTML='';
+  for(let w=1;w<=8;w++){
+    const b=document.createElement('button');
+    b.className='wk'+(w===week?' on':'');b.textContent=w;
+    if(w===4)b.dataset.phase='deload';
+    b.setAttribute('aria-label','Semana '+w);
+    b.onclick=()=>{week=w;rail();sesh();volume()};
+    el.appendChild(b);
+  }
+  document.getElementById('phase').textContent=PH[week].toUpperCase()+'  ·  BÁSICOS A '+SR[week];
+  document.getElementById('phaseTiny').textContent='Semana '+week+' de 8';
+}
+function dayTabs(){
+  const el=document.getElementById('days');el.innerHTML='';
+  DAYS.forEach(d=>{
+    const b=document.createElement('button');
+    b.className='day'+(d.id===day?' on':'')+(d.wet?' wet':'')+(d.delt?' delt':'');
+    b.innerHTML=`<b>${d.n}</b><s>${d.short}</s>`;
+    b.onclick=()=>{day=d.id;dayTabs();sesh()};
+    el.appendChild(b);
+  });
+}
+function sesh(){
+  readBases();
+  const d=DAYS.find(x=>x.id===day),host=document.getElementById('sesh');
+  let total=0;d.blocks.forEach(b=>total+=b.ex.length);
+  let h=`<div class="sesh"><div class="seshhead"><h3>${d.s}</h3><span class="tag${d.wet?' wet':''}">${d.tag}</span></div>
+    <p class="seshnote">${d.note}</p><p class="count">${total} ejercicios · ${d.blocks.length} bloques</p>`;
+  let idx=0;
+  d.blocks.forEach(blk=>{
+    h+=`<div class="blk" data-tone="${blk.tone||''}"><div class="blkhead"><h4>${blk.t}</h4><span class="rule"></span><span class="n">${blk.ex.length}</span></div>`;
+    blk.ex.forEach(e=>{
+      let loadHtml='';
+      if(e.base){
+        const kg=e.round(bases[e.base]*F[week]*(e.mult||1));
+        const lbl=e.base==='bp'?'kg en barra':'kg de lastre';
+        loadHtml=`<div class="load"><span class="kg">${kg%1?kg.toFixed(2).replace(/0$/,''):kg}</span><span class="u">${lbl}</span><span class="rpe">${e.rpe||''}</span></div>`;
+      }
+      const sets=e.base?SR[week]:e.sets;
+      h+=`<div class="ex"><div class="dia">${DIA[e.d]}<small>${e.move||''}</small></div><div class="exbody">
+        <p class="exname">${e.name}</p><p class="exmeta">${sets}</p>${loadHtml}
+        <p class="cue">${e.cue}</p>${e.why?`<p class="why">↳ ${e.why}</p>`:''}
+        <div class="log">
+          <input type="text" inputmode="decimal" placeholder="kg" data-log="${d.id}-${idx}-kg" aria-label="kg realizados">
+          <input type="text" inputmode="numeric" placeholder="reps" data-log="${d.id}-${idx}-rp" aria-label="repeticiones realizadas">
+          <span data-st="${d.id}-${idx}">Sin registrar</span>
+        </div></div></div>`;
+      idx++;
+    });
+    h+='</div>';
+  });
+  host.innerHTML=h+'</div>';
+  host.querySelectorAll('[data-log]').forEach(async inp=>{
+    const key='w'+week+'-'+inp.dataset.log;
+    const v=await load(key);if(v!==null)inp.value=v;
+    inp.addEventListener('change',()=>{
+      save(key,inp.value);
+      const st=host.querySelector(`[data-st="${inp.dataset.log.split('-').slice(0,2).join('-')}"]`);
+      if(st){st.textContent='Guardado';st.classList.add('saved')}
+    });
+  });
+}
+['bp','pu','dp','bw'].forEach(k=>{
+  const el=document.getElementById(k);
+  el.addEventListener('input',()=>{sesh();save('base-'+k,el.value)});
+});
+(async()=>{
+  for(const k of ['bp','pu','dp','bw']){const v=await load('base-'+k);if(v!==null)document.getElementById(k).value=v;}
+  rail();dayTabs();sesh();volume();
+})();
+</script>
+</body>
+</html>
