@@ -53,6 +53,11 @@
 </header>
 <div class="chips" id="groups"></div>
 <div class="exlist" id="exlist"></div>
+<div class="chartmodes" aria-label="Ejes del gráfico">
+  <span class="lbl">Visualizar</span>
+  <button class="chip on" id="plotKg" aria-pressed="true">KG</button>
+  <button class="chip on" id="plotReps" aria-pressed="true">REPES</button>
+</div>
 <div class="chartbox"><div id="chartHost"></div><div class="legend" id="legend"></div>
  <p class="caption" id="cap"></p></div>
 <div class="prtable" id="prtable"></div>
@@ -83,7 +88,7 @@
   <p>Instálala en la pantalla de inicio: icono propio, pantalla completa y funciona sin conexión.</p>
   <button class="btn" id="installBtn">Instalar app</button>
 </div>
-<p class="foot"><b style="color:var(--dim)">Cómo se calcula el gráfico.</b> Con lastre, se dibuja el 1RM estimado (Epley: kg × (1 + reps/30)) para que series pesadas y ligeras sean comparables. Sin lastre, repeticiones o segundos. Al comparar varios ejercicios, cada curva se muestra como % de mejora sobre su primera marca, para que quepan en el mismo eje.<br><br>
+<p class="foot"><b style="color:var(--dim)">Cómo se calcula el gráfico.</b> Activa KG y REPES para comparar el peso real con las repeticiones. Deja solo KG o solo REPES para ver esa medida a lo largo del tiempo. No se transforma el peso en 1RM estimado.<br><br>
 <b style="color:var(--dim)">Para instalarlo.</b> Chrome en Android → Menú → Añadir a pantalla de inicio.</p>
 </div>
 

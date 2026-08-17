@@ -7,6 +7,13 @@ function DB(){
   return mem||(mem={prs:{},bases:{}});
 }
 function put(d){if(smode==='localStorage'){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}mem=d;}
+const DONE_KEY='gym-done-v1';
+let doneMem={};
+function doneDb(){
+  if(smode==='localStorage'){try{return JSON.parse(localStorage.getItem(DONE_KEY)||'{}')}catch(e){return{}}}
+  return doneMem;
+}
+function putDone(d){if(smode==='localStorage'){try{localStorage.setItem(DONE_KEY,JSON.stringify(d))}catch(e){}}doneMem=d;}
 const st=document.getElementById('store');
 st.textContent=smode==='localStorage'?'ACTIVO · guardado en este dispositivo':'SOLO SESIÓN · descarga el archivo y ábrelo en Chrome';
 if(smode!=='localStorage')st.classList.add('off');
@@ -92,6 +99,7 @@ function sesh(){
       const dispCue=ph?ph.cue:e.cue;
       const dispWhy=ph?ph.why:e.why;
       const id=e.m?slug(e.name):null;
+      const doneId=today()+'|'+day+'|'+slug(e.name),completed=!!doneDb()[doneId];
       let loadHtml='';
       if(e.base){
         const kg=e.round(bases[e.base]*(e.pct||F[week]*(e.mult||1)));
@@ -101,14 +109,16 @@ function sesh(){
       const best=id?bestOf(id):null;
       const prBtn=id?`<button class="prbtn${best?' has':''}" data-pr="${bi}-${ei}">
           ${best?`<b>${best.kg>0?best.kg+'×'+best.r:best.r}</b>marca`:`<b>+</b>marca`}</button>`:'';
-      h+=`<div class="ex"><div class="exrow">
+      const doneBtn=`<button class="donebtn${completed?' on':''}" data-done="${doneId}" aria-pressed="${completed}">
+          <b>${completed?'✓':'○'}</b>${completed?'hecho':'hacer'}</button>`;
+      h+=`<div class="ex${completed?' done':''}"><div class="exrow">
         <div class="dia">${DIA[e.d]}<small>${e.move||''}</small></div>
         <div class="exbody">
           <p class="exname">${dispName}</p>
           <p class="exmeta">${dispSets}</p>${loadHtml}
           <p class="cue">${dispCue}</p>
           ${dispWhy?`<p class="why">↳ ${dispWhy}</p>`:''}
-        </div>${prBtn}</div>
+        </div><div class="exactions">${doneBtn}${prBtn}</div></div>
         ${id?`<div class="prform" id="prf-${bi}-${ei}">
           <div class="r">
             <div><p class="lbl">Kg / lastre</p><input type="number" inputmode="decimal" step="0.5" min="0" id="kg-${bi}-${ei}" placeholder="0"></div>
@@ -122,6 +132,11 @@ function sesh(){
     h+='</div>';
   });
   host.innerHTML=h;
+  host.querySelectorAll('[data-done]').forEach(b=>b.addEventListener('click',()=>{
+    const d=doneDb(),id=b.dataset.done;
+    if(d[id])delete d[id];else d[id]=true;
+    putDone(d);sesh();
+  }));
   host.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{
     const f=document.getElementById('prf-'+b.dataset.pr);
     f.classList.toggle('open');
@@ -169,6 +184,7 @@ function volume(){
 /* ================= progreso ================= */
 const COLORS=['#FF6B35','#2FC2D6','#7B5CFF','#C9A227','#5FD68B','#E5484D','#EEF4F3'];
 let grp='Básicos', sel=new Set(['press-banca','dominada-lastrada','fondos-lastrados']);
+let plotKg=true,plotReps=true;
 function buildGroups(){
   document.getElementById('groups').innerHTML=GROUPS.map(g=>
     `<button class="chip${g===grp?' on':''}" data-g="${g}">${g}</button>`).join('');
@@ -204,47 +220,55 @@ function drawChart(){
     host.innerHTML='<p class="empty">Selecciona ejercicios con registros.<br>Las marcas se anotan desde la pestaña Rutina, con el botón de cada ejercicio.</p>';
     tbl.innerHTML='';return;
   }
-  const multi=series.length>1;
+  const mode=plotKg&&plotReps?'scatter':plotKg?'kg':'reps';
   const W=700,H=260,L=48,R=12,T=14,B=30;
   let allX=[],allY=[];
   series.forEach(s=>{
-    s.pts=s.list.map(e=>({t:new Date(e.d).getTime(),v:val(e),e}));
-    if(multi){
-      const f=s.pts[0].v||1;
-      s.pts.forEach(p=>p.y=(p.v/f-1)*100);
-    }else s.pts.forEach(p=>p.y=p.v);
-    allX.push(...s.pts.map(p=>p.t)); allY.push(...s.pts.map(p=>p.y));
+    s.pts=s.list.map(e=>({x:mode==='scatter'?e.r:new Date(e.d).getTime(),y:mode==='reps'?e.r:e.kg,e}));
+    allX.push(...s.pts.map(p=>p.x));allY.push(...s.pts.map(p=>p.y));
   });
-  const x0=Math.min(...allX),x1=Math.max(...allX);
+  let x0=Math.min(...allX),x1=Math.max(...allX);
   let y0=Math.min(...allY),y1=Math.max(...allY);
+  if(mode==='scatter'){
+    const xpad=(x1-x0)*.08||1;x0=Math.max(0,x0-xpad);x1+=xpad;
+  }
   const pad=(y1-y0)*0.15||Math.max(Math.abs(y1)*0.1,1);y0-=pad;y1+=pad;
-  if(!multi)y0=Math.max(0,y0);
-  const px=t=>L+(x1===x0?0.5:(t-x0)/(x1-x0))*(W-L-R);
+  y0=Math.max(0,y0);
+  const px=x=>L+(x1===x0?0.5:(x-x0)/(x1-x0))*(W-L-R);
   const py=v=>T+(1-(v-y0)/(y1-y0||1))*(H-T-B);
   let g='';
   for(let i=0;i<=3;i++){
     const v=y0+(y1-y0)*i/3,y=py(v);
     g+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#22333F"/>
-        <text x="${L-7}" y="${y+4}" text-anchor="end" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="11">${multi?(v>0?'+':'')+Math.round(v)+'%':fmt(v)}</text>`;
+        <text x="${L-7}" y="${y+4}" text-anchor="end" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="11">${fmt(v)}</text>`;
   }
   let lines='',dots='';
   series.forEach((s,si)=>{
     const c=COLORS[si%COLORS.length];
-    const pl=s.pts.map(p=>px(p.t).toFixed(1)+','+py(p.y).toFixed(1)).join(' ');
-    if(s.pts.length>1)lines+=`<polyline points="${pl}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const pl=s.pts.map(p=>px(p.x).toFixed(1)+','+py(p.y).toFixed(1)).join(' ');
+    if(mode!=='scatter'&&s.pts.length>1)lines+=`<polyline points="${pl}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
     s.pts.forEach((p,pi)=>{
-      dots+=`<circle cx="${px(p.t).toFixed(1)}" cy="${py(p.y).toFixed(1)}" r="4.5" fill="#0E171E" stroke="${c}" stroke-width="2" style="cursor:pointer" data-s="${si}" data-p="${pi}"/>`;
+      dots+=`<circle cx="${px(p.x).toFixed(1)}" cy="${py(p.y).toFixed(1)}" r="4.5" fill="#0E171E" stroke="${c}" stroke-width="2" style="cursor:pointer" data-s="${si}" data-p="${pi}"/>`;
     });
     leg.innerHTML+=`<span><i style="background:${c}"></i>${s.name}</span>`;
   });
-  const dtsAll=[...new Set([].concat(...series.map(s=>s.list.map(e=>e.d))))].sort();
-  const xl=[dtsAll[0],dtsAll[dtsAll.length-1]].filter((v,i,a)=>a.indexOf(v)===i)
-    .map(d=>`<text x="${px(new Date(d).getTime()).toFixed(1)}" y="${H-9}" text-anchor="middle" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="11">${dmy(d)}</text>`).join('');
+  let xl='';
+  if(mode==='scatter'){
+    for(let i=0;i<=3;i++){
+      const v=x0+(x1-x0)*i/3;
+      xl+=`<text x="${px(v).toFixed(1)}" y="${H-9}" text-anchor="middle" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="11">${fmt(v)}</text>`;
+    }
+  }else{
+    const dtsAll=[...new Set([].concat(...series.map(s=>s.list.map(e=>e.d))))].sort();
+    xl=[dtsAll[0],dtsAll[dtsAll.length-1]].filter((v,i,a)=>a.indexOf(v)===i)
+      .map(d=>`<text x="${px(new Date(d).getTime()).toFixed(1)}" y="${H-9}" text-anchor="middle" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="11">${dmy(d)}</text>`).join('');
+  }
   host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}">${g}${lines}${dots}${xl}</svg>`;
-  cap.textContent=multi?'% de mejora sobre la primera marca · toca un punto':'valor absoluto (1RM est. o reps) · toca un punto';
+  cap.textContent=mode==='scatter'?'Eje X: repeticiones · Eje Y: kg reales · toca un punto':
+    mode==='kg'?'Eje X: tiempo · Eje Y: kg reales · toca un punto':'Eje X: tiempo · Eje Y: repeticiones/segundos · toca un punto';
   host.querySelectorAll('circle').forEach(c=>c.addEventListener('click',()=>{
     const s=series[+c.dataset.s],p=s.pts[+c.dataset.p],e=p.e;
-    cap.textContent=s.name+' · '+dmy(e.d)+' · '+(e.kg>0?e.kg+' kg × '+e.r+' · 1RM '+fmt(epley(e.kg,e.r))+' kg':e.r+' reps/s');
+    cap.textContent=s.name+' · '+dmy(e.d)+' · '+(e.kg>0?e.kg+' kg × '+e.r:e.r+' reps/s');
   }));
   /* tabla de historial de lo seleccionado */
   tbl.innerHTML=series.map((s,si)=>{
@@ -266,6 +290,21 @@ function drawChart(){
     put(d);buildExList();drawChart();
   }));
 }
+
+function syncPlotMode(){
+  const kg=document.getElementById('plotKg'),reps=document.getElementById('plotReps');
+  kg.classList.toggle('on',plotKg);kg.setAttribute('aria-pressed',plotKg);
+  reps.classList.toggle('on',plotReps);reps.setAttribute('aria-pressed',plotReps);
+  drawChart();
+}
+document.getElementById('plotKg').addEventListener('click',()=>{
+  if(plotKg&&!plotReps)return;
+  plotKg=!plotKg;syncPlotMode();
+});
+document.getElementById('plotReps').addEventListener('click',()=>{
+  if(plotReps&&!plotKg)return;
+  plotReps=!plotReps;syncPlotMode();
+});
 
 /* ================= datos ================= */
 document.getElementById('exp').addEventListener('click',()=>{

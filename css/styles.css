@@ -97,6 +97,8 @@ h1 em{font-style:normal;color:var(--heat)}
 .blk[data-tone="wet"] .blkhead h4{color:var(--water)}
 .blk[data-tone="calm"] .blkhead h4{color:var(--dim)}
 .ex{border-top:1px solid var(--line);padding:13px 0 12px}
+.ex.done{background:linear-gradient(90deg,rgba(95,214,139,.16),rgba(95,214,139,.035));
+ border-color:rgba(95,214,139,.55);margin:0 -8px;padding-left:8px;padding-right:8px}
 .blk .ex:last-child{border-bottom:1px solid var(--line)}
 .exrow{display:flex;gap:12px;align-items:flex-start}
 .dia{flex:0 0 64px;height:62px;position:relative;background:var(--panel2);border:1px solid var(--line);
@@ -120,6 +122,13 @@ h1 em{font-style:normal;color:var(--heat)}
  border-radius:2px;cursor:pointer;text-transform:uppercase;line-height:1.3;text-align:center}
 .prbtn b{display:block;color:var(--heat);font-size:11px}
 .prbtn.has{border-color:#3A2A1F}
+.exactions{flex:0 0 auto;display:flex;flex-direction:column;gap:6px}
+.donebtn{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--dim);
+ font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.08em;padding:7px 6px 6px;
+ border-radius:2px;cursor:pointer;text-transform:uppercase;line-height:1.25}
+.donebtn b{display:block;font-size:14px;line-height:1;color:var(--dim)}
+.donebtn.on{border-color:var(--ok);color:var(--ok);background:rgba(95,214,139,.08)}
+.donebtn.on b{color:var(--ok)}
 .prform{display:none;margin-top:10px;background:var(--panel2);border:1px solid var(--line);
  border-radius:2px;padding:11px}
 .prform.open{display:block}
@@ -165,6 +174,8 @@ h1 em{font-style:normal;color:var(--heat)}
 .exitem .nm{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .exitem .dt{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--dim)}
 .exitem.nodata{opacity:.42}
+.chartmodes{display:flex;align-items:center;gap:6px;margin:14px 0 0}
+.chartmodes .lbl{margin:0 4px 0 0}
 .chartbox{margin:16px 0 0;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:12px 10px 8px}
 svg.chart{display:block;width:100%;height:auto;overflow:visible}
 .legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 4px 4px}
