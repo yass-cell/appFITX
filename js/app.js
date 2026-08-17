@@ -170,7 +170,7 @@ function volume(){
     if(week===8&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.7));
     tot[e.m]=(tot[e.m]||0)+s;
   })));
-  const order=['dl','dpo','da','pec','esp','bi','tri','pie','ham','cal','core'];
+  const order=['dl','dpo','da','pec','esp','bi','tri','pie','ham','ere','cal','core'];
   const max=Math.max(...order.map(k=>tot[k]||0))||1;
   document.getElementById('volwk').textContent='Semana '+week;
   document.getElementById('vrows').innerHTML=order.map(k=>{

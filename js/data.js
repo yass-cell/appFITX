@@ -44,6 +44,12 @@ legcurl:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"
 calf:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><line x1="12" y1="38" x2="26" y2="38"/><line x1="12" y1="38" x2="12" y2="44" stroke="${M}" stroke-width="1.4"/><line x1="24" y1="38" x2="25" y2="24"/><line x1="25" y1="24" x2="26" y2="12"/><circle cx="26" cy="9" r="3"/><line x1="26" y1="15" x2="32" y2="24"/><circle cx="33" cy="27" r="2.4" fill="${A}" stroke="${A}"/><line x1="17" y1="42" x2="17" y2="32" stroke="${A}"/><path d="M14 35 L17 30 L20 35" stroke="${A}"/><line x1="24.4" y1="30" x2="24.7" y2="35" stroke="${V}" stroke-width="2.8"/>`),
 pistol:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><circle cx="22" cy="11" r="3.2"/><line x1="22" y1="14" x2="18" y2="26"/><line x1="21" y1="17" x2="33" y2="19"/><line x1="18" y1="26" x2="25" y2="30"/><line x1="25" y1="30" x2="23" y2="41"/><line x1="23" y1="41" x2="28" y2="41"/><line x1="18" y1="26" x2="36" y2="29"/><line x1="20" y1="44" x2="30" y2="44" stroke="${A}" stroke-dasharray="2 3"/><line x1="20" y1="27" x2="24" y2="29" stroke="${V}" stroke-width="2.8"/>`),
 swim:S(`<path d="M3 30 Q8 25 13 30 T23 30 T33 30 T43 30" stroke="${W}"/><path d="M3 38 Q8 33 13 38 T23 38 T33 38 T43 38" stroke="${W}"/><circle cx="17" cy="16" r="3"/><path d="M20 18 Q28 8 36 15"/><line x1="20" y1="18" x2="28" y2="21"/><circle cx="38" cy="18" r="1" fill="${W}" stroke="${W}"/><circle cx="41" cy="15" r="0.8" fill="${W}" stroke="${W}"/>`),
+brow:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><circle cx="29" cy="10" r="3"/><line x1="27" y1="13" x2="17" y2="25"/><line x1="17" y1="25" x2="13" y2="42"/><line x1="17" y1="25" x2="27" y2="42"/><line x1="24" y1="17" x2="27" y2="29"/><line x1="27" y1="29" x2="18" y2="32"/><line x1="8" y1="33" x2="38" y2="33"/><circle cx="9" cy="33" r="3" fill="${A}" stroke="${A}"/><circle cx="37" cy="33" r="3" fill="${A}" stroke="${A}"/><path d="M42 37 V27" stroke="${A}" stroke-dasharray="2 2"/><path d="M39 30 L42 25 L45 30" stroke="${A}"/><line x1="22" y1="17" x2="18" y2="23" stroke="${V}" stroke-width="2.8"/>`),
+rowc:S(`<line x1="5" y1="6" x2="5" y2="43" stroke="${M}" stroke-width="1.4"/><circle cx="5" cy="17" r="1.8" fill="${A}" stroke="${A}"/><line x1="5" y1="17" x2="25" y2="22" stroke="${M}" stroke-width="1.4"/><line x1="9" y1="38" x2="28" y2="38"/><line x1="12" y1="38" x2="12" y2="44" stroke="${M}"/><circle cx="35" cy="13" r="3"/><line x1="33" y1="16" x2="29" y2="29"/><line x1="29" y1="29" x2="22" y2="38"/><line x1="29" y1="29" x2="39" y2="38"/><line x1="31" y1="19" x2="25" y2="22"/><path d="M12 26 H24" stroke="${A}" stroke-dasharray="2 2"/><path d="M16 23 L11 26 L16 29" stroke="${A}"/><line x1="31" y1="17" x2="28" y2="22" stroke="${V}" stroke-width="2.8"/>`),
+flyf:S(`<line x1="5" y1="5" x2="5" y2="43" stroke="${M}" stroke-width="1.4"/><line x1="43" y1="5" x2="43" y2="43" stroke="${M}" stroke-width="1.4"/><circle cx="5" cy="14" r="1.8" fill="${A}" stroke="${A}"/><circle cx="43" cy="14" r="1.8" fill="${A}" stroke="${A}"/><circle cx="24" cy="9" r="3"/><line x1="24" y1="12" x2="24" y2="29"/><line x1="24" y1="29" x2="19" y2="42"/><line x1="24" y1="29" x2="29" y2="42"/><line x1="24" y1="16" x2="15" y2="20"/><line x1="24" y1="16" x2="33" y2="20"/><line x1="5" y1="14" x2="15" y2="20" stroke="${M}"/><line x1="43" y1="14" x2="33" y2="20" stroke="${M}"/><path d="M12 29 Q20 24 24 25" stroke="${A}" stroke-dasharray="2 2"/><path d="M36 29 Q28 24 24 25" stroke="${A}" stroke-dasharray="2 2"/><line x1="20" y1="15" x2="28" y2="15" stroke="${V}" stroke-width="2.8"/>`),
+legraise:S(`<line x1="4" y1="41" x2="44" y2="41" stroke="${M}" stroke-width="1.4"/><circle cx="9" cy="36" r="3"/><line x1="12" y1="36" x2="27" y2="36"/><line x1="27" y1="36" x2="36" y2="17"/><line x1="27" y1="36" x2="42" y2="24"/><path d="M34 38 Q42 30 39 20" stroke="${A}" stroke-dasharray="2 2"/><path d="M36 23 L39 18 L42 23" stroke="${A}"/><line x1="18" y1="35" x2="26" y2="35" stroke="${V}" stroke-width="2.8"/>`),
+hip90:S(`<circle cx="23" cy="10" r="3"/><line x1="23" y1="13" x2="21" y2="27"/><line x1="21" y1="27" x2="10" y2="30"/><line x1="10" y1="30" x2="8" y2="41"/><line x1="21" y1="27" x2="32" y2="31"/><line x1="32" y1="31" x2="41" y2="27"/><line x1="18" y1="18" x2="9" y2="24"/><line x1="26" y1="18" x2="35" y2="23"/><path d="M8 15 Q21 5 37 14" stroke="${A}" stroke-dasharray="2 2"/><path d="M33 10 L39 14 L34 18" stroke="${A}"/><circle cx="21" cy="27" r="3" fill="${V}" stroke="${V}"/>`),
+backext:S(`<line x1="5" y1="43" x2="43" y2="43" stroke="${M}" stroke-width="1.4"/><line x1="10" y1="39" x2="27" y2="23" stroke="${M}" stroke-width="3"/><line x1="13" y1="36" x2="13" y2="43" stroke="${M}"/><line x1="25" y1="25" x2="25" y2="43" stroke="${M}"/><circle cx="37" cy="12" r="3"/><line x1="34" y1="14" x2="24" y2="24"/><line x1="24" y1="24" x2="15" y2="34"/><line x1="24" y1="24" x2="20" y2="38"/><line x1="31" y1="17" x2="28" y2="25"/><circle cx="28" cy="28" r="3" fill="${A}" stroke="${A}"/><path d="M43 28 Q41 17 36 14" stroke="${A}" stroke-dasharray="2 2"/><line x1="27" y1="20" x2="23" y2="25" stroke="${V}" stroke-width="3"/>`),
 heat:S(`<line x1="6" y1="32" x2="30" y2="32"/><line x1="9" y1="32" x2="9" y2="40" stroke="${M}" stroke-width="1.4"/><line x1="27" y1="32" x2="27" y2="40" stroke="${M}" stroke-width="1.4"/><circle cx="15" cy="18" r="3"/><line x1="15" y1="21" x2="15" y2="31"/><line x1="15" y1="31" x2="22" y2="32"/><line x1="22" y1="32" x2="22" y2="40"/><path d="M34 30 q3 -4 0 -9 q-3 -4 0 -9" stroke="${A}"/><path d="M40 32 q3 -4 0 -9 q-3 -4 0 -9" stroke="${A}"/><circle cx="35" cy="40" r="1.4" fill="${A}" stroke="${A}"/><circle cx="39" cy="41" r="1.4" fill="${A}" stroke="${A}"/><circle cx="37" cy="43" r="1.4" fill="${A}" stroke="${A}"/>`)};
 
 /* ================= programa · Heavy + Pump ================= */
@@ -52,9 +58,9 @@ const F={1:.88,2:.92,3:.96,4:.78,5:.96,6:1.00,7:1.03,8:1.05};
 const SR={1:'4 × 5',2:'4 × 6',3:'5 × 4',4:'2 × 5',5:'5 × 3-5',6:'5 × 4',7:'4 × 3',8:'Test 3-5RM'};
 const r125=v=>Math.round(v/1.25)*1.25,r1=v=>Math.round(v);
 const G={dl:'Hombro',dpo:'Hombro',da:'Hombro',pec:'Pecho',esp:'Espalda',
- bi:'Brazo',tri:'Brazo',pie:'Pierna',ham:'Pierna',cal:'Pierna',core:'Core y skills'};
+ bi:'Brazo',tri:'Brazo',pie:'Pierna',ham:'Pierna',ere:'Pierna',cal:'Pierna',core:'Core y skills'};
 const MUS={dl:'Delt. lateral',dpo:'Delt. posterior',da:'Delt. anterior',pec:'Pecho',esp:'Espalda',
- bi:'Bíceps',tri:'Tríceps',pie:'Cuádriceps',ham:'Isquios',cal:'Gemelo',core:'Core'};
+ bi:'Bíceps',tri:'Tríceps',pie:'Cuádriceps',ham:'Isquios',ere:'Erectores',cal:'Gemelo',core:'Core'};
 
 /* Escalera dragon flag: el bloque del día 7 cambia según la semana */
 const DRAGON={
@@ -80,24 +86,37 @@ const DAYS=[
    {d:'plank',move:'bloquea',name:'RKC plank',sets:'3 × 30-45 s',m:'core',cue:'Retroversión pélvica, glúteo y puños apretados: tensión máxima, no aguantar por aguantar.',why:'Anti-extensión: la puerta de la fase 1 del dragon flag.'}]}]},
 
 {id:'d2',n:'Día 2',s:'Espalda heavy y bíceps',tag:'Carga',short:'Espalda H',
- note:'Dominada lastrada como KPI y tus dos remos: la máquina pendular para cargar estable y el remo a una mano para recorrido largo.',
+ note:'Dominada lastrada como KPI, máquina pendular para cargar estable y remo con barra para construir espesor.',
  blocks:[
   {t:'Fuerza',ex:[
    {base:'pu',round:r1,d:'pull',move:'tira ↑',name:'Dominada lastrada',m:'esp',cue:'Brazos extendidos abajo, pecho a la barra, cero balanceo. 3-4 min.',why:'KPI principal de tirón y fuerza relativa.'}]},
   {t:'Espalda · tensión',tone:'wide',ex:[
-   {d:'rowm',move:'rema ←',name:'Remo en máquina pendular, pecho apoyado',sets:'3 × 6-8',m:'esp',cue:'Pecho contra el soporte; tira con los codos y frena la vuelta 2-3 s.',why:'Tu máquina: carga alta sin gastar ni una gota de lumbar.'},
-   {d:'rowdb',move:'1 brazo',name:'Remo a una mano con mancuerna',sets:'2 × 8-10 por lado',m:'esp',cue:'Deja estirar el dorsal abajo y lleva el codo a la cadera sin rotar el tronco.',why:'Unilateral con recorrido largo: fácil de sentir y de progresar.'}]},
+   {d:'rowm',move:'rema ←',name:'Remo en máquina pendular, pecho apoyado',sets:'2 × 6-8',m:'esp',cue:'Pecho contra el soporte; tira con los codos y frena la vuelta 2-3 s.',why:'Tu máquina: carga alta sin gastar ni una gota de lumbar.'},
+   {d:'brow',move:'rema ↑',name:'Remo con barra',sets:'3 × 6-10',m:'esp',cue:'Bisagra estable, abdomen firme y barra hacia el ombligo. Si molesta la zona lumbar, usa el remo pendular.',why:'Espesor global y fuerza en el tirón horizontal.'}]},
   {t:'Bíceps',tone:'pump',ex:[
    {d:'curlinc',move:'estira',name:'Curl inclinado con mancuernas',sets:'3 × 8-12',m:'bi',cue:'Brazo colgando detrás del torso, sin adelantar el hombro.',why:'Bíceps en posición larga: el estímulo que más crece.'},
    {d:'hammer',move:'neutro',name:'Curl martillo',sets:'2 × 10-15',m:'bi',cue:'Muñeca neutra y cero balanceo.',why:'Braquial y antebrazo: grosor de brazo y agarre para dominadas.'}]},
   {t:'Core · compresión',tone:'wide',ex:[
    {d:'hangraise',move:'piernas ↑',name:'Elevación de piernas colgado',sets:'3 × 8-12',m:'core',cue:'Termina cada repetición con retroversión pélvica; si balanceas, para la serie.',why:'Compresión para L-sit y la fase 2 del dragon.'}]}]},
 
-{id:'d3',n:'Día 3',s:'Hombro y brazos',tag:'V-shape',short:'Hombro',delt:true,
- note:'Tu día específico: la máquina convergente inclinada que te gusta, el ancho por delante y por detrás, brazos y el core más exigente.',
+{id:'d3',n:'Día 3',s:'Reset · movilidad y skills',tag:'Activo',short:'Reset',wet:true,
+ note:'Recuperación activa a RPE 5-6: poca carga, movilidad de cadera y trabajo escapular sin convertirlo en otra sesión dura.',
+ blocks:[
+  {t:'Control y escápulas',tone:'wide',ex:[
+   {d:'lsit',move:'sostén',name:'L-sit / tuck L-sit',sets:'3 × 10-20 s',m:'core',cue:'Escápulas deprimidas, brazos bloqueados; termina cada serie con 4-5 s en reserva.',why:'Control y compresión sin convertirlo en otra paliza de core.'},
+   {d:'scap',move:'escápulas',name:'Scapular pull-ups + dead hang',sets:'2 × 8-10 + 2 × 20-30 s',m:'',cue:'Brazos rectos: mueve solo las escápulas. El dead hang, cómodo.',why:'Escápula fuerte para dominadas y agarre gratis.'}]},
+  {t:'Movilidad de cadera y lumbar',tone:'calm',ex:[
+   {d:'hip90',move:'rota ↔',name:'Transiciones 90/90 de cadera',sets:'2 × 6-8 por lado',m:'',cue:'Rodillas flexionadas, rota desde la cadera sin forzar la lumbar. Movimiento lento e indoloro.',why:'Mejora rotación interna y externa para sentadilla, prensa y comodidad lumbar.'},
+   {d:'mob',move:'suelta',name:'Movilidad completa',sets:'12-15 min',m:'',cue:'Prioriza flexores de cadera, glúteo, aductores y tobillo; añade dorsal y muñeca. Nada de dolor.',why:'Recupera rangos útiles sin sumar fatiga al ciclo.'}]},
+  {t:'Agua · opcional',tone:'wet',ex:[
+   {d:'swim',move:'suave',name:'Piscina técnica',sets:'15-25 min',m:'',cue:'Muy fácil: técnica de respiración y flotación.',why:'Cardio de bajo impacto que no deja resaca.'},
+   {d:'heat',move:'calor',name:'Sauna o baño turco',sets:'10-15 min',m:'',cue:'Solo hidratado; sal ante el primer mareo.',why:'Relajación, no prueba de resistencia.'}]}]},
+
+{id:'d4',n:'Día 4',s:'Hombro y brazos',tag:'V-shape',short:'Hombro',delt:true,
+ note:'Día específico después del reset: press vertical medible, ancho por delante y por detrás, brazos y core controlado.',
  blocks:[
   {t:'Fuerza hombro',ex:[
-   {d:'pressm',move:'empuja ↑',name:'Press de hombro en máquina inclinada',sets:'4 × 5-8',m:'da',cue:'Espalda pegada al respaldo; sube sin bloquear de golpe. 2,5-3 min.',why:'Tu press estable: progresa en fuerza sin gastar equilibrio.'}]},
+   {d:'pressm',move:'empuja ↑',name:'Press de hombro en máquina inclinada',sets:'4 × 5-8',m:'da',cue:'Espalda pegada y 1-2 RIR. Al lograr 4 × 8 limpio, sube la mínima placa. Descansa 2,5-3 min.',why:'Cuarto KPI de fuerza: presión vertical estable y medible.'}]},
   {t:'Ancho',tone:'wide',ex:[
    {d:'lateral',move:'abre ↗',name:'Elevación lateral en polea',sets:'4 × 10-15',m:'dl',cue:'Plano escapular, sin encoger el trapecio.',why:'Primera dosis del músculo que te hace ancho.'},
    {d:'rear',move:'abre ←→',name:'Pájaro en máquina',sets:'3 × 12-20',m:'dpo',cue:'Pecho fijo al soporte y pausa breve atrás.',why:'Profundidad de hombro y salud del manguito.'}]},
@@ -105,42 +124,28 @@ const DAYS=[
    {d:'curlz',move:'flexiona',name:'Curl con barra Z',sets:'3 × 8-12',m:'bi',cue:'Codos pegados al costado; torso inmóvil.',why:'Bíceps directo con carga, sin redundancia.'},
    {d:'tripd',move:'extiende ↓',name:'Extensión en polea con cuerda',sets:'3 × 10-15',m:'tri',cue:'Codos quietos; abre la cuerda al final y cierra del todo.',why:'Tríceps con mínima fatiga articular.'}]},
   {t:'Core · fuerza',tone:'wide',ex:[
-   {d:'abwheel',move:'rueda →',name:'Ab wheel',sets:'3 × 6-10',m:'core',cue:'Desde rodillas; gana rango antes que repeticiones.',why:'Anti-extensión de nivel: alimenta las fases 3-4 del dragon.'},
+   {d:'legraise',move:'piernas ↑',name:'Elevación de piernas tumbado',sets:'3 × 10-15',m:'core',cue:'Lumbar pegada al suelo y pelvis en retroversión; baja solo hasta donde mantengas el control.',why:'Compresión y abdomen inferior con una progresión fácil de dosificar.'},
    {d:'sideplank',move:'lateral',name:'Plancha lateral',sets:'2 × 30-45 s por lado',m:'core',cue:'Cadera alta y pelvis neutra.',why:'El plano frontal que la plancha normal no toca.'}]}]},
 
-{id:'d4',n:'Día 4',s:'Reset · movilidad y skills',tag:'Activo',short:'Reset',wet:true,
- note:'No es un día de fuerza: habilidades a RPE 5-6, lejos del fallo y sin lastre. El día que repara codo y hombro entre los dos bloques.',
- blocks:[
-  {t:'Body skills · técnica',tone:'wide',ex:[
-   {d:'lsit',move:'sostén',name:'L-sit / tuck L-sit',sets:'4 × 10-20 s',m:'core',cue:'Escápulas deprimidas, brazos bloqueados; termina cada serie con 4-5 s en reserva.',why:'Control y compresión sin convertirlo en otra paliza de core.'},
-   {d:'hstand',move:'equilibra',name:'Pino contra pared',sets:'4-5 × 20-30 s',m:'',cue:'Costillas abajo, glúteo activo. Nada de intentos máximos.',why:'Control de hombro y propiocepción que pagan todos los press.'},
-   {d:'scap',move:'escápulas',name:'Scapular pull-ups + dead hang',sets:'2 × 8-10 + 2 × 20-30 s',m:'',cue:'Brazos rectos: mueve solo las escápulas. El dead hang, cómodo.',why:'Escápula fuerte para dominadas y agarre gratis.'}]},
-  {t:'Movilidad',tone:'calm',ex:[
-   {d:'mob',move:'suelta',name:'Movilidad completa',sets:'15-20 min',m:'',cue:'Hombro, dorsal, muñeca, cadera y tobillo. Lento y sin dolor.',why:'Mantiene los rangos que usan press, dominada y sentadilla.'}]},
-  {t:'Agua · opcional',tone:'wet',ex:[
-   {d:'swim',move:'suave',name:'Piscina técnica',sets:'15-25 min',m:'',cue:'Muy fácil: técnica de respiración y flotación.',why:'Cardio de bajo impacto que no deja resaca.'},
-   {d:'heat',move:'calor',name:'Sauna o baño turco',sets:'10-15 min',m:'',cue:'Solo hidratado; sal ante el primer mareo.',why:'Relajación, no prueba de resistencia.'}]}]},
-
 {id:'d5',n:'Día 5',s:'Pecho pump y lateral',tag:'Bombeo',short:'Pecho P',delt:true,
- note:'Segunda exposición real de pecho: la banca vuelve en versión técnica con pausa y después tensión, estiramiento y aducción.',
+ note:'Segunda exposición real de pecho: banca técnica, tensión inclinada y aducción horizontal en polea hacia delante.',
  blocks:[
   {t:'Banca técnica',ex:[
    {base:'bp',pct:.72,round:r125,d:'benchp',move:'pausa 1 s',name:'Press banca con pausa',sets:'3 × 5 · 70-75%',m:'pec',cue:'Pausa clara en el pecho y sube rápido. Es técnica, no un test.',why:'La segunda frecuencia semanal que hace subir tu banca.'}]},
   {t:'Upper chest · volumen',tone:'wide',ex:[
-   {d:'incl',move:'empuja ↗',name:'Press inclinado con mancuernas · pump',sets:'3 × 10-12',m:'pec',cue:'Misma técnica del día 1 con bastante menos carga; 90-120 s.',why:'Tu básico otra vez, ahora en tiempo bajo tensión.'},
-   {d:'fly',move:'abre/cierra',name:'Fly inclinado con mancuernas',sets:'2 × 12-15',m:'pec',cue:'Excéntrica de 2-3 s; cierra sin chocar las mancuernas.',why:'Tensión continua en el rango largo.'},
-   {d:'cable',move:'junta ↗',name:'Cruce de polea bajo → alto',sets:'2 × 15-20',m:'pec',cue:'Pausa de 1 s con las manos juntas y arriba.',why:'La aducción final de recorrido que las mancuernas pierden.'}]},
+   {d:'incl',move:'empuja ↗',name:'Press inclinado con mancuernas · pump',sets:'2 × 10-12',m:'pec',cue:'Misma técnica del día 1 con bastante menos carga; 90-120 s.',why:'Tu básico otra vez, ahora en tiempo bajo tensión.'},
+   {d:'flyf',move:'junta →',name:'Fly en polea hacia delante',sets:'2 × 12-15',m:'pec',cue:'Poleas a la altura del pecho, codos suaves y manos al frente. Pausa 1 s sin encorvar hombros.',why:'Aducción horizontal con tensión continua y recorrido controlable.'}]},
   {t:'Deltoide lateral',tone:'wide',ex:[
    {d:'lateral',move:'abre ↗',name:'Elevación lateral con mancuernas',sets:'3 × 15-20',m:'dl',cue:'Tensión continua y cero balanceo.',why:'Segunda dosis semanal del ancho.'}]},
   {t:'Tríceps pump',tone:'pump',ex:[
    {d:'tripd',move:'extiende ↓',name:'Extensión en polea con cuerda',sets:'3 × 12-20',m:'tri',cue:'60-75 s de descanso; busca contracción, no récord.',why:'Bombeo con coste articular mínimo.'}]}]},
 
 {id:'d6',n:'Día 6',s:'Espalda pump y posterior',tag:'Bombeo',short:'Espalda P',delt:true,
- note:'Repeticiones altas y congestión: jalón, tu pendular en versión tensión, pullover, práctica de dominadas y el seguro del hombro.',
+ note:'Repeticiones altas y congestión: lat pulldown, remo en polea, pullover, dominadas técnicas y trabajo posterior.',
  blocks:[
   {t:'Espalda · volumen',tone:'wide',ex:[
    {d:'latp',move:'tira ↓',name:'Jalón al pecho, agarre neutro',sets:'3 × 10-15',m:'esp',cue:'Deprime la escápula primero; excéntrica controlada.',why:'Dorsal a repeticiones para sumar anchura.'},
-   {d:'rowm',move:'rema ←',name:'Remo en máquina pendular · pump',sets:'2 × 12-15',m:'esp',cue:'Menos carga que el día 2: pausa de 1 s atrás y estira del todo.',why:'Tu máquina en versión tensión continua.'},
+   {d:'rowc',move:'rema ←',name:'Remo sentado en polea, agarre neutro',sets:'2 × 10-15',m:'esp',cue:'Torso estable, estira la escápula al frente y lleva los codos hacia la cadera. Pausa 1 s atrás.',why:'Espesor con tensión continua y poca carga lumbar.'},
    {d:'pullover',move:'brazos ↓',name:'Pullover de brazos rectos en polea',sets:'2 × 15-20',m:'esp',cue:'Codos casi fijos; manos a los muslos sin empujar con el tríceps.',why:'Aísla la extensión de hombro del dorsal.'},
    {d:'pull',move:'reps',name:'Dominadas a peso corporal',sets:'1 × 8-15',m:'esp',cue:'Deja 2 en reserva; cero kipping.',why:'Segunda práctica del patrón sin freír el codo.'}]},
   {t:'Posterior y salud',tone:'wide',ex:[
@@ -150,21 +155,19 @@ const DAYS=[
    {d:'curlc',move:'flexiona',name:'Curl en polea baja',sets:'3 × 12-15',m:'bi',cue:'Tensión constante; si el codo protesta, cambia a martillo.',why:'Cierra el brazo sin interferir con las dominadas.'}]}]},
 
 {id:'d7',n:'Día 7',s:'Pierna y dragon core',tag:'Pierna',short:'Pierna',
- note:'Pierna completa y contenida: potencia en fresco, tus dos máquinas, gemelos, y el bloque dragon que cambia según la semana. Agua de cierre.',
+ note:'Pierna completa y contenida: máquinas, cadena posterior, erectores, gemelos y el bloque dragon que cambia según la semana.',
  blocks:[
   {t:'Entrada',tone:'calm',ex:[
    {d:'squatbw',move:'profunda',name:'Sentadilla peso corporal + movilidad',sets:'2 rondas',m:'',cue:'Sentadilla profunda con pausa + cadera y tobillo. Es calentamiento, no serie.',why:'La base de movimiento antes de las máquinas, como pediste.'}]},
-  {t:'Potencia',ex:[
-   {d:'jump',move:'salta ↑',name:'Box jump',sets:'4 × 3',m:'pie',cue:'Fresco y explosivo; para en cuanto baje la altura.',why:'Potencia sin coste de hipertrofia.'}]},
   {t:'Pierna',tone:'wide',ex:[
    {d:'legpress',move:'empuja →',name:'Prensa de pierna horizontal',sets:'3 × 8-12',m:'pie',cue:'Pelvis pegada al asiento; las rodillas siguen a los pies.',why:'Tu máquina: cuádriceps con carga dosificable.'},
    {d:'legext',move:'extiende',name:'Extensión de cuádriceps',sets:'3 × 12-15',m:'pie',cue:'Pausa arriba y baja en 2 s.',why:'Cuádriceps directo sin cargar la columna.'},
    {d:'legcurl',move:'flexiona',name:'Curl femoral',sets:'3 × 10-15',m:'ham',cue:'Cadera fija y rango completo.',why:'Equilibra la rodilla y protege el isquio.'},
+   {d:'backext',move:'cadera ↑',name:'Extensión lumbar en banco 45°',sets:'3 × 10-15 · progresiva',m:'ere',cue:'Empieza sin peso. Mueve desde la cadera, columna neutra y sube solo hasta alinear el cuerpo; rango indoloro.',why:'Fortalece erectores y cadena posterior con apoyo estable y carga gradual.'},
    {d:'calf',move:'talón ↑',name:'Elevación de gemelo',sets:'4 × 12-15',m:'cal',cue:'Pausa arriba y estiramiento completo abajo.',why:'El detalle que remata la pierna definida.'},
    {d:'pistol',move:'1 pierna',name:'Pistol squat · progresión',sets:'2 × 4-8 por lado',m:'pie',cue:'Caja o apoyo si hace falta; controla la bajada.',why:'Fuerza relativa y estabilidad unilateral.'}]},
   {t:'Dragon core',tone:'wide',ex:[
-   {d:'dragon',dyn:'dragon',move:'baja lento',name:'Dragon flag',sets:'4 × 3-6',m:'core',cue:'Tuck negative primero; solo avanza si costillas y pelvis se mantienen bloqueadas.',why:'Trabajo específico hacia tu skill objetivo.'},
-   {d:'mclimb',move:'rápido ↔',name:'Mountain climbers',sets:'6 × 20 s / 40 s',m:'core',cue:'Cadera quieta, rodillas rápidas, lumbar sin hundir.',why:'Cardio y core dinámico en un solo bloque.'}]},
+   {d:'dragon',dyn:'dragon',move:'baja lento',name:'Dragon flag',sets:'4 × 3-6',m:'core',cue:'Tuck negative primero; solo avanza si costillas y pelvis se mantienen bloqueadas.',why:'Trabajo específico hacia tu skill objetivo.'}]},
   {t:'Agua · cierre',tone:'wet',ex:[
    {d:'swim',move:'suave',name:'Piscina suave + sauna',sets:'15-20 min · opcional',m:'',cue:'Nadar fácil y calor corto: esto es recuperación, no más entreno.',why:'El cierre que ya te funcionaba.'}]}]}
 ];
