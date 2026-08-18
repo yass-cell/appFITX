@@ -79,8 +79,18 @@ h1 em{font-style:normal;color:var(--heat)}
 .day.on s{color:var(--heat)}
 .day.wet.on{border-color:var(--water);background:#0F1D22}
 .day.wet.on s{color:var(--water)}
+.day.done,.day.on.done,.day.wet.on.done{border-color:var(--ok);background:rgba(95,214,139,.1)}
+.day.done b,.day.done s,.day.on.done s,.day.wet.on.done s{color:var(--ok)}
+.daycheck{position:absolute;top:4px;right:6px;color:var(--ok);font-family:"JetBrains Mono",monospace;
+ font-size:11px;font-weight:700}
 .day.delt::after{content:"";position:absolute;top:6px;right:6px;width:5px;height:5px;
  border-radius:50%;background:var(--wide)}
+.day.delt.done::after{display:none}
+.weekmark{display:flex;align-items:center;gap:10px;padding:12px 0 0}
+.weekmark>span:first-child{flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+ letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.weekbar{flex:1;height:5px;background:var(--panel);border-radius:2px;overflow:hidden}
+.weekbar i{display:block;width:0;height:100%;background:var(--ok);transition:width .25s ease}
 .seshhead{display:flex;align-items:baseline;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
 .seshhead h3{font-family:"Anton",sans-serif;font-weight:400;font-size:24px;margin:0;text-transform:uppercase}
 .tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;

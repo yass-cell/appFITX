@@ -41,7 +41,25 @@ const epley=(kg,r)=>kg*(1+r/30);
 const val=e=>e.kg>0?epley(e.kg,e.r):e.r;
 const fmt=n=>Math.round(n*10)/10;
 const dmy=s=>{const p=s.split('-');return p[2]+'/'+p[1]};
-const today=()=>new Date().toISOString().slice(0,10);
+const dateKey=d=>{
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+};
+const today=()=>dateKey(new Date());
+function weekDates(){
+  const now=new Date();now.setHours(12,0,0,0);
+  const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+  return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return dateKey(d)});
+}
+function requiredExercises(d){
+  return d.blocks.flatMap(b=>/opcional/i.test(b.t)?[]:b.ex
+    .filter(e=>!/opcional/i.test(e.sets||''))
+    .map(e=>slug(e.name)));
+}
+function dayComplete(d){
+  const ids=requiredExercises(d),done=doneDb();
+  return ids.length>0&&weekDates().some(date=>ids.every(id=>done[date+'|'+d.id+'|'+id]));
+}
 function prsOf(id){const d=DB();return (d.prs[id]||[]).slice().sort((a,b)=>a.d.localeCompare(b.d));}
 function bestOf(id){const l=prsOf(id);if(!l.length)return null;let b=l[0],bv=val(l[0]);
  l.forEach(e=>{const v=val(e);if(v>bv){bv=v;b=e}});return b;}
@@ -75,12 +93,17 @@ function rail(){
 function dayTabs(){
   const el=document.getElementById('days');el.innerHTML='';
   DAYS.forEach(d=>{
+    const complete=dayComplete(d);
     const b=document.createElement('button');
-    b.className='day'+(d.id===day?' on':'')+(d.wet?' wet':'')+(d.delt?' delt':'');
-    b.innerHTML=`<b>${d.n}</b><s>${d.short}</s>`;
+    b.className='day'+(d.id===day?' on':'')+(d.wet?' wet':'')+(d.delt?' delt':'')+(complete?' done':'');
+    b.innerHTML=`<b>${d.n}</b><s>${d.short}</s>${complete?'<span class="daycheck">✓</span>':''}`;
+    b.setAttribute('aria-label',d.n+' '+d.short+(complete?' completado esta semana':''));
     b.onclick=()=>{day=d.id;dayTabs();sesh()};
     el.appendChild(b);
   });
+  const n=DAYS.filter(dayComplete).length;
+  document.getElementById('weekDoneText').textContent='Semana actual · '+n+'/7 días completos';
+  document.getElementById('weekDoneBar').style.width=Math.round(n/7*100)+'%';
 }
 function sesh(){
   readBases();
@@ -135,7 +158,7 @@ function sesh(){
   host.querySelectorAll('[data-done]').forEach(b=>b.addEventListener('click',()=>{
     const d=doneDb(),id=b.dataset.done;
     if(d[id])delete d[id];else d[id]=true;
-    putDone(d);sesh();
+    putDone(d);dayTabs();sesh();
   }));
   host.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{
     const f=document.getElementById('prf-'+b.dataset.pr);
@@ -340,6 +363,15 @@ document.getElementById('file').addEventListener('change',ev=>{
   if(d.bases)['bp','pu','dp','bw'].forEach(k=>{if(d.bases[k])document.getElementById(k).value=d.bases[k];});
   rail();dayTabs();sesh();volume();buildGroups();buildExList();drawChart();
 })();
+
+let renderedDate=today();
+function refreshDateBoundary(){
+  const current=today();
+  if(current===renderedDate)return;
+  renderedDate=current;dayTabs();sesh();
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshDateBoundary()});
+setInterval(refreshDateBoundary,60000);
 
 /* ================= PWA: instalación ================= */
 let deferredPrompt=null;
