@@ -55,6 +55,62 @@
   <p class="kicker">Evolución temporal</p>
   <h1>Pro<em>greso</em></h1>
 </header>
+
+<section class="weekdash" aria-labelledby="weekDashTitle">
+  <div class="sectionhead"><h2 id="weekDashTitle">Esta semana</h2><span id="weekRange">—</span></div>
+  <div class="statgrid">
+    <div class="stat"><b id="statDays">0/7</b><span>Días</span></div>
+    <div class="stat"><b id="statExercises">0/0</b><span>Ejercicios</span></div>
+    <div class="stat star"><b id="statPrs">★ 0</b><span>PR nuevos</span></div>
+    <div class="stat"><b id="statStreak">0</b><span>Semanas 7/7</span></div>
+  </div>
+  <div class="weekdots" id="weekDots" aria-label="Estado de los siete días de la rutina"></div>
+</section>
+
+<section class="calendarcard" aria-labelledby="calendarTitle">
+  <div class="calhead">
+    <button class="calnav" id="calPrev" aria-label="Mes anterior">‹</button>
+    <h2 id="calendarTitle">—</h2>
+    <button class="calnav" id="calNext" aria-label="Mes siguiente">›</button>
+  </div>
+  <div class="calweek" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+  <div class="calgrid" id="calGrid"></div>
+  <div class="callegend">
+    <span><i class="complete"></i>Completo</span><span><i class="partial"></i>Parcial</span><span><b>★</b>PR</span>
+  </div>
+  <div class="daydetail" id="dayDetail"></div>
+</section>
+
+<section class="bodytrack" aria-labelledby="bodyTitle">
+  <div class="sectionhead"><h2 id="bodyTitle">Recomposición</h2><span>Registro semanal</span></div>
+  <div class="bodyform">
+    <div><p class="lbl">Fecha</p><input id="bodyDate" type="date"></div>
+    <div><p class="lbl">Peso kg</p><input id="bodyWeight" type="number" inputmode="decimal" step="0.1" min="0" placeholder="75.0"></div>
+    <div><p class="lbl">Cintura cm</p><input id="bodyWaist" type="number" inputmode="decimal" step="0.1" min="0" placeholder="82.0"></div>
+  </div>
+  <div class="bodyactions">
+    <button class="btn" id="saveBody">Guardar medida</button>
+    <button class="btn ghost danger" id="deleteBody" hidden>Eliminar</button>
+  </div>
+  <div class="photoline">
+    <div id="photoPreview"><span>Sin foto para esta fecha</span></div>
+    <div class="photoactions">
+      <button class="btn ghost" id="choosePhoto">Añadir foto</button>
+      <button class="textbtn danger" id="deletePhoto" hidden>Eliminar foto</button>
+    </div>
+  </div>
+  <input type="file" id="photoInput" accept="image/*" style="display:none">
+  <p class="privacy">Las fotos se comprimen y quedan guardadas únicamente en este dispositivo. Se incluyen al exportar tu copia.</p>
+  <div class="bodymodes" aria-label="Métrica corporal del gráfico">
+    <button class="chip on" id="metricWeight" aria-pressed="true">PESO</button>
+    <button class="chip" id="metricWaist" aria-pressed="false">CINTURA</button>
+  </div>
+  <div class="bodychart" id="bodyChart"></div>
+</section>
+
+<div class="progresssection">
+  <div class="sectionhead"><h2>Marcas por ejercicio</h2><span>Kg y repeticiones reales</span></div>
+</div>
 <div class="chips" id="groups"></div>
 <div class="exlist" id="exlist"></div>
 <div class="chartmodes" aria-label="Ejes del gráfico">
@@ -80,7 +136,7 @@
 </div>
 <div class="card">
   <h3>Copia de seguridad</h3>
-  <p>Los datos viven en el navegador. Si limpias datos de Chrome o Android reclama espacio, se pierden. Exporta de vez en cuando; al importar, se fusiona sin borrar lo que ya tengas.</p>
+  <p>Exporta marcas, casillas completadas, medidas y fotos. Al importar se fusiona por fecha sin borrar lo que ya tengas.</p>
   <div class="tools">
     <button class="btn ghost" id="exp">Exportar JSON</button>
     <button class="btn ghost" id="imp">Importar JSON</button>

@@ -2,9 +2,16 @@
 const KEY='gym-app-v1';
 let mem=null,smode='memoria';
 try{localStorage.setItem('__t','1');localStorage.removeItem('__t');smode='localStorage';}catch(e){}
+const cleanDb=d=>{
+  const x=d&&typeof d==='object'?d:{};
+  if(!x.prs||typeof x.prs!=='object')x.prs={};
+  if(!x.bases||typeof x.bases!=='object')x.bases={};
+  if(!Array.isArray(x.body))x.body=[];
+  return x;
+};
 function DB(){
-  if(smode==='localStorage'){try{return JSON.parse(localStorage.getItem(KEY)||'{"prs":{},"bases":{}}')}catch(e){return{prs:{},bases:{}}}}
-  return mem||(mem={prs:{},bases:{}});
+  if(smode==='localStorage'){try{return cleanDb(JSON.parse(localStorage.getItem(KEY)||'{"prs":{},"bases":{},"body":[]}'))}catch(e){return cleanDb({})}}
+  return mem||(mem=cleanDb({}));
 }
 function put(d){if(smode==='localStorage'){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}mem=d;}
 const DONE_KEY='gym-done-v1';
@@ -14,6 +21,37 @@ function doneDb(){
   return doneMem;
 }
 function putDone(d){if(smode==='localStorage'){try{localStorage.setItem(DONE_KEY,JSON.stringify(d))}catch(e){}}doneMem=d;}
+
+/* Las fotos van en IndexedDB para no llenar el espacio reservado a marcas y casillas. */
+const MEDIA_DB='gym-media-v1',MEDIA_STORE='photos';
+let mediaPromise=null,mediaMem={};
+function mediaDb(){
+  if(!('indexedDB' in window))return Promise.resolve(null);
+  if(mediaPromise)return mediaPromise;
+  mediaPromise=new Promise(resolve=>{
+    const req=indexedDB.open(MEDIA_DB,1);
+    req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(MEDIA_STORE))req.result.createObjectStore(MEDIA_STORE,{keyPath:'d'});};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>resolve(null);
+  });
+  return mediaPromise;
+}
+async function photoGet(d){
+  const db=await mediaDb();if(!db)return mediaMem[d]||null;
+  return new Promise(resolve=>{const r=db.transaction(MEDIA_STORE,'readonly').objectStore(MEDIA_STORE).get(d);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null);});
+}
+async function photoAll(){
+  const db=await mediaDb();if(!db)return Object.values(mediaMem);
+  return new Promise(resolve=>{const r=db.transaction(MEDIA_STORE,'readonly').objectStore(MEDIA_STORE).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>resolve([]);});
+}
+async function photoPut(p){
+  const db=await mediaDb();if(!db){mediaMem[p.d]=p;return;}
+  return new Promise(resolve=>{const tx=db.transaction(MEDIA_STORE,'readwrite');tx.objectStore(MEDIA_STORE).put(p);tx.oncomplete=()=>resolve();tx.onerror=()=>resolve();});
+}
+async function photoRemove(d){
+  const db=await mediaDb();if(!db){delete mediaMem[d];return;}
+  return new Promise(resolve=>{const tx=db.transaction(MEDIA_STORE,'readwrite');tx.objectStore(MEDIA_STORE).delete(d);tx.oncomplete=()=>resolve();tx.onerror=()=>resolve();});
+}
 const st=document.getElementById('store');
 st.textContent=smode==='localStorage'?'ACTIVO · guardado en este dispositivo':'SOLO SESIÓN · descarga el archivo y ábrelo en Chrome';
 if(smode!=='localStorage')st.classList.add('off');
@@ -37,17 +75,17 @@ const GROUPS=['Básicos','Pecho','Espalda','Hombro','Brazo','Pierna','Core y ski
 if(Object.values(EX).some(e=>e.grp==='Archivo'))GROUPS.push('Archivo');
 
 /* ================= métricas ================= */
-const epley=(kg,r)=>kg*(1+r/30);
-const val=e=>e.kg>0?epley(e.kg,e.r):e.r;
 const fmt=n=>Math.round(n*10)/10;
 const dmy=s=>{const p=s.split('-');return p[2]+'/'+p[1]};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const dateKey=d=>{
   const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 };
 const today=()=>dateKey(new Date());
-function weekDates(){
-  const now=new Date();now.setHours(12,0,0,0);
+const keyDate=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12,0,0,0)};
+function weekDates(anchor=new Date()){
+  const now=new Date(anchor);now.setHours(12,0,0,0);
   const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
   return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return dateKey(d)});
 }
@@ -61,8 +99,24 @@ function dayComplete(d){
   return ids.length>0&&weekDates().some(date=>ids.every(id=>done[date+'|'+d.id+'|'+id]));
 }
 function prsOf(id){const d=DB();return (d.prs[id]||[]).slice().sort((a,b)=>a.d.localeCompare(b.d));}
-function bestOf(id){const l=prsOf(id);if(!l.length)return null;let b=l[0],bv=val(l[0]);
- l.forEach(e=>{const v=val(e);if(v>bv){bv=v;b=e}});return b;}
+function bestOf(id){const l=prsOf(id);if(!l.length)return null;return l.reduce((b,e)=>
+  (+e.kg||0)>(+b.kg||0)||((+e.kg||0)===(+b.kg||0)&&(+e.r||0)>(+b.r||0))?e:b,l[0]);}
+function rawPrFlags(list){
+  let first=true,maxKg=-Infinity,repsAtKg={};
+  return list.slice().sort((a,b)=>a.d.localeCompare(b.d)).map(e=>{
+    const kg=+e.kg||0,r=+e.r||0,prior=repsAtKg[kg]||0;
+    const loadPr=!first&&kg>maxKg,repPr=!first&&kg===maxKg&&r>prior;
+    maxKg=Math.max(maxKg,kg);repsAtKg[kg]=Math.max(prior,r);first=false;
+    return {...e,isPr:loadPr||repPr,prType:loadPr?'Carga':repPr?'Repeticiones':''};
+  });
+}
+function allPrEvents(){
+  const out=[];
+  Object.entries(DB().prs||{}).forEach(([id,list])=>rawPrFlags(list).forEach(e=>{
+    if(e.isPr)out.push({id,name:EX[id]?.name||id.replace(/-/g,' '),...e});
+  }));
+  return out.sort((a,b)=>a.d.localeCompare(b.d));
+}
 
 /* ================= tabs ================= */
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
@@ -70,12 +124,12 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
   document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');
   document.getElementById(b.dataset.p).classList.add('on');
-  if(b.dataset.p==='p-progreso'){buildExList();drawChart();}
+  if(b.dataset.p==='p-progreso'){renderProgress();buildExList();drawChart();}
   window.scrollTo(0,0);
 }));
 
 /* ================= rutina ================= */
-let week=1,day='d1';
+let week=Math.min(8,Math.max(1,parseInt(DB().programWeek)||1)),day='d1';
 const bases={};
 function readBases(){['bp','pu','dp','bw'].forEach(k=>bases[k]=parseFloat(document.getElementById(k).value)||0);}
 function rail(){
@@ -84,7 +138,7 @@ function rail(){
     const b=document.createElement('button');
     b.className='wk'+(w===week?' on':'');b.textContent=w;
     if(w===4)b.dataset.phase='deload';
-    b.onclick=()=>{week=w;rail();sesh();volume()};
+    b.onclick=()=>{week=w;const d=DB();d.programWeek=w;put(d);rail();sesh();volume()};
     el.appendChild(b);
   }
   document.getElementById('phase').textContent=PH[week].toUpperCase()+'  ·  BÁSICOS A '+SR[week];
@@ -148,7 +202,7 @@ function sesh(){
             <div><p class="lbl">Reps o seg</p><input type="number" inputmode="numeric" step="1" min="1" id="rp-${bi}-${ei}" placeholder="5"></div>
             <button class="btn" data-save="${bi}-${ei}" data-id="${id}">OK</button>
           </div>
-          ${best?`<p class="prlast">Tu mejor: <b>${best.kg>0?best.kg+' kg × '+best.r:best.r}</b> (${dmy(best.d)})${best.kg>0?' · 1RM est. '+fmt(epley(best.kg,best.r))+' kg':''}</p>`:''}
+          ${best?`<p class="prlast">Tu mejor: <b>${best.kg>0?best.kg+' kg × '+best.r:best.r}</b> (${dmy(best.d)})</p>`:''}
         </div>`:''}
       </div>`;
     });
@@ -158,7 +212,7 @@ function sesh(){
   host.querySelectorAll('[data-done]').forEach(b=>b.addEventListener('click',()=>{
     const d=doneDb(),id=b.dataset.done;
     if(d[id])delete d[id];else d[id]=true;
-    putDone(d);dayTabs();sesh();
+    putDone(d);dayTabs();sesh();renderProgress();
   }));
   host.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{
     const f=document.getElementById('prf-'+b.dataset.pr);
@@ -172,7 +226,7 @@ function sesh(){
     const d=DB(),f=today();
     d.prs[id]=(d.prs[id]||[]).filter(x=>x.d!==f);
     d.prs[id].push({d:f,kg,r});
-    put(d); sesh();
+    put(d);sesh();renderProgress();buildExList();drawChart();
   }));
 }
 ['bp','pu','dp','bw'].forEach(k=>{
@@ -202,6 +256,154 @@ function volume(){
       <span class="vbar"><i style="width:${Math.round(v/max*100)}%"></i></span>
       <span class="vnum">${v}</span></div>`;
   }).join('');
+}
+
+/* ================= calendario y resumen ================= */
+const DAY_LETTERS=['L','M','X','J','V','S','D'];
+let calendarCursor=(()=>{const d=keyDate(today());return new Date(d.getFullYear(),d.getMonth(),1,12)})();
+let selectedCalendarDate=today(),bodyMetric='weight',photoDates=new Set(),detailPhotoToken=0,photoControlToken=0;
+
+function doneIndex(){
+  const out={};
+  Object.entries(doneDb()).forEach(([key,on])=>{
+    if(!on)return;
+    const p=key.split('|');if(p.length<3)return;
+    const date=p[0],dayId=p[1],id=p.slice(2).join('|');
+    (((out[date]||(out[date]={}))[dayId]||(out[date][dayId]=new Set()))).add(id);
+  });
+  return out;
+}
+function exerciseLabel(dayId,id){
+  const d=DAYS.find(x=>x.id===dayId);
+  if(d){const e=d.blocks.flatMap(b=>b.ex).find(x=>slug(x.name)===id);if(e)return e.name;}
+  return id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());
+}
+function sessionStats(date,d,index=doneIndex()){
+  const set=index[date]?.[d.id]||new Set(),required=requiredExercises(d);
+  const requiredSet=new Set(required),doneRequired=required.filter(id=>set.has(id));
+  const optional=[...set].filter(id=>!requiredSet.has(id));
+  return {date,day:d,started:set.size>0,total:required.length,done:doneRequired.length,
+    complete:required.length>0&&required.every(id=>set.has(id)),required,doneSet:set,optional};
+}
+function dateActivity(date,index=doneIndex()){
+  const sessions=DAYS.map(d=>sessionStats(date,d,index)).filter(s=>s.started);
+  const done=sessions.reduce((n,s)=>n+s.done,0),total=sessions.reduce((n,s)=>n+s.total,0);
+  return {date,sessions,done,total,has:sessions.length>0,complete:sessions.length>0&&sessions.every(s=>s.complete)};
+}
+function weekSummaryFor(anchor=new Date(),index=doneIndex()){
+  const dates=weekDates(anchor);
+  const routine=DAYS.map(d=>{
+    const options=dates.map(date=>sessionStats(date,d,index));
+    return options.reduce((best,s)=>s.done>best.done?s:best,options[0]);
+  });
+  const prs=allPrEvents().filter(e=>e.d>=dates[0]&&e.d<=dates[6]);
+  return {dates,routine,days:routine.filter(s=>s.complete).length,
+    exercises:routine.reduce((n,s)=>n+s.done,0),
+    total:DAYS.reduce((n,d)=>n+requiredExercises(d).length,0),prs};
+}
+function fullWeekStreak(index=doneIndex()){
+  let anchor=new Date(),sum=weekSummaryFor(anchor,index);
+  if(sum.days<7)anchor.setDate(anchor.getDate()-7);
+  let streak=0;
+  for(let i=0;i<104;i++){
+    if(weekSummaryFor(anchor,index).days!==7)break;
+    streak++;anchor.setDate(anchor.getDate()-7);
+  }
+  return streak;
+}
+function bodyRecords(){
+  const map={};(DB().body||[]).forEach(e=>{if(e&&e.d)map[e.d]=e});
+  return Object.values(map).sort((a,b)=>a.d.localeCompare(b.d));
+}
+function bodyMap(){const out={};bodyRecords().forEach(e=>out[e.d]=e);return out;}
+function prsByDate(){const out={};allPrEvents().forEach(e=>(out[e.d]||(out[e.d]=[])).push(e));return out;}
+
+function renderWeekDashboard(){
+  const index=doneIndex(),s=weekSummaryFor(new Date(),index),pbd=prsByDate();
+  document.getElementById('weekRange').textContent=dmy(s.dates[0])+' – '+dmy(s.dates[6]);
+  document.getElementById('statDays').textContent=s.days+'/7';
+  document.getElementById('statExercises').textContent=s.exercises+'/'+s.total;
+  document.getElementById('statPrs').textContent='★ '+s.prs.length;
+  document.getElementById('statStreak').textContent=fullWeekStreak(index);
+  document.getElementById('weekDots').innerHTML=s.dates.map((date,i)=>{
+    const a=dateActivity(date,index),stars=(pbd[date]||[]).length;
+    return `<div class="wdot${a.complete?' done':a.has?' partial':''}" title="${date}">
+      <b>${DAY_LETTERS[i]}</b><span>${keyDate(date).getDate()}</span>${stars?`<i class="mini-star">★${stars>1?stars:''}</i>`:''}</div>`;
+  }).join('');
+}
+function renderCalendar(){
+  const y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),index=doneIndex(),pbd=prsByDate(),bm=bodyMap();
+  document.getElementById('calendarTitle').textContent=new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'}).format(calendarCursor);
+  const first=(new Date(y,m,1).getDay()+6)%7,last=new Date(y,m+1,0).getDate();
+  let h=Array.from({length:first},()=>'<button class="calday blank" tabindex="-1"></button>').join('');
+  for(let n=1;n<=last;n++){
+    const date=dateKey(new Date(y,m,n,12)),a=dateActivity(date,index),stars=(pbd[date]||[]).length;
+    const cls=a.complete?' complete':a.has?' partial':'';
+    h+=`<button class="calday${cls}${date===today()?' today':''}${date===selectedCalendarDate?' selected':''}${date>today()?' future':''}" data-caldate="${date}" aria-label="${n}${a.complete?', entrenamiento completo':a.has?', entrenamiento parcial':''}${stars?', '+stars+' PR':''}">
+      <span class="num">${n}</span>${bm[date]||photoDates.has(date)?'<i class="measure"></i>':''}${stars?`<span class="stars">★${stars>1?stars:''}</span>`:''}</button>`;
+  }
+  document.getElementById('calGrid').innerHTML=h;
+  document.querySelectorAll('[data-caldate]').forEach(b=>b.addEventListener('click',()=>selectProgressDate(b.dataset.caldate)));
+}
+function selectProgressDate(date){
+  selectedCalendarDate=date;
+  const d=keyDate(date);calendarCursor=new Date(d.getFullYear(),d.getMonth(),1,12);
+  renderCalendar();renderDayDetail(date);loadBodyForm(date);renderPhotoControl(date);
+}
+function renderDayDetail(date=selectedCalendarDate){
+  const host=document.getElementById('dayDetail'),a=dateActivity(date),prs=prsByDate()[date]||[],body=bodyMap()[date];
+  const title=new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long'}).format(keyDate(date));
+  let h=`<div class="detailhead"><h3>${esc(title)}</h3><span>${a.sessions.length?a.done+'/'+a.total+' ejercicios':'Sin entrenamiento'}</span></div>`;
+  a.sessions.forEach(s=>{
+    const optional=s.optional.map(id=>`<span class="done">✓ ${esc(exerciseLabel(s.day.id,id))}</span>`).join('');
+    h+=`<div class="detailsession"><div class="detailtitle"><b>${esc(s.day.n+' · '+s.day.short)}</b><span class="${s.complete?'ok':''}">${s.complete?'✓ COMPLETO':s.done+'/'+s.total}</span></div>
+      <div class="detailchecks">${s.required.map(id=>`<span class="${s.doneSet.has(id)?'done':''}">${s.doneSet.has(id)?'✓':'○'} ${esc(exerciseLabel(s.day.id,id))}</span>`).join('')}${optional}</div></div>`;
+  });
+  if(prs.length)h+=`<div class="detailprs">${prs.map(e=>`<div class="detailpr"><span>★</span><b>${esc(e.name)}</b><em>${e.kg>0?fmt(e.kg)+' kg × '+e.r:e.r+' reps/s'} · ${e.prType}</em></div>`).join('')}</div>`;
+  if(body)h+=`<div class="detailbody">${body.weight?`<span>${fmt(body.weight)} kg</span>`:''}${body.waist?`<span>Cintura ${fmt(body.waist)} cm</span>`:''}</div>`;
+  if(!a.has&&!prs.length&&!body&&!photoDates.has(date))h+='<p class="detail-empty">Todavía no hay actividad registrada este día.</p>';
+  h+='<div class="detailphoto" id="detailPhoto"></div>';
+  host.innerHTML=h;
+  const requested=++detailPhotoToken;
+  photoGet(date).then(p=>{
+    if(requested!==detailPhotoToken||date!==selectedCalendarDate)return;
+    const el=document.getElementById('detailPhoto');if(!el||!p)return;
+    el.innerHTML=`<img src="${p.data}" alt="Foto de progreso del ${date}"><button class="textbtn danger" id="detailDeletePhoto">Eliminar foto</button>`;
+    document.getElementById('detailDeletePhoto').onclick=deleteSelectedPhoto;
+  });
+}
+document.getElementById('calPrev').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1,12);renderCalendar()});
+document.getElementById('calNext').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1,12);renderCalendar()});
+
+function loadBodyForm(date=selectedCalendarDate){
+  const rec=bodyMap()[date];
+  document.getElementById('bodyDate').value=date;
+  document.getElementById('bodyWeight').value=rec?.weight||'';
+  document.getElementById('bodyWaist').value=rec?.waist||'';
+  document.getElementById('deleteBody').hidden=!rec;
+}
+function drawBodyChart(){
+  const host=document.getElementById('bodyChart'),unit=bodyMetric==='weight'?'kg':'cm';
+  const list=bodyRecords().filter(e=>Number.isFinite(+e[bodyMetric])&&+e[bodyMetric]>0);
+  if(!list.length){host.innerHTML=`<p class="empty">Añade ${bodyMetric==='weight'?'tu peso':'tu cintura'} una vez por semana para ver la tendencia.</p>`;return;}
+  const W=700,H=180,L=44,R=12,T=14,B=28,x0=keyDate(list[0].d).getTime(),x1=keyDate(list[list.length-1].d).getTime();
+  let y0=Math.min(...list.map(e=>+e[bodyMetric])),y1=Math.max(...list.map(e=>+e[bodyMetric]));
+  const pad=(y1-y0)*.18||Math.max(y1*.015,.5);y0=Math.max(0,y0-pad);y1+=pad;
+  const px=x=>L+(x1===x0 ? .5 : (x-x0)/(x1-x0))*(W-L-R),py=y=>T+(1-(y-y0)/(y1-y0||1))*(H-T-B);
+  let grid='';for(let i=0;i<=3;i++){const v=y0+(y1-y0)*i/3,y=py(v);grid+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#22333F"/><text x="${L-6}" y="${y+4}" text-anchor="end" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="10">${fmt(v)}</text>`;}
+  const points=list.map(e=>px(keyDate(e.d).getTime()).toFixed(1)+','+py(+e[bodyMetric]).toFixed(1)).join(' ');
+  const dots=list.map(e=>`<circle cx="${px(keyDate(e.d).getTime())}" cy="${py(+e[bodyMetric])}" r="4" fill="#0E171E" stroke="#7B5CFF" stroke-width="2"><title>${dmy(e.d)} · ${fmt(+e[bodyMetric])} ${unit}</title></circle>`).join('');
+  host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}">${grid}${list.length>1?`<polyline points="${points}" fill="none" stroke="#7B5CFF" stroke-width="2.5"/>`:''}${dots}<text x="${L}" y="${H-7}" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="10">${dmy(list[0].d)}</text><text x="${W-R}" y="${H-7}" text-anchor="end" fill="#7B94A2" font-family="JetBrains Mono, monospace" font-size="10">${dmy(list[list.length-1].d)}</text></svg>`;
+}
+async function refreshPhotoDates(){photoDates=new Set((await photoAll()).map(p=>p.d));renderCalendar();renderDayDetail();}
+async function renderPhotoControl(date=selectedCalendarDate){
+  const token=++photoControlToken,p=await photoGet(date);if(token!==photoControlToken||document.getElementById('bodyDate').value!==date)return;
+  document.getElementById('photoPreview').innerHTML=p?`<img src="${p.data}" alt="Foto de progreso del ${date}">`:'<span>Sin foto para esta fecha</span>';
+  document.getElementById('choosePhoto').textContent=p?'Cambiar foto':'Añadir foto';
+  document.getElementById('deletePhoto').hidden=!p;
+}
+function renderProgress(){
+  renderWeekDashboard();renderCalendar();renderDayDetail();loadBodyForm();drawBodyChart();renderPhotoControl();
 }
 
 /* ================= progreso ================= */
@@ -295,22 +497,21 @@ function drawChart(){
   }));
   /* tabla de historial de lo seleccionado */
   tbl.innerHTML=series.map((s,si)=>{
-    let best=-Infinity;
-    const marks=s.list.map(e=>{const v=val(e);const p=v>best;if(p)best=v;return p});
+    const flags=rawPrFlags(s.list);
     return `<h3 style="font-family:Anton,sans-serif;font-weight:400;font-size:15px;letter-spacing:.05em;text-transform:uppercase;margin:18px 0 2px;color:${COLORS[si%COLORS.length]}">${s.name}</h3>`+
       s.list.slice().reverse().map((e,ri)=>{
         const i=s.list.length-1-ri;
         return `<div class="hrow"><span class="hd">${dmy(e.d)}</span>
           <span class="hv">${e.kg>0?e.kg+' kg × '+e.r:e.r}</span>
-          ${marks[i]?'<span class="prb">PR</span>':''}
-          <span class="he">${e.kg>0?fmt(epley(e.kg,e.r))+' kg':''}</span>
+          ${flags[i].isPr?'<span class="prb">PR</span>':''}
+          <span class="he">${flags[i].prType}</span>
           <button class="del" data-id="${s.id}" data-d="${e.d}">×</button></div>`;
       }).join('');
   }).join('');
   tbl.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>{
     const d=DB();d.prs[b.dataset.id]=(d.prs[b.dataset.id]||[]).filter(x=>x.d!==b.dataset.d);
     if(!d.prs[b.dataset.id].length)delete d.prs[b.dataset.id];
-    put(d);buildExList();drawChart();
+    put(d);buildExList();drawChart();renderProgress();
   }));
 }
 
@@ -329,17 +530,87 @@ document.getElementById('plotReps').addEventListener('click',()=>{
   plotReps=!plotReps;syncPlotMode();
 });
 
+/* ================= recomposición ================= */
+document.getElementById('bodyDate').addEventListener('change',e=>{
+  if(!e.target.value)return;
+  selectProgressDate(e.target.value);
+});
+document.getElementById('saveBody').addEventListener('click',()=>{
+  const date=document.getElementById('bodyDate').value||today();
+  const weight=parseFloat(document.getElementById('bodyWeight').value);
+  const waist=parseFloat(document.getElementById('bodyWaist').value);
+  if(!(weight>0)&&!(waist>0)){alert('Añade el peso, la cintura o ambos.');return;}
+  const d=DB(),map={};(d.body||[]).forEach(e=>map[e.d]=e);
+  map[date]={d:date,...(weight>0?{weight}:{}),...(waist>0?{waist}:{})};
+  d.body=Object.values(map).sort((a,b)=>a.d.localeCompare(b.d));put(d);
+  selectedCalendarDate=date;const parsed=keyDate(date);calendarCursor=new Date(parsed.getFullYear(),parsed.getMonth(),1,12);
+  renderProgress();
+});
+document.getElementById('deleteBody').addEventListener('click',()=>{
+  const date=document.getElementById('bodyDate').value;if(!date)return;
+  if(!confirm('¿Eliminar las medidas de '+dmy(date)+'?'))return;
+  const d=DB();d.body=(d.body||[]).filter(e=>e.d!==date);put(d);renderProgress();
+});
+function setBodyMetric(metric){
+  bodyMetric=metric;
+  const w=document.getElementById('metricWeight'),c=document.getElementById('metricWaist');
+  w.classList.toggle('on',metric==='weight');w.setAttribute('aria-pressed',metric==='weight');
+  c.classList.toggle('on',metric==='waist');c.setAttribute('aria-pressed',metric==='waist');
+  drawBodyChart();
+}
+document.getElementById('metricWeight').addEventListener('click',()=>setBodyMetric('weight'));
+document.getElementById('metricWaist').addEventListener('click',()=>setBodyMetric('waist'));
+
+function compressPhoto(file){
+  return new Promise((resolve,reject)=>{
+    const rd=new FileReader();
+    rd.onerror=()=>reject(new Error('read'));
+    rd.onload=()=>{
+      const img=new Image();img.onerror=()=>reject(new Error('image'));
+      img.onload=()=>{
+        const max=1200,scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+        const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+        const ctx=canvas.getContext('2d');ctx.fillStyle='#0A1015';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',.8));
+      };
+      img.src=rd.result;
+    };
+    rd.readAsDataURL(file);
+  });
+}
+document.getElementById('choosePhoto').addEventListener('click',()=>document.getElementById('photoInput').click());
+document.getElementById('photoInput').addEventListener('change',async e=>{
+  const file=e.target.files[0];if(!file)return;
+  if(!file.type.startsWith('image/')){alert('Selecciona una imagen.');return;}
+  const btn=document.getElementById('choosePhoto'),old=btn.textContent;btn.disabled=true;btn.textContent='Guardando…';
+  try{
+    const date=document.getElementById('bodyDate').value||today(),data=await compressPhoto(file);
+    await photoPut({d:date,data,updatedAt:new Date().toISOString()});photoDates.add(date);selectedCalendarDate=date;renderProgress();
+  }catch(err){alert('No se pudo guardar esa foto. Prueba con otra imagen.');}
+  finally{btn.disabled=false;btn.textContent=old;e.target.value='';renderPhotoControl();}
+});
+async function deleteSelectedPhoto(){
+  const date=document.getElementById('bodyDate').value||selectedCalendarDate;
+  if(!date||!confirm('¿Eliminar la foto del '+dmy(date)+'?'))return;
+  await photoRemove(date);photoDates.delete(date);renderProgress();
+}
+document.getElementById('deletePhoto').addEventListener('click',deleteSelectedPhoto);
+
 /* ================= datos ================= */
-document.getElementById('exp').addEventListener('click',()=>{
-  const blob=new Blob([JSON.stringify({version:1,...DB()},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='fuerza-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);
+document.getElementById('exp').addEventListener('click',async()=>{
+  const btn=document.getElementById('exp'),old=btn.textContent;btn.disabled=true;btn.textContent='Preparando…';
+  try{
+    const photos=await photoAll();
+    const blob=new Blob([JSON.stringify({version:2,...DB(),done:doneDb(),photos},null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='fuerza-completa-'+today()+'.json';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }finally{btn.disabled=false;btn.textContent=old;}
 });
 document.getElementById('imp').addEventListener('click',()=>document.getElementById('file').click());
 document.getElementById('file').addEventListener('change',ev=>{
   const f=ev.target.files[0];if(!f)return;
   const rd=new FileReader();
-  rd.onload=()=>{
+  rd.onload=async()=>{
     try{
       const inc=JSON.parse(rd.result);
       if(!inc||typeof inc!=='object'||!inc.prs)throw 0;
@@ -350,9 +621,20 @@ document.getElementById('file').addEventListener('change',ev=>{
         cur.prs[id]=Object.values(map).sort((a,b)=>a.d.localeCompare(b.d));
       });
       if(inc.bases)cur.bases={...cur.bases,...inc.bases};
-      put(cur);sesh();buildExList();drawChart();
-      alert('Copia importada y fusionada.');
+      if(Array.isArray(inc.body)){
+        const body={};(cur.body||[]).forEach(e=>{if(e?.d)body[e.d]=e});
+        inc.body.forEach(e=>{if(e?.d)body[e.d]=e});cur.body=Object.values(body).sort((a,b)=>a.d.localeCompare(b.d));
+      }
+      put(cur);
+      if(inc.done&&typeof inc.done==='object'){
+        const merged={...doneDb()};Object.entries(inc.done).forEach(([k,v])=>{if(v)merged[k]=true});putDone(merged);
+      }
+      if(Array.isArray(inc.photos))for(const p of inc.photos){if(p?.d&&typeof p.data==='string'&&p.data.startsWith('data:image/'))await photoPut(p);}
+      if(cur.bases)['bp','pu','dp','bw'].forEach(k=>{if(cur.bases[k])document.getElementById(k).value=cur.bases[k]});
+      dayTabs();sesh();buildExList();drawChart();await refreshPhotoDates();renderProgress();
+      alert('Copia completa importada y fusionada sin borrar tus datos actuales.');
     }catch(e){alert('Ese archivo no tiene el formato esperado.');}
+    ev.target.value='';
   };
   rd.readAsText(f);
 });
@@ -361,14 +643,15 @@ document.getElementById('file').addEventListener('change',ev=>{
 (function(){
   const d=DB();
   if(d.bases)['bp','pu','dp','bw'].forEach(k=>{if(d.bases[k])document.getElementById(k).value=d.bases[k];});
-  rail();dayTabs();sesh();volume();buildGroups();buildExList();drawChart();
+  rail();dayTabs();sesh();volume();renderProgress();buildGroups();buildExList();drawChart();refreshPhotoDates();
 })();
 
 let renderedDate=today();
 function refreshDateBoundary(){
   const current=today();
   if(current===renderedDate)return;
-  renderedDate=current;dayTabs();sesh();
+  renderedDate=current;selectedCalendarDate=current;calendarCursor=new Date(keyDate(current).getFullYear(),keyDate(current).getMonth(),1,12);
+  dayTabs();sesh();renderProgress();
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshDateBoundary()});
 setInterval(refreshDateBoundary,60000);

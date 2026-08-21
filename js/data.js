@@ -43,7 +43,7 @@ legext:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/
 legcurl:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><line x1="18" y1="44" x2="18" y2="30" stroke="${M}" stroke-width="1.4"/><line x1="13" y1="30" x2="27" y2="30"/><line x1="27" y1="30" x2="30" y2="17"/><line x1="26" y1="27" x2="31" y2="27" stroke="${M}" stroke-width="3"/><circle cx="28" cy="13" r="3"/><line x1="28" y1="16" x2="23" y2="28"/><line x1="23" y1="28" x2="33" y2="29"/><line x1="33" y1="29" x2="38" y2="38"/><circle cx="38" cy="38" r="2.4" fill="${A}" stroke="${A}"/><path d="M43 26 Q45 33 40 38" stroke="${A}" stroke-dasharray="2 2"/><path d="M44 34 L40 39 L37 35" stroke="${A}"/><line x1="26" y1="30.4" x2="31" y2="30.8" stroke="${V}" stroke-width="2.8"/>`),
 calf:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><line x1="12" y1="38" x2="26" y2="38"/><line x1="12" y1="38" x2="12" y2="44" stroke="${M}" stroke-width="1.4"/><line x1="24" y1="38" x2="25" y2="24"/><line x1="25" y1="24" x2="26" y2="12"/><circle cx="26" cy="9" r="3"/><line x1="26" y1="15" x2="32" y2="24"/><circle cx="33" cy="27" r="2.4" fill="${A}" stroke="${A}"/><line x1="17" y1="42" x2="17" y2="32" stroke="${A}"/><path d="M14 35 L17 30 L20 35" stroke="${A}"/><line x1="24.4" y1="30" x2="24.7" y2="35" stroke="${V}" stroke-width="2.8"/>`),
 pistol:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><circle cx="22" cy="11" r="3.2"/><line x1="22" y1="14" x2="18" y2="26"/><line x1="21" y1="17" x2="33" y2="19"/><line x1="18" y1="26" x2="25" y2="30"/><line x1="25" y1="30" x2="23" y2="41"/><line x1="23" y1="41" x2="28" y2="41"/><line x1="18" y1="26" x2="36" y2="29"/><line x1="20" y1="44" x2="30" y2="44" stroke="${A}" stroke-dasharray="2 3"/><line x1="20" y1="27" x2="24" y2="29" stroke="${V}" stroke-width="2.8"/>`),
-swim:S(`<path d="M3 30 Q8 25 13 30 T23 30 T33 30 T43 30" stroke="${W}"/><path d="M3 38 Q8 33 13 38 T23 38 T33 38 T43 38" stroke="${W}"/><circle cx="17" cy="16" r="3"/><path d="M20 18 Q28 8 36 15"/><line x1="20" y1="18" x2="28" y2="21"/><circle cx="38" cy="18" r="1" fill="${W}" stroke="${W}"/><circle cx="41" cy="15" r="0.8" fill="${W}" stroke="${W}"/>`),
+ walk:S(`<line x1="3" y1="43" x2="45" y2="43" stroke="${M}" stroke-width="1.4"/><path d="M5 38 L43 25 L43 43 L5 43 Z" stroke="${M}" stroke-width="1.4"/><circle cx="22" cy="9" r="3"/><line x1="22" y1="12" x2="24" y2="25"/><line x1="23" y1="16" x2="31" y2="21"/><line x1="24" y1="25" x2="16" y2="36"/><line x1="24" y1="25" x2="34" y2="32"/><path d="M8 20 H17" stroke="${A}" stroke-dasharray="2 2"/><path d="M13 17 L18 20 L13 23" stroke="${A}"/><line x1="21" y1="18" x2="23" y2="25" stroke="${V}" stroke-width="2.8"/>`),
 brow:S(`<line x1="4" y1="44" x2="44" y2="44" stroke="${M}" stroke-width="1.4"/><circle cx="29" cy="10" r="3"/><line x1="27" y1="13" x2="17" y2="25"/><line x1="17" y1="25" x2="13" y2="42"/><line x1="17" y1="25" x2="27" y2="42"/><line x1="24" y1="17" x2="27" y2="29"/><line x1="27" y1="29" x2="18" y2="32"/><line x1="8" y1="33" x2="38" y2="33"/><circle cx="9" cy="33" r="3" fill="${A}" stroke="${A}"/><circle cx="37" cy="33" r="3" fill="${A}" stroke="${A}"/><path d="M42 37 V27" stroke="${A}" stroke-dasharray="2 2"/><path d="M39 30 L42 25 L45 30" stroke="${A}"/><line x1="22" y1="17" x2="18" y2="23" stroke="${V}" stroke-width="2.8"/>`),
 rowc:S(`<line x1="5" y1="6" x2="5" y2="43" stroke="${M}" stroke-width="1.4"/><circle cx="5" cy="17" r="1.8" fill="${A}" stroke="${A}"/><line x1="5" y1="17" x2="25" y2="22" stroke="${M}" stroke-width="1.4"/><line x1="9" y1="38" x2="28" y2="38"/><line x1="12" y1="38" x2="12" y2="44" stroke="${M}"/><circle cx="35" cy="13" r="3"/><line x1="33" y1="16" x2="29" y2="29"/><line x1="29" y1="29" x2="22" y2="38"/><line x1="29" y1="29" x2="39" y2="38"/><line x1="31" y1="19" x2="25" y2="22"/><path d="M12 26 H24" stroke="${A}" stroke-dasharray="2 2"/><path d="M16 23 L11 26 L16 29" stroke="${A}"/><line x1="31" y1="17" x2="28" y2="22" stroke="${V}" stroke-width="2.8"/>`),
 flyf:S(`<line x1="5" y1="5" x2="5" y2="43" stroke="${M}" stroke-width="1.4"/><line x1="43" y1="5" x2="43" y2="43" stroke="${M}" stroke-width="1.4"/><circle cx="5" cy="14" r="1.8" fill="${A}" stroke="${A}"/><circle cx="43" cy="14" r="1.8" fill="${A}" stroke="${A}"/><circle cx="24" cy="9" r="3"/><line x1="24" y1="12" x2="24" y2="29"/><line x1="24" y1="29" x2="19" y2="42"/><line x1="24" y1="29" x2="29" y2="42"/><line x1="24" y1="16" x2="15" y2="20"/><line x1="24" y1="16" x2="33" y2="20"/><line x1="5" y1="14" x2="15" y2="20" stroke="${M}"/><line x1="43" y1="14" x2="33" y2="20" stroke="${M}"/><path d="M12 29 Q20 24 24 25" stroke="${A}" stroke-dasharray="2 2"/><path d="M36 29 Q28 24 24 25" stroke="${A}" stroke-dasharray="2 2"/><line x1="20" y1="15" x2="28" y2="15" stroke="${V}" stroke-width="2.8"/>`),
@@ -99,8 +99,8 @@ const DAYS=[
   {t:'Core · compresión',tone:'wide',ex:[
    {d:'hangraise',move:'piernas ↑',name:'Elevación de piernas colgado',sets:'3 × 8-12',m:'core',cue:'Termina cada repetición con retroversión pélvica; si balanceas, para la serie.',why:'Compresión para L-sit y la fase 2 del dragon.'}]}]},
 
-{id:'d3',n:'Día 3',s:'Reset · movilidad y skills',tag:'Activo',short:'Reset',wet:true,
- note:'Recuperación activa a RPE 5-6: poca carga, movilidad de cadera y trabajo escapular sin convertirlo en otra sesión dura.',
+{id:'d3',n:'Día 3',s:'Reset · movilidad, skills y cardio largo',tag:'Activo',short:'Reset',wet:true,
+ note:'Única sesión larga de cardio: suma pasos en zona 2 y deja energía para hombros. Los 10.000 pasos son el total del día, no 10.000 extra.',
  blocks:[
   {t:'Control y escápulas',tone:'wide',ex:[
    {d:'lsit',move:'sostén',name:'L-sit / tuck L-sit',sets:'3 × 10-20 s',m:'core',cue:'Escápulas deprimidas, brazos bloqueados; termina cada serie con 4-5 s en reserva.',why:'Control y compresión sin convertirlo en otra paliza de core.'},
@@ -108,12 +108,13 @@ const DAYS=[
   {t:'Movilidad de cadera y lumbar',tone:'calm',ex:[
    {d:'hip90',move:'rota ↔',name:'Transiciones 90/90 de cadera',sets:'2 × 6-8 por lado',m:'',cue:'Rodillas flexionadas, rota desde la cadera sin forzar la lumbar. Movimiento lento e indoloro.',why:'Mejora rotación interna y externa para sentadilla, prensa y comodidad lumbar.'},
    {d:'mob',move:'suelta',name:'Movilidad completa',sets:'12-15 min',m:'',cue:'Prioriza flexores de cadera, glúteo, aductores y tobillo; añade dorsal y muñeca. Nada de dolor.',why:'Recupera rangos útiles sin sumar fatiga al ciclo.'}]},
-  {t:'Agua · opcional',tone:'wet',ex:[
-   {d:'swim',move:'suave',name:'Piscina técnica',sets:'15-25 min',m:'',cue:'Muy fácil: técnica de respiración y flotación.',why:'Cardio de bajo impacto que no deja resaca.'},
-   {d:'heat',move:'calor',name:'Sauna o baño turco',sets:'10-15 min',m:'',cue:'Solo hidratado; sal ante el primer mareo.',why:'Relajación, no prueba de resistencia.'}]}]},
+  {t:'Cardio · sesión larga',tone:'wet',ex:[
+   {d:'walk',move:'camina ↗',name:'Caminata inclinada · zona 2',sets:'45-60 min · ≈ 4.500-6.000 pasos',m:'',cue:'RPE 3-4: respiras más, pero puedes hablar en frases. Ajusta pendiente y velocidad sin agarrarte a la cinta.',why:'Aporta la mayor parte de los pasos del día con fatiga baja y sostenible.'}]},
+  {t:'Recuperación · opcional',tone:'calm',ex:[
+   {d:'heat',move:'calor',name:'Sauna o baño turco',sets:'10-15 min · opcional',m:'',cue:'Solo hidratado; sal ante el primer mareo.',why:'Relajación, no sustituye los pasos ni provoca pérdida de grasa.'}]}]},
 
-{id:'d4',n:'Día 4',s:'Hombro y brazos',tag:'V-shape',short:'Hombro',delt:true,
- note:'Día específico después del reset: press vertical medible, ancho por delante y por detrás, brazos y core controlado.',
+{id:'d4',n:'Día 4',s:'Hombro, brazos y cardio',tag:'V-shape',short:'Hombro',delt:true,
+ note:'Día específico después del reset: fuerza y ancho, seguido de 20 minutos vivos para acercarte a 10.000 pasos.',
  blocks:[
   {t:'Fuerza hombro',ex:[
    {d:'pressm',move:'empuja ↑',name:'Press de hombro en máquina inclinada',sets:'4 × 5-8',m:'da',cue:'Espalda pegada y 1-2 RIR. Al lograr 4 × 8 limpio, sube la mínima placa. Descansa 2,5-3 min.',why:'Cuarto KPI de fuerza: presión vertical estable y medible.'}]},
@@ -125,7 +126,9 @@ const DAYS=[
    {d:'tripd',move:'extiende ↓',name:'Extensión en polea con cuerda',sets:'3 × 10-15',m:'tri',cue:'Codos quietos; abre la cuerda al final y cierra del todo.',why:'Tríceps con mínima fatiga articular.'}]},
   {t:'Core · fuerza',tone:'wide',ex:[
    {d:'legraise',move:'piernas ↑',name:'Elevación de piernas tumbado',sets:'3 × 10-15',m:'core',cue:'Lumbar pegada al suelo y pelvis en retroversión; baja solo hasta donde mantengas el control.',why:'Compresión y abdomen inferior con una progresión fácil de dosificar.'},
-   {d:'sideplank',move:'lateral',name:'Plancha lateral',sets:'2 × 30-45 s por lado',m:'core',cue:'Cadera alta y pelvis neutra.',why:'El plano frontal que la plancha normal no toca.'}]}]},
+   {d:'sideplank',move:'lateral',name:'Plancha lateral',sets:'2 × 30-45 s por lado',m:'core',cue:'Cadera alta y pelvis neutra.',why:'El plano frontal que la plancha normal no toca.'}]},
+  {t:'Cardio · pasos',tone:'wet',ex:[
+   {d:'walk',move:'ritmo ↑',name:'Caminata inclinada · ritmo fuerte',sets:'20 min · ≈ 2.000-2.500 pasos',m:'',cue:'3 min suaves + 14 min a RPE 6-7 + 3 min suaves. Habla en frases cortas; no corras ni te agarres.',why:'Bloque compacto de pasos y cardio al terminar el tren superior.'}]}]},
 
 {id:'d5',n:'Día 5',s:'Pecho pump y lateral',tag:'Bombeo',short:'Pecho P',delt:true,
  note:'Segunda exposición real de pecho: banca técnica, tensión inclinada y aducción horizontal en polea hacia delante.',
@@ -140,8 +143,8 @@ const DAYS=[
   {t:'Tríceps pump',tone:'pump',ex:[
    {d:'tripd',move:'extiende ↓',name:'Extensión en polea con cuerda',sets:'3 × 12-20',m:'tri',cue:'60-75 s de descanso; busca contracción, no récord.',why:'Bombeo con coste articular mínimo.'}]}]},
 
-{id:'d6',n:'Día 6',s:'Espalda pump y posterior',tag:'Bombeo',short:'Espalda P',delt:true,
- note:'Repeticiones altas y congestión: lat pulldown, remo en polea, pullover, dominadas técnicas y trabajo posterior.',
+{id:'d6',n:'Día 6',s:'Espalda pump, posterior y cardio',tag:'Bombeo',short:'Espalda P',delt:true,
+ note:'Espalda a repeticiones y el segundo bloque de 20 minutos vivos: última sesión de cardio de la semana.',
  blocks:[
   {t:'Espalda · volumen',tone:'wide',ex:[
    {d:'latp',move:'tira ↓',name:'Jalón al pecho, agarre neutro',sets:'3 × 10-15',m:'esp',cue:'Deprime la escápula primero; excéntrica controlada.',why:'Dorsal a repeticiones para sumar anchura.'},
@@ -152,7 +155,9 @@ const DAYS=[
    {d:'rear',move:'abre ←→',name:'Pájaro en máquina',sets:'3 × 15-20',m:'dpo',cue:'Ligero, pausa atrás y vuelta lenta.',why:'Segunda dosis del deltoides posterior.'},
    {d:'facepull',move:'a la cara',name:'Face pull',sets:'2 × 15',m:'dpo',cue:'Cuerda a la cara, codos altos, rota los pulgares atrás.',why:'El seguro del hombro con todo este volumen de press.'}]},
   {t:'Bíceps pump',tone:'pump',ex:[
-   {d:'curlc',move:'flexiona',name:'Curl en polea baja',sets:'3 × 12-15',m:'bi',cue:'Tensión constante; si el codo protesta, cambia a martillo.',why:'Cierra el brazo sin interferir con las dominadas.'}]}]},
+   {d:'curlc',move:'flexiona',name:'Curl en polea baja',sets:'3 × 12-15',m:'bi',cue:'Tensión constante; si el codo protesta, cambia a martillo.',why:'Cierra el brazo sin interferir con las dominadas.'}]},
+  {t:'Cardio · pasos',tone:'wet',ex:[
+   {d:'walk',move:'ritmo ↑',name:'Caminata inclinada · ritmo fuerte',sets:'20 min · ≈ 2.000-2.500 pasos',m:'',cue:'3 min suaves + 14 min a RPE 6-7 + 3 min suaves. Mantén zancada natural y baja la pendiente si carga la lumbar o los gemelos.',why:'Suma pasos con poco impacto sin convertir el día de espalda en otra sesión de piernas.'}]}]},
 
 {id:'d7',n:'Día 7',s:'Pierna y dragon core',tag:'Pierna',short:'Pierna',
  note:'Pierna completa y contenida: máquinas, cadena posterior, erectores, gemelos y el bloque dragon que cambia según la semana.',
@@ -168,6 +173,6 @@ const DAYS=[
    {d:'pistol',move:'1 pierna',name:'Pistol squat · progresión',sets:'2 × 4-8 por lado',m:'pie',cue:'Caja o apoyo si hace falta; controla la bajada.',why:'Fuerza relativa y estabilidad unilateral.'}]},
   {t:'Dragon core',tone:'wide',ex:[
    {d:'dragon',dyn:'dragon',move:'baja lento',name:'Dragon flag',sets:'4 × 3-6',m:'core',cue:'Tuck negative primero; solo avanza si costillas y pelvis se mantienen bloqueadas.',why:'Trabajo específico hacia tu skill objetivo.'}]},
-  {t:'Agua · cierre',tone:'wet',ex:[
-   {d:'swim',move:'suave',name:'Piscina suave + sauna',sets:'15-20 min · opcional',m:'',cue:'Nadar fácil y calor corto: esto es recuperación, no más entreno.',why:'El cierre que ya te funcionaba.'}]}]}
+  {t:'Recuperación · opcional',tone:'calm',ex:[
+   {d:'heat',move:'calor',name:'Sauna o baño turco',sets:'10-15 min · opcional',m:'',cue:'Hidrátate y mantenlo suave; hoy no se añade cardio.',why:'Así el plan conserva exactamente tres sesiones semanales de cardio.'}]}]}
 ];

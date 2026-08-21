@@ -1,9 +1,9 @@
 # Fuerza · rutina y marcas
 
-PWA de rutina de gimnasio (8 semanas, 3 días de hombro) con registro de marcas,
-gráficos de progreso y copia de seguridad JSON. **100% offline**: fuentes
+PWA de rutina de gimnasio (8 semanas, 3 días de cardio caminando) con registro de marcas,
+calendario de entrenamientos, PR, medidas corporales, fotos de progreso, gráficos y copia de seguridad JSON. **100% offline**: fuentes
 autoalojadas, sin CDN, sin backend. Los datos viven en el `localStorage` del
-dispositivo (clave `gym-app-v1`).
+dispositivo (claves `gym-app-v1` y `gym-done-v1`; fotos en IndexedDB `gym-media-v1`).
 
 ## Estructura
 
@@ -12,7 +12,7 @@ index.html            página única (3 pestañas: Rutina / Progreso / Datos)
 css/styles.css        estilos + @font-face locales
 js/data.js            programa (DAYS) e iconos SVG
 js/app.js             lógica, render y registro del service worker
-sw.js                 service worker cache-first (caché "fuerza-v1")
+sw.js                 service worker cache-first (caché versionada)
 manifest.webmanifest  manifest de instalación
 fonts/                Anton, Space Grotesk (400/500/700), JetBrains Mono (400/700) en .woff2
 icons/                iconos PNG 192, 512 y 512 maskable
@@ -68,6 +68,7 @@ GitHub Pages procese el sitio con Jekyll.
 
 ## Copias de seguridad
 
-Pestaña **Datos** → *Exportar JSON* descarga `fuerza-AAAA-MM-DD.json` (incluye
-campo `version`). *Importar JSON* fusiona sin borrar lo existente. Exporta de
-vez en cuando: si limpias los datos de Chrome, el historial se pierde.
+Pestaña **Datos** → *Exportar JSON* descarga `fuerza-completa-AAAA-MM-DD.json`
+con marcas, casillas, medidas y fotos (formato `version: 2`). *Importar JSON*
+fusiona por fecha sin borrar lo existente y sigue aceptando las copias antiguas.
+Exporta de vez en cuando: si limpias los datos de Chrome, el historial local se pierde.
