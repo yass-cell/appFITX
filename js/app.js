@@ -58,6 +58,8 @@ if(smode!=='localStorage')st.classList.add('off');
 
 /* ============ catálogo derivado de la rutina ============ */
 const slug=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+/* La identidad de la casilla puede sobrevivir a un cambio de ejercicio/nombre. */
+const doneExerciseId=e=>e.doneAs||slug(e.name);
 const EX={}; // slug -> {name, grp}
 const BASIC=new Set();
 DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
@@ -92,7 +94,7 @@ function weekDates(anchor=new Date()){
 function requiredExercises(d){
   return d.blocks.flatMap(b=>/opcional/i.test(b.t)?[]:b.ex
     .filter(e=>!/opcional/i.test(e.sets||''))
-    .map(e=>slug(e.name)));
+    .map(doneExerciseId));
 }
 function dayComplete(d){
   const ids=requiredExercises(d),done=doneDb();
@@ -176,7 +178,7 @@ function sesh(){
       const dispCue=ph?ph.cue:e.cue;
       const dispWhy=ph?ph.why:e.why;
       const id=e.m?slug(e.name):null;
-      const doneId=today()+'|'+day+'|'+slug(e.name),completed=!!doneDb()[doneId];
+      const doneId=today()+'|'+day+'|'+doneExerciseId(e),completed=!!doneDb()[doneId];
       let loadHtml='';
       if(e.base){
         const kg=e.round(bases[e.base]*(e.pct||F[week]*(e.mult||1)));
@@ -241,7 +243,7 @@ const nsets=s=>{const m=String(s).match(/^\s*(\d+)\s*[×x]/);return m?parseInt(m
 function volume(){
   const tot={};
   DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
-    if(!e.m)return;
+    if(!e.m||/opcional/i.test(b.t)||/opcional/i.test(e.sets||''))return;
     let s=e.base&&!e.pct?nsets(SR[week]):nsets(e.sets);
     if(week===4&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.6));
     if(week===8&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.7));
@@ -275,7 +277,7 @@ function doneIndex(){
 }
 function exerciseLabel(dayId,id){
   const d=DAYS.find(x=>x.id===dayId);
-  if(d){const e=d.blocks.flatMap(b=>b.ex).find(x=>slug(x.name)===id);if(e)return e.name;}
+  if(d){const e=d.blocks.flatMap(b=>b.ex).find(x=>doneExerciseId(x)===id);if(e)return e.name;}
   return id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());
 }
 function sessionStats(date,d,index=doneIndex()){

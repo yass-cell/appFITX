@@ -30,6 +30,7 @@ tripd:S(`<line x1="40" y1="5" x2="40" y2="42" stroke="${M}" stroke-width="1.4"/>
 abwheel:S(`<line x1="4" y1="42" x2="44" y2="42" stroke="${M}" stroke-width="1.4"/><line x1="7" y1="42" x2="13" y2="40"/><line x1="13" y1="40" x2="17" y2="31"/><line x1="17" y1="31" x2="32" y2="26"/><circle cx="34" cy="23" r="3"/><line x1="30" y1="27" x2="37" y2="34"/><circle cx="38" cy="37" r="4.5"/><line x1="34" y1="37" x2="42" y2="37" stroke="${A}"/><path d="M20 41 H33" stroke="${A}" stroke-dasharray="2 3"/><path d="M30 38.5 L35 41 L30 43.5" stroke="${A}"/><line x1="21" y1="29.7" x2="29" y2="27" stroke="${V}" stroke-width="2.8"/>`),
 sideplank:S(`<line x1="4" y1="42" x2="44" y2="42" stroke="${M}" stroke-width="1.4"/><line x1="10" y1="41" x2="18" y2="41"/><line x1="13" y1="41" x2="15" y2="32"/><circle cx="12" cy="29" r="3"/><line x1="15" y1="32" x2="40" y2="38"/><line x1="21" y1="33.4" x2="21" y2="23"/><line x1="27" y1="28" x2="27" y2="22" stroke="${A}"/><path d="M24 25 L27 20 L30 25" stroke="${A}"/><line x1="20" y1="33.2" x2="28" y2="35" stroke="${V}" stroke-width="2.8"/>`),
 hangraise:S(`<line x1="6" y1="6" x2="42" y2="6"/><line x1="10" y1="6" x2="10" y2="3" stroke="${M}" stroke-width="1.4"/><line x1="38" y1="6" x2="38" y2="3" stroke="${M}" stroke-width="1.4"/><line x1="18" y1="6" x2="22" y2="14"/><line x1="30" y1="6" x2="26" y2="14"/><circle cx="24" cy="13" r="3"/><line x1="24" y1="16" x2="24" y2="28"/><line x1="24" y1="28" x2="37" y2="26"/><path d="M26 40 Q36 37 38 28" stroke="${A}" stroke-dasharray="2 2"/><path d="M34 30 L38 25 L41 31" stroke="${A}"/><line x1="24" y1="24" x2="28" y2="26.5" stroke="${V}" stroke-width="2.8"/>`),
+crunch:S(`<line x1="5" y1="5" x2="5" y2="43" stroke="${M}" stroke-width="1.4"/><circle cx="5" cy="8" r="1.8" fill="${A}" stroke="${A}"/><line x1="5" y1="8" x2="25" y2="15" stroke="${M}" stroke-width="1.4"/><circle cx="28" cy="13" r="3"/><path d="M27 16 Q18 23 23 33"/><line x1="23" y1="33" x2="17" y2="42"/><line x1="23" y1="33" x2="29" y2="42"/><line x1="25" y1="18" x2="22" y2="12"/><line x1="29" y1="17" x2="27" y2="11"/><path d="M38 14 Q31 20 30 28" stroke="${A}" stroke-dasharray="2 2"/><path d="M27 24 L30 30 L34 25" stroke="${A}"/><path d="M23 20 Q20 25 23 29" stroke="${V}" stroke-width="3"/>`),
 dragon:S(`<line x1="4" y1="34" x2="24" y2="34"/><line x1="6" y1="34" x2="6" y2="42" stroke="${M}" stroke-width="1.4"/><line x1="22" y1="34" x2="22" y2="42" stroke="${M}" stroke-width="1.4"/><circle cx="8" cy="30" r="3"/><line x1="10" y1="29" x2="5" y2="33"/><line x1="11" y1="30" x2="38" y2="10"/><line x1="20" y1="23" x2="29" y2="16" stroke="${V}" stroke-width="2.8"/><path d="M38 12 Q42 22 36 30" stroke="${A}" stroke-dasharray="2 2"/><path d="M39 26 L36 31 L33 27" stroke="${A}"/>`),
 mclimb:S(`<line x1="4" y1="42" x2="44" y2="42" stroke="${M}" stroke-width="1.4"/><line x1="14" y1="41" x2="16" y2="31"/><circle cx="12" cy="28" r="3"/><line x1="16" y1="31" x2="36" y2="35"/><line x1="36" y1="35" x2="26" y2="36"/><line x1="26" y1="36" x2="23" y2="31"/><line x1="36" y1="35" x2="43" y2="41"/><line x1="40" y1="28" x2="44" y2="28" stroke="${A}"/><line x1="39" y1="24" x2="43" y2="24" stroke="${A}"/><path d="M30 30 Q26 27 23 28" stroke="${A}" stroke-dasharray="2 2"/><path d="M26 26 L22 28 L25 31" stroke="${A}"/><line x1="21" y1="32" x2="30" y2="34" stroke="${V}" stroke-width="2.6"/>`),
 lsit:S(`<line x1="8" y1="30" x2="16" y2="30"/><line x1="12" y1="30" x2="12" y2="38" stroke="${M}" stroke-width="1.4"/><line x1="9" y1="38" x2="15" y2="38" stroke="${M}" stroke-width="1.4"/><line x1="24" y1="30" x2="32" y2="30"/><line x1="28" y1="30" x2="28" y2="38" stroke="${M}" stroke-width="1.4"/><line x1="25" y1="38" x2="31" y2="38" stroke="${M}" stroke-width="1.4"/><circle cx="20" cy="12" r="3.2"/><line x1="20" y1="15" x2="20" y2="27"/><line x1="20" y1="17" x2="12" y2="29"/><line x1="20" y1="17" x2="28" y2="29"/><line x1="20" y1="27" x2="40" y2="26"/><line x1="36" y1="31" x2="36" y2="34" stroke="${A}"/><line x1="40" y1="31" x2="40" y2="34" stroke="${A}"/><line x1="21" y1="25.5" x2="29" y2="26" stroke="${V}" stroke-width="2.8"/>`),
@@ -64,10 +65,10 @@ const MUS={dl:'Delt. lateral',dpo:'Delt. posterior',da:'Delt. anterior',pec:'Pec
 
 /* Escalera dragon flag: el bloque del día 7 cambia según la semana */
 const DRAGON={
-1:{name:'Dragon flag · fase 1: base',sets:'3 × 30 s + 3 × 3',cue:'Hollow hold con lumbar pegada; después 3 negativas tuck muy suaves para aprender el gesto.',why:'Puerta a fase 2: RKC plank de 60 s sin que caiga la cadera.'},
-2:{name:'Dragon flag · fase 2: colgado',sets:'4 × 10 + 3 × 8-10 s',cue:'Elevaciones estrictas sin balanceo y tuck hold en banco con pelvis en retroversión.',why:'Puerta a fase 3: 12 elevaciones estrictas seguidas.'},
-3:{name:'Dragon flag · fase 3: negativas tuck',sets:'4 × 4-6 · bajar 4-5 s',cue:'Desde arriba, rodillas al pecho, baja frenando. Si la lumbar se arquea, se acabó la serie.',why:'Puerta a fase 4: 6 negativas de 5 s con la lumbar bloqueada.'},
-4:{name:'Dragon flag · fase 4: piernas largas',sets:'4 × 3-5 + intento sem. 8',cue:'Negativas con una pierna extendida o straddle. El intento completo, solo la semana 8 y fresco.',why:'Si no sale, sale el ciclo que viene: la negativa lenta ES el entrenamiento.'}};
+1:{name:'Dragon flag · fase 1: base',sets:'2 × 3 negativas tuck',cue:'Negativas tuck muy suaves; termina antes de que la lumbar se arquee.',why:'Práctica técnica opcional: la hipertrofia principal ya está cubierta por los crunches.'},
+2:{name:'Dragon flag · fase 2: colgado',sets:'2 × 8-10 s tuck hold',cue:'Pelvis en retroversión y costillas abajo durante toda la serie.',why:'Dos series limpias bastan para practicar la posición sin frenar la recuperación.'},
+3:{name:'Dragon flag · fase 3: negativas tuck',sets:'2 × 4-6 · bajar 4-5 s',cue:'Desde arriba, rodillas al pecho y bajada lenta; corta al perder la posición.',why:'Calidad y control: no necesitas convertir la skill en otra sesión dura de abdomen.'},
+4:{name:'Dragon flag · fase 4: piernas largas',sets:'2 × 3-5 · intento sem. 8',cue:'Negativa con una pierna extendida o straddle. El intento completo, solo en semana 8 y fresco.',why:'Conserva la progresión de la skill con una dosis pequeña y recuperable.'}};
 const dragonPhase=w=>w<=2?1:w<=4?2:w<=6?3:4;
 
 const DAYS=[
@@ -97,7 +98,7 @@ const DAYS=[
    {d:'curlinc',move:'estira',name:'Curl inclinado con mancuernas',sets:'3 × 8-12',m:'bi',cue:'Brazo colgando detrás del torso, sin adelantar el hombro.',why:'Bíceps en posición larga: el estímulo que más crece.'},
    {d:'hammer',move:'neutro',name:'Curl martillo',sets:'2 × 10-15',m:'bi',cue:'Muñeca neutra y cero balanceo.',why:'Braquial y antebrazo: grosor de brazo y agarre para dominadas.'}]},
   {t:'Core · compresión',tone:'wide',ex:[
-   {d:'hangraise',move:'piernas ↑',name:'Elevación de piernas colgado',sets:'3 × 8-12',m:'core',cue:'Termina cada repetición con retroversión pélvica; si balanceas, para la serie.',why:'Compresión para L-sit y la fase 2 del dragon.'}]}]},
+   {d:'hangraise',move:'pelvis ↑',name:'Elevación de piernas colgado',sets:'3 × 8-12',m:'core',cue:'Sube las rodillas o piernas y termina encogiendo la pelvis hacia las costillas. Si solo flexionas la cadera o balanceas, para.',why:'Primera dosis de hipertrofia: progresa repeticiones y después añade una carga pequeña.'}]}]},
 
 {id:'d3',n:'Día 3',s:'Reset · movilidad, skills y cardio largo',tag:'Activo',short:'Reset',wet:true,
  note:'Única sesión larga de cardio: suma pasos en zona 2 y deja energía para hombros. Los 10.000 pasos son el total del día, no 10.000 extra.',
@@ -124,8 +125,8 @@ const DAYS=[
   {t:'Brazos',tone:'pump',ex:[
    {d:'curlz',move:'flexiona',name:'Curl con barra Z',sets:'3 × 8-12',m:'bi',cue:'Codos pegados al costado; torso inmóvil.',why:'Bíceps directo con carga, sin redundancia.'},
    {d:'tripd',move:'extiende ↓',name:'Extensión en polea con cuerda',sets:'3 × 10-15',m:'tri',cue:'Codos quietos; abre la cuerda al final y cierra del todo.',why:'Tríceps con mínima fatiga articular.'}]},
-  {t:'Core · fuerza',tone:'wide',ex:[
-   {d:'legraise',move:'piernas ↑',name:'Elevación de piernas tumbado',sets:'3 × 10-15',m:'core',cue:'Lumbar pegada al suelo y pelvis en retroversión; baja solo hasta donde mantengas el control.',why:'Compresión y abdomen inferior con una progresión fácil de dosificar.'},
+  {t:'Core · hipertrofia',tone:'wide',ex:[
+   {d:'crunch',move:'costillas ↓',name:'Crunch en polea o máquina abdominal',doneAs:'elevacion-de-piernas-tumbado',sets:'3 × 8-12',m:'core',cue:'Pelvis estable: acerca costillas a pelvis flexionando el tronco. Baja en 2-3 s y deja 1-2 repeticiones en reserva.',why:'La dosis pesada y medible: completa 3 × 12 y después sube la mínima placa.'},
    {d:'sideplank',move:'lateral',name:'Plancha lateral',sets:'2 × 30-45 s por lado',m:'core',cue:'Cadera alta y pelvis neutra.',why:'El plano frontal que la plancha normal no toca.'}]},
   {t:'Cardio · pasos',tone:'wet',ex:[
    {d:'walk',move:'ritmo ↑',name:'Caminata inclinada · ritmo fuerte',sets:'20 min · ≈ 2.000-2.500 pasos',m:'',cue:'3 min suaves + 14 min a RPE 6-7 + 3 min suaves. Habla en frases cortas; no corras ni te agarres.',why:'Bloque compacto de pasos y cardio al terminar el tren superior.'}]}]},
@@ -159,8 +160,8 @@ const DAYS=[
   {t:'Cardio · pasos',tone:'wet',ex:[
    {d:'walk',move:'ritmo ↑',name:'Caminata inclinada · ritmo fuerte',sets:'20 min · ≈ 2.000-2.500 pasos',m:'',cue:'3 min suaves + 14 min a RPE 6-7 + 3 min suaves. Mantén zancada natural y baja la pendiente si carga la lumbar o los gemelos.',why:'Suma pasos con poco impacto sin convertir el día de espalda en otra sesión de piernas.'}]}]},
 
-{id:'d7',n:'Día 7',s:'Pierna y dragon core',tag:'Pierna',short:'Pierna',
- note:'Pierna completa y contenida: máquinas, cadena posterior, erectores, gemelos y el bloque dragon que cambia según la semana.',
+{id:'d7',n:'Día 7',s:'Pierna y abdomen',tag:'Pierna',short:'Pierna',
+ note:'Pierna completa y contenida, seguida de la tercera dosis directa de abdomen. El dragon queda como práctica opcional.',
  blocks:[
   {t:'Entrada',tone:'calm',ex:[
    {d:'squatbw',move:'profunda',name:'Sentadilla peso corporal + movilidad',sets:'2 rondas',m:'',cue:'Sentadilla profunda con pausa + cadera y tobillo. Es calentamiento, no serie.',why:'La base de movimiento antes de las máquinas, como pediste.'}]},
@@ -171,8 +172,10 @@ const DAYS=[
    {d:'backext',move:'cadera ↑',name:'Extensión lumbar en banco 45°',sets:'3 × 10-15 · progresiva',m:'ere',cue:'Empieza sin peso. Mueve desde la cadera, columna neutra y sube solo hasta alinear el cuerpo; rango indoloro.',why:'Fortalece erectores y cadena posterior con apoyo estable y carga gradual.'},
    {d:'calf',move:'talón ↑',name:'Elevación de gemelo',sets:'4 × 12-15',m:'cal',cue:'Pausa arriba y estiramiento completo abajo.',why:'El detalle que remata la pierna definida.'},
    {d:'pistol',move:'1 pierna',name:'Pistol squat · progresión',sets:'2 × 4-8 por lado',m:'pie',cue:'Caja o apoyo si hace falta; controla la bajada.',why:'Fuerza relativa y estabilidad unilateral.'}]},
-  {t:'Dragon core',tone:'wide',ex:[
-   {d:'dragon',dyn:'dragon',move:'baja lento',name:'Dragon flag',sets:'4 × 3-6',m:'core',cue:'Tuck negative primero; solo avanza si costillas y pelvis se mantienen bloqueadas.',why:'Trabajo específico hacia tu skill objetivo.'}]},
+  {t:'Core · hipertrofia',tone:'wide',ex:[
+   {d:'crunch',move:'enrolla ↑',name:'Crunch declinado lastrado',doneAs:'dragon-flag',sets:'3 × 10-15',m:'core',cue:'Disco pegado al pecho. Enrolla el tronco acercando costillas a pelvis; no subas rígido tirando solo del flexor de cadera.',why:'Tercera dosis directa: cuando logres 3 × 15 a 1-2 RIR, añade la carga mínima.'}]},
+  {t:'Skill dragon · opcional',tone:'calm',ex:[
+   {d:'dragon',dyn:'dragon',doneAs:'dragon-flag-skill',move:'baja lento',name:'Dragon flag',sets:'2 × 3-6',m:'core',cue:'Tuck negative primero; solo avanza si costillas y pelvis se mantienen bloqueadas.',why:'Práctica breve para conservar la progresión sin añadir fatiga obligatoria.'}]},
   {t:'Recuperación · opcional',tone:'calm',ex:[
    {d:'heat',move:'calor',name:'Sauna o baño turco',sets:'10-15 min · opcional',m:'',cue:'Hidrátate y mantenlo suave; hoy no se añade cardio.',why:'Así el plan conserva exactamente tres sesiones semanales de cardio.'}]}]}
 ];
