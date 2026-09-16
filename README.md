@@ -1,5 +1,9 @@
 # Fuerza · rutina y marcas
 
+App publicada: https://yass-cell.github.io/appFITX/ · repositorio:
+https://github.com/yass-cell/appFITX (`main`, GitHub Pages desde la raíz).
+El procedimiento y las reglas de conservación de datos están en `AGENTS.md`.
+
 PWA de rutina de gimnasio (8 semanas, 5 sesiones de fuerza, 2 descansos y 3 dosis progresivas de cardio) con registro de marcas,
 calendario de entrenamientos, PR, medidas corporales, fotos de progreso, gráficos y copia de seguridad JSON. **100% offline**: fuentes
 autoalojadas, sin CDN, sin backend. Los datos viven en el `localStorage` del
@@ -59,6 +63,8 @@ donde se registra el peso total de la única mancuerna.
    `node scripts/build-portable.cjs` para regenerar el HTML independiente.
 3. En la PWA, acepta **Actualizar** cuando aparezca. En la misma dirección y
    navegador se conservan `localStorage` e IndexedDB; no borres los datos del sitio.
+   La publicación se realiza con commit y push a `origin main`; la app instalada
+   recibe los nuevos recursos de GitHub Pages cuando se completa el despliegue.
 4. Si cambias de navegador, dispositivo o dirección (por ejemplo, de localhost a
    GitHub Pages), abre **Datos → Importar JSON** en el destino. Los registros se
    fusionan por ejercicio/fecha; las entradas de la copia prevalecen en coincidencias.
