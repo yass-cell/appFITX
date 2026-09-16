@@ -5,8 +5,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0A1015",
-  "theme_color": "#0A1015",
+  "background_color": "#060608",
+  "theme_color": "#060608",
   "description": "Rutina de gimnasio de 8 semanas con registro de marcas y gráficos de progreso. 100% offline.",
   "icons": [
     { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" },

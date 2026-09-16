@@ -1,10 +1,13 @@
 /* Fuerza · service worker — cache-first con precarga completa del app shell */
-const CACHE='fuerza-v13';
+const CACHE='fuerza-v22';
 const ASSETS=[
   './',
   './index.html',
   './css/styles.css',
   './js/data.js',
+  './js/program-history.js',
+  './js/program.js',
+  './js/exercise-art.js',
   './js/app.js',
   './manifest.webmanifest',
   './fonts/anton-400.woff2',

@@ -1,3 +1,7 @@
 # instantánea original de una sola página (fuente del split; no forma parte del sitio publicado)
 fuerza-app.html
 rutina-vshape-heavy-pump-v3.html
+
+# Copias personales: nunca se publican con el código.
+backups-private/
+fuerza-completa-*.json

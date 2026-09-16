@@ -66,7 +66,7 @@ DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
   if(!e.m)return;
   const id=slug(e.name);
   if(!EX[id]) EX[id]={name:e.name,grp:G[e.m]||'Otros'};
-  if(e.base||b.t.indexOf('Fuerza')===0) BASIC.add(id);
+  if(e.strength||e.base||b.t.indexOf('Fuerza')===0) BASIC.add(id);
 })));
 BASIC.forEach(id=>{ if(EX[id]) EX[id].grp='Básicos'; });
 /* marcas antiguas de rutinas anteriores: se conservan en el grupo Archivo */
@@ -92,6 +92,7 @@ function weekDates(anchor=new Date()){
   return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return dateKey(d)});
 }
 function requiredExercises(d){
+  if(d.rest)return [];
   return d.blocks.flatMap(b=>/opcional/i.test(b.t)?[]:b.ex
     .filter(e=>!/opcional/i.test(e.sets||''))
     .map(doneExerciseId));
@@ -131,19 +132,17 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
 }));
 
 /* ================= rutina ================= */
-let week=Math.min(8,Math.max(1,parseInt(DB().programWeek)||1)),day='d1';
-const bases={};
-function readBases(){['bp','pu','dp','bw'].forEach(k=>bases[k]=parseFloat(document.getElementById(k).value)||0);}
+let week=Math.min(8,Math.max(1,parseInt(DB().aestheticProgramWeek)||1)),day=DAYS[0].id;
 function rail(){
   const el=document.getElementById('rail');el.innerHTML='';
   for(let w=1;w<=8;w++){
     const b=document.createElement('button');
     b.className='wk'+(w===week?' on':'');b.textContent=w;
     if(w===4)b.dataset.phase='deload';
-    b.onclick=()=>{week=w;const d=DB();d.programWeek=w;put(d);rail();sesh();volume()};
+    b.onclick=()=>{week=w;const d=DB();d.aestheticProgramWeek=w;put(d);rail();sesh();volume()};
     el.appendChild(b);
   }
-  document.getElementById('phase').textContent=PH[week].toUpperCase()+'  ·  BÁSICOS A '+SR[week];
+  document.getElementById('phase').textContent=PH[week].toUpperCase()+' · CARDIO '+cardioMinutes[week].reduce((a,b)=>a+b,0)+' MIN/SEM';
   document.getElementById('phaseTiny').textContent='Semana '+week+' de 8';
 }
 function dayTabs(){
@@ -157,41 +156,37 @@ function dayTabs(){
     b.onclick=()=>{day=d.id;dayTabs();sesh()};
     el.appendChild(b);
   });
-  const n=DAYS.filter(dayComplete).length;
-  document.getElementById('weekDoneText').textContent='Semana actual · '+n+'/7 días completos';
-  document.getElementById('weekDoneBar').style.width=Math.round(n/7*100)+'%';
+  const n=TRAINING_DAYS.filter(dayComplete).length;
+  document.getElementById('weekDoneText').textContent='Semana actual · '+n+'/'+TRAINING_DAYS.length+' sesiones';
+  document.getElementById('weekDoneBar').style.width=Math.round(n/TRAINING_DAYS.length*100)+'%';
 }
 function sesh(){
-  readBases();
   const d=DAYS.find(x=>x.id===day),host=document.getElementById('sesh');
+  host.dataset.tone=d.rest?'recovery':d.tag==='Pump'?'pump':d.tag==='Build'?'build':'heavy';
   let total=0;d.blocks.forEach(b=>total+=b.ex.length);
-  const dnote=week===4?' · descarga: accesorios −40%':week===8?' · test: accesorios −30%':'';
+  const dnote=week===4&&!d.rest?' · descarga: series reducidas':'';
   let h=`<div class="seshhead"><h3>${d.s}</h3><span class="tag${d.wet?' wet':''}">${d.tag}</span></div>
-    <p class="seshnote">${d.note}</p>
-    <p class="count">${total} ejercicios · ${d.blocks.length} bloques${dnote}</p>`;
+    <p class="session-focus">${d.focus||''}</p><p class="seshnote">${d.note}</p>
+    <p class="count">${d.rest?'CAMINATA + MOVILIDAD · AJUSTA SEGÚN ENERGÍA':d.duration+' · '+total+' ejercicios'}${dnote}</p>`;
   d.blocks.forEach((blk,bi)=>{
     h+=`<div class="blk" data-tone="${blk.tone||''}"><div class="blkhead"><h4>${blk.t}</h4><span class="rule"></span></div>`;
     blk.ex.forEach((e,ei)=>{
       const ph=e.dyn==='dragon'?DRAGON[dragonPhase(week)]:null;
       const dispName=ph?ph.name:e.name;
-      const dispSets=e.base&&!e.pct?SR[week]:(ph?ph.sets:e.sets);
+      const dispSets=exerciseSets(e,week);
       const dispCue=ph?ph.cue:e.cue;
       const dispWhy=ph?ph.why:e.why;
       const id=e.m?slug(e.name):null;
       const doneId=today()+'|'+day+'|'+doneExerciseId(e),completed=!!doneDb()[doneId];
       let loadHtml='';
-      if(e.base){
-        const kg=e.round(bases[e.base]*(e.pct||F[week]*(e.mult||1)));
-        loadHtml=`<div class="load"><span class="kg">${kg%1?kg.toFixed(2).replace(/0$/,''):kg}</span>
-          <span class="u">${e.base==='bp'?'kg barra':'kg lastre'}</span></div>`;
-      }
+      if(e.strength)loadHtml='<p class="strength-hint">Carga elegida por ti · RIR 2 · descanso 3 min</p>';
       const best=id?bestOf(id):null;
       const prBtn=id?`<button class="prbtn${best?' has':''}" data-pr="${bi}-${ei}">
-          ${best?`<b>${best.kg>0?best.kg+'×'+best.r:best.r}</b>marca`:`<b>+</b>marca`}</button>`:'';
-      const doneBtn=`<button class="donebtn${completed?' on':''}" data-done="${doneId}" aria-pressed="${completed}">
+          ${best?`<b>${best.kg}×${best.r}</b>marca`:`<b>+</b>marca`}</button>`:'';
+      const doneBtn=d.rest?'':`<button class="donebtn${completed?' on':''}" data-done="${doneId}" aria-label="${esc((completed?'Desmarcar ':'Completar ')+dispName)}" aria-pressed="${completed}">
           <b>${completed?'✓':'○'}</b>${completed?'hecho':'hacer'}</button>`;
       h+=`<div class="ex${completed?' done':''}"><div class="exrow">
-        <div class="dia">${DIA[e.d]}<small>${e.move||''}</small></div>
+        <button class="dia" data-movement="${bi}-${ei}" aria-label="Ver movimiento: ${esc(dispName)}">${ExerciseArt.svg(e.d)}<small>VER TÉCNICA ↗</small></button>
         <div class="exbody">
           <p class="exname">${dispName}</p>
           <p class="exmeta">${dispSets}</p>${loadHtml}
@@ -200,17 +195,25 @@ function sesh(){
         </div><div class="exactions">${doneBtn}${prBtn}</div></div>
         ${id?`<div class="prform" id="prf-${bi}-${ei}">
           <div class="r">
-            <div><p class="lbl">Kg / lastre</p><input type="number" inputmode="decimal" step="0.5" min="0" id="kg-${bi}-${ei}" placeholder="0"></div>
+            <div><p class="lbl">Kg / +lastre / −asistencia</p><input type="number" inputmode="decimal" step="0.5" id="kg-${bi}-${ei}" placeholder="0"></div>
             <div><p class="lbl">Reps o seg</p><input type="number" inputmode="numeric" step="1" min="1" id="rp-${bi}-${ei}" placeholder="5"></div>
             <button class="btn" data-save="${bi}-${ei}" data-id="${id}">OK</button>
           </div>
-          ${best?`<p class="prlast">Tu mejor: <b>${best.kg>0?best.kg+' kg × '+best.r:best.r}</b> (${dmy(best.d)})</p>`:''}
+          <p class="prlast">Guarda una serie de referencia por ejercicio y día. Otro guardado la sustituye. ${e.d==='bench'?'En banca, peso total de la barra y los discos.':e.d==='chestpress'?'Anota la carga indicada y usa siempre la misma máquina y ajuste.':e.d==='pullover'?'En pullover, peso total de la única mancuerna.':'En mancuernas, kg por mano.'}</p>
+          ${best?`<p class="prlast">Tu mejor: <b>${best.kg} kg × ${best.r}</b> (${dmy(best.d)})</p>`:''}
         </div>`:''}
       </div>`;
     });
     h+='</div>';
   });
   host.innerHTML=h;
+  host.querySelectorAll('[data-movement]').forEach(b=>b.addEventListener('click',()=>{
+    const [bi,ei]=b.dataset.movement.split('-').map(Number),e=d.blocks[bi].ex[ei],spec=ExerciseArt.specs[e.d]||ExerciseArt.specs.mob;
+    document.getElementById('movementTitle').textContent=e.name;
+    document.getElementById('movementFrames').innerHTML=spec.labels.map((label,i)=>`<figure>${ExerciseArt.svg(e.d,i)}<figcaption><b>0${i+1}</b> ${esc(label)}</figcaption></figure>`).join('');
+    document.getElementById('movementCue').textContent=e.cue;
+    document.getElementById('movementDialog').showModal();
+  }));
   host.querySelectorAll('[data-done]').forEach(b=>b.addEventListener('click',()=>{
     const d=doneDb(),id=b.dataset.done;
     if(d[id])delete d[id];else d[id]=true;
@@ -231,12 +234,6 @@ function sesh(){
     put(d);sesh();renderProgress();buildExList();drawChart();
   }));
 }
-['bp','pu','dp','bw'].forEach(k=>{
-  const el=document.getElementById(k);
-  el.addEventListener('input',()=>{
-    const d=DB(); d.bases=d.bases||{}; d.bases[k]=el.value; put(d); sesh();
-  });
-});
 
 /* ================= series por semana ================= */
 const nsets=s=>{const m=String(s).match(/^\s*(\d+)\s*[×x]/);return m?parseInt(m[1]):0};
@@ -244,13 +241,14 @@ function volume(){
   const tot={};
   DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
     if(!e.m||/opcional/i.test(b.t)||/opcional/i.test(e.sets||''))return;
-    let s=e.base&&!e.pct?nsets(SR[week]):nsets(e.sets);
-    if(week===4&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.6));
-    if(week===8&&!(e.base&&!e.pct))s=Math.max(0,Math.round(s*.7));
+    const s=nsets(exerciseSets(e,week));
     tot[e.m]=(tot[e.m]||0)+s;
   })));
   const order=['dl','dpo','da','pec','esp','bi','tri','pie','ham','ere','cal','core'];
   const max=Math.max(...order.map(k=>tot[k]||0))||1;
+  document.getElementById('priorityGrid').innerHTML=[
+    ['esp','Espalda',tot.esp||0],['dl','Lateral',tot.dl||0],['dpo','Posterior',tot.dpo||0],['core','Abs',tot.core||0],['bi','Bí / Trí',(tot.bi||0)+' / '+(tot.tri||0)]
+  ].map(([key,label,value])=>`<div class="priority" data-muscle="${key}"><b>${value}</b><span>${label}</span><small>series / sem</small></div>`).join('');
   document.getElementById('volwk').textContent='Semana '+week;
   document.getElementById('vrows').innerHTML=order.map(k=>{
     const v=tot[k]||0,key=(k==='dl'||k==='dpo');
@@ -276,7 +274,7 @@ function doneIndex(){
   return out;
 }
 function exerciseLabel(dayId,id){
-  const d=DAYS.find(x=>x.id===dayId);
+  const d=HISTORY_DAYS.find(x=>x.id===dayId);
   if(d){const e=d.blocks.flatMap(b=>b.ex).find(x=>doneExerciseId(x)===id);if(e)return e.name;}
   return id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());
 }
@@ -288,27 +286,27 @@ function sessionStats(date,d,index=doneIndex()){
     complete:required.length>0&&required.every(id=>set.has(id)),required,doneSet:set,optional};
 }
 function dateActivity(date,index=doneIndex()){
-  const sessions=DAYS.map(d=>sessionStats(date,d,index)).filter(s=>s.started);
+  const sessions=HISTORY_DAYS.map(d=>sessionStats(date,d,index)).filter(s=>s.started);
   const done=sessions.reduce((n,s)=>n+s.done,0),total=sessions.reduce((n,s)=>n+s.total,0);
   return {date,sessions,done,total,has:sessions.length>0,complete:sessions.length>0&&sessions.every(s=>s.complete)};
 }
 function weekSummaryFor(anchor=new Date(),index=doneIndex()){
   const dates=weekDates(anchor);
-  const routine=DAYS.map(d=>{
+  const routine=TRAINING_DAYS.map(d=>{
     const options=dates.map(date=>sessionStats(date,d,index));
     return options.reduce((best,s)=>s.done>best.done?s:best,options[0]);
   });
   const prs=allPrEvents().filter(e=>e.d>=dates[0]&&e.d<=dates[6]);
   return {dates,routine,days:routine.filter(s=>s.complete).length,
     exercises:routine.reduce((n,s)=>n+s.done,0),
-    total:DAYS.reduce((n,d)=>n+requiredExercises(d).length,0),prs};
+    total:TRAINING_DAYS.reduce((n,d)=>n+requiredExercises(d).length,0),prs};
 }
 function fullWeekStreak(index=doneIndex()){
   let anchor=new Date(),sum=weekSummaryFor(anchor,index);
-  if(sum.days<7)anchor.setDate(anchor.getDate()-7);
+  if(sum.days<TRAINING_DAYS.length)anchor.setDate(anchor.getDate()-7);
   let streak=0;
   for(let i=0;i<104;i++){
-    if(weekSummaryFor(anchor,index).days!==7)break;
+    if(weekSummaryFor(anchor,index).days!==TRAINING_DAYS.length)break;
     streak++;anchor.setDate(anchor.getDate()-7);
   }
   return streak;
@@ -323,7 +321,7 @@ function prsByDate(){const out={};allPrEvents().forEach(e=>(out[e.d]||(out[e.d]=
 function renderWeekDashboard(){
   const index=doneIndex(),s=weekSummaryFor(new Date(),index),pbd=prsByDate();
   document.getElementById('weekRange').textContent=dmy(s.dates[0])+' – '+dmy(s.dates[6]);
-  document.getElementById('statDays').textContent=s.days+'/7';
+  document.getElementById('statDays').textContent=s.days+'/'+TRAINING_DAYS.length;
   document.getElementById('statExercises').textContent=s.exercises+'/'+s.total;
   document.getElementById('statPrs').textContent='★ '+s.prs.length;
   document.getElementById('statStreak').textContent=fullWeekStreak(index);
@@ -361,7 +359,7 @@ function renderDayDetail(date=selectedCalendarDate){
     h+=`<div class="detailsession"><div class="detailtitle"><b>${esc(s.day.n+' · '+s.day.short)}</b><span class="${s.complete?'ok':''}">${s.complete?'✓ COMPLETO':s.done+'/'+s.total}</span></div>
       <div class="detailchecks">${s.required.map(id=>`<span class="${s.doneSet.has(id)?'done':''}">${s.doneSet.has(id)?'✓':'○'} ${esc(exerciseLabel(s.day.id,id))}</span>`).join('')}${optional}</div></div>`;
   });
-  if(prs.length)h+=`<div class="detailprs">${prs.map(e=>`<div class="detailpr"><span>★</span><b>${esc(e.name)}</b><em>${e.kg>0?fmt(e.kg)+' kg × '+e.r:e.r+' reps/s'} · ${e.prType}</em></div>`).join('')}</div>`;
+  if(prs.length)h+=`<div class="detailprs">${prs.map(e=>`<div class="detailpr"><span>★</span><b>${esc(e.name)}</b><em>${e.kg!==0?fmt(e.kg)+' kg × '+e.r:e.r+' reps/s'} · ${e.prType}</em></div>`).join('')}</div>`;
   if(body)h+=`<div class="detailbody">${body.weight?`<span>${fmt(body.weight)} kg</span>`:''}${body.waist?`<span>Cintura ${fmt(body.waist)} cm</span>`:''}</div>`;
   if(!a.has&&!prs.length&&!body&&!photoDates.has(date))h+='<p class="detail-empty">Todavía no hay actividad registrada este día.</p>';
   h+='<div class="detailphoto" id="detailPhoto"></div>';
@@ -460,7 +458,7 @@ function drawChart(){
     const xpad=(x1-x0)*.08||1;x0=Math.max(0,x0-xpad);x1+=xpad;
   }
   const pad=(y1-y0)*0.15||Math.max(Math.abs(y1)*0.1,1);y0-=pad;y1+=pad;
-  y0=Math.max(0,y0);
+  if(mode==='reps'||Math.min(...allY)>=0)y0=Math.max(0,y0);
   const px=x=>L+(x1===x0?0.5:(x-x0)/(x1-x0))*(W-L-R);
   const py=v=>T+(1-(v-y0)/(y1-y0||1))*(H-T-B);
   let g='';
@@ -495,7 +493,7 @@ function drawChart(){
     mode==='kg'?'Eje X: tiempo · Eje Y: kg reales · toca un punto':'Eje X: tiempo · Eje Y: repeticiones/segundos · toca un punto';
   host.querySelectorAll('circle').forEach(c=>c.addEventListener('click',()=>{
     const s=series[+c.dataset.s],p=s.pts[+c.dataset.p],e=p.e;
-    cap.textContent=s.name+' · '+dmy(e.d)+' · '+(e.kg>0?e.kg+' kg × '+e.r:e.r+' reps/s');
+    cap.textContent=s.name+' · '+dmy(e.d)+' · '+(e.kg!==0?e.kg+' kg × '+e.r:e.r+' reps/s');
   }));
   /* tabla de historial de lo seleccionado */
   tbl.innerHTML=series.map((s,si)=>{
@@ -504,7 +502,7 @@ function drawChart(){
       s.list.slice().reverse().map((e,ri)=>{
         const i=s.list.length-1-ri;
         return `<div class="hrow"><span class="hd">${dmy(e.d)}</span>
-          <span class="hv">${e.kg>0?e.kg+' kg × '+e.r:e.r}</span>
+          <span class="hv">${e.kg!==0?e.kg+' kg × '+e.r:e.r}</span>
           ${flags[i].isPr?'<span class="prb">PR</span>':''}
           <span class="he">${flags[i].prType}</span>
           <button class="del" data-id="${s.id}" data-d="${e.d}">×</button></div>`;
@@ -599,11 +597,19 @@ async function deleteSelectedPhoto(){
 document.getElementById('deletePhoto').addEventListener('click',deleteSelectedPhoto);
 
 /* ================= datos ================= */
+async function completeBackup(){
+  return {version:2,...DB(),done:doneDb(),photos:await photoAll()};
+}
+document.getElementById('viewBackup').addEventListener('click',async()=>{
+  const backup=await completeBackup();
+  document.getElementById('backupJson').value=JSON.stringify(backup,null,2);
+  document.getElementById('backupSummary').textContent=Object.values(backup.prs).reduce((n,list)=>n+list.length,0)+' marcas · '+Object.values(backup.done).filter(Boolean).length+' ejercicios completados · '+backup.body.length+' medidas · '+backup.photos.length+' fotos';
+  document.getElementById('backupPreview').hidden=false;
+});
 document.getElementById('exp').addEventListener('click',async()=>{
   const btn=document.getElementById('exp'),old=btn.textContent;btn.disabled=true;btn.textContent='Preparando…';
   try{
-    const photos=await photoAll();
-    const blob=new Blob([JSON.stringify({version:2,...DB(),done:doneDb(),photos},null,2)],{type:'application/json'});
+    const blob=new Blob([JSON.stringify(await completeBackup(),null,2)],{type:'application/json'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);
     a.download='fuerza-completa-'+today()+'.json';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   }finally{btn.disabled=false;btn.textContent=old;}
@@ -623,6 +629,9 @@ document.getElementById('file').addEventListener('change',ev=>{
         cur.prs[id]=Object.values(map).sort((a,b)=>a.d.localeCompare(b.d));
       });
       if(inc.bases)cur.bases={...cur.bases,...inc.bases};
+      if(cur.aestheticProgramWeek===undefined&&Number.isInteger(inc.aestheticProgramWeek)){
+        cur.aestheticProgramWeek=Math.min(8,Math.max(1,inc.aestheticProgramWeek));
+      }
       if(Array.isArray(inc.body)){
         const body={};(cur.body||[]).forEach(e=>{if(e?.d)body[e.d]=e});
         inc.body.forEach(e=>{if(e?.d)body[e.d]=e});cur.body=Object.values(body).sort((a,b)=>a.d.localeCompare(b.d));
@@ -632,8 +641,8 @@ document.getElementById('file').addEventListener('change',ev=>{
         const merged={...doneDb()};Object.entries(inc.done).forEach(([k,v])=>{if(v)merged[k]=true});putDone(merged);
       }
       if(Array.isArray(inc.photos))for(const p of inc.photos){if(p?.d&&typeof p.data==='string'&&p.data.startsWith('data:image/'))await photoPut(p);}
-      if(cur.bases)['bp','pu','dp','bw'].forEach(k=>{if(cur.bases[k])document.getElementById(k).value=cur.bases[k]});
-      dayTabs();sesh();buildExList();drawChart();await refreshPhotoDates();renderProgress();
+      week=Math.min(8,Math.max(1,parseInt(DB().aestheticProgramWeek)||1));
+      rail();dayTabs();sesh();volume();buildExList();drawChart();await refreshPhotoDates();renderProgress();
       alert('Copia completa importada y fusionada sin borrar tus datos actuales.');
     }catch(e){alert('Ese archivo no tiene el formato esperado.');}
     ev.target.value='';
@@ -644,7 +653,6 @@ document.getElementById('file').addEventListener('change',ev=>{
 /* ================= init ================= */
 (function(){
   const d=DB();
-  if(d.bases)['bp','pu','dp','bw'].forEach(k=>{if(d.bases[k])document.getElementById(k).value=d.bases[k];});
   rail();dayTabs();sesh();volume();renderProgress();buildGroups();buildExList();drawChart();refreshPhotoDates();
 })();
 
