@@ -174,12 +174,9 @@ function sesh(){
       const ph=e.dyn==='dragon'?DRAGON[dragonPhase(week)]:null;
       const dispName=ph?ph.name:e.name;
       const dispSets=exerciseSets(e,week);
-      const dispCue=ph?ph.cue:e.cue;
-      const dispWhy=ph?ph.why:e.why;
+      const shortCue=(ExerciseArt.specs[e.d]||ExerciseArt.specs.mob).labels[1];
       const id=e.m?slug(e.name):null;
       const doneId=today()+'|'+day+'|'+doneExerciseId(e),completed=!!doneDb()[doneId];
-      let loadHtml='';
-      if(e.strength)loadHtml='<p class="strength-hint">Carga elegida por ti · RIR 2 · descanso 3 min</p>';
       const best=id?bestOf(id):null;
       const prBtn=id?`<button class="prbtn${best?' has':''}" data-pr="${bi}-${ei}">
           ${best?`<b>${best.kg}×${best.r}</b>marca`:`<b>+</b>marca`}</button>`:'';
@@ -187,12 +184,11 @@ function sesh(){
           <b>${completed?'✓':'○'}</b>${completed?'hecho':'hacer'}</button>`;
       h+=`<div class="ex${completed?' done':''}"><div class="exrow">
         <button class="dia" data-movement="${bi}-${ei}" aria-label="Ver movimiento: ${esc(dispName)}">${ExerciseArt.svg(e.d)}<small>VER TÉCNICA ↗</small></button>
-        <div class="exbody">
-          <p class="exname">${dispName}</p>
-          <p class="exmeta">${dispSets}</p>${loadHtml}
-          <p class="cue">${dispCue}</p>
-          ${dispWhy?`<p class="why">↳ ${dispWhy}</p>`:''}
-        </div><div class="exactions">${doneBtn}${prBtn}</div></div>
+        <button class="exbody exercise-details" data-movement="${bi}-${ei}" aria-label="Ver detalles: ${esc(dispName)}" aria-haspopup="dialog">
+          <span class="exname">${dispName}</span>
+          <span class="exmeta">${dispSets}</span>
+          <span class="cue">${esc(shortCue)}.</span>
+        </button><div class="exactions">${doneBtn}${prBtn}</div></div>
         ${id?`<div class="prform" id="prf-${bi}-${ei}">
           <div class="r">
             <div><p class="lbl">Kg / +lastre / −asistencia</p><input type="number" inputmode="decimal" step="0.5" id="kg-${bi}-${ei}" placeholder="0"></div>
@@ -209,9 +205,17 @@ function sesh(){
   host.innerHTML=h;
   host.querySelectorAll('[data-movement]').forEach(b=>b.addEventListener('click',()=>{
     const [bi,ei]=b.dataset.movement.split('-').map(Number),e=d.blocks[bi].ex[ei],spec=ExerciseArt.specs[e.d]||ExerciseArt.specs.mob;
-    document.getElementById('movementTitle').textContent=e.name;
+    const ph=e.dyn==='dragon'?DRAGON[dragonPhase(week)]:null;
+    document.getElementById('movementTitle').textContent=ph?ph.name:e.name;
+    document.getElementById('movementSets').textContent=exerciseSets(e,week);
+    const strength=document.getElementById('movementStrength');
+    strength.textContent=e.strength?'Carga elegida por ti · RIR 2 · descanso 3 min':'';
+    strength.hidden=!e.strength;
     document.getElementById('movementFrames').innerHTML=spec.labels.map((label,i)=>`<figure>${ExerciseArt.svg(e.d,i)}<figcaption><b>0${i+1}</b> ${esc(label)}</figcaption></figure>`).join('');
-    document.getElementById('movementCue').textContent=e.cue;
+    document.getElementById('movementCue').textContent=ph?ph.cue:e.cue;
+    const why=document.getElementById('movementWhy');
+    why.textContent=(ph?ph.why:e.why)||'';
+    why.hidden=!why.textContent;
     document.getElementById('movementDialog').showModal();
   }));
   host.querySelectorAll('[data-done]').forEach(b=>b.addEventListener('click',()=>{

@@ -63,5 +63,7 @@ git diff --check
   locales de otra exploración; no forman parte del despliegue actual.
 - Preferencias actuales: interfaz oscura, colores por subcategoría, tarjetas
   pendientes tenues/translúcidas y completadas con color/brillo; selector de días
-  fijo al desplazarse. Las indicaciones nuevas del usuario prevalecen sobre diseños
+  fijo al desplazarse. Tarjetas compactas con una frase; pulsar dibujo o texto abre
+  la descripción completa, series, descansos y recomendaciones.
+  Las indicaciones nuevas del usuario prevalecen sobre diseños
   y repartos de rutina antiguos.
