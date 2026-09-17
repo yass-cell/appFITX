@@ -65,5 +65,8 @@ git diff --check
   pendientes tenues/translúcidas y completadas con color/brillo; selector de días
   fijo al desplazarse. Tarjetas compactas con una frase; pulsar dibujo o texto abre
   la descripción completa, series, descansos y recomendaciones.
+  En móvil, acciones a la derecha: Hacer arriba y Marca debajo. Los ejercicios de
+  descanso también se pueden marcar; siguen siendo opcionales y no suman a las
+  cinco sesiones de pesas semanales.
   Las indicaciones nuevas del usuario prevalecen sobre diseños
   y repartos de rutina antiguos.

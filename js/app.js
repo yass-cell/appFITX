@@ -180,7 +180,7 @@ function sesh(){
       const best=id?bestOf(id):null;
       const prBtn=id?`<button class="prbtn${best?' has':''}" data-pr="${bi}-${ei}">
           ${best?`<b>${best.kg}×${best.r}</b>marca`:`<b>+</b>marca`}</button>`:'';
-      const doneBtn=d.rest?'':`<button class="donebtn${completed?' on':''}" data-done="${doneId}" aria-label="${esc((completed?'Desmarcar ':'Completar ')+dispName)}" aria-pressed="${completed}">
+      const doneBtn=`<button class="donebtn${completed?' on':''}" data-done="${doneId}" aria-label="${esc((completed?'Desmarcar ':'Completar ')+dispName)}" aria-pressed="${completed}">
           <b>${completed?'✓':'○'}</b>${completed?'hecho':'hacer'}</button>`;
       h+=`<div class="ex${completed?' done':''}"><div class="exrow">
         <button class="dia" data-movement="${bi}-${ei}" aria-label="Ver movimiento: ${esc(dispName)}">${ExerciseArt.svg(e.d)}<small>VER TÉCNICA ↗</small></button>
