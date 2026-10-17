@@ -5,3 +5,6 @@ rutina-vshape-heavy-pump-v3.html
 # Copias personales: nunca se publican con el código.
 backups-private/
 fuerza-completa-*.json
+
+# Herramientas de diseño locales (decisiones y bocetos): no forman parte del sitio.
+.impeccable/

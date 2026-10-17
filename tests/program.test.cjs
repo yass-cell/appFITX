@@ -5,13 +5,13 @@ function setup(){
  const done={};const c={doneDb:()=>done,allPrEvents:()=>[]};vm.createContext(c);
  for(const p of ['js/data.js','js/program-history.js','js/program.js','js/exercise-art.js'])vm.runInContext(read(p),c,{filename:p});
  const app=read('js/app.js');
- vm.runInContext(app.slice(app.indexOf('const slug='),app.indexOf('const EX='))+app.slice(app.indexOf('const dateKey='),app.indexOf('function prsOf'))+app.slice(app.indexOf('function doneIndex(){'),app.indexOf('function bodyRecords(){')),c);
- vm.runInContext('globalThis.r={DAYS,TRAINING_DAYS,LEGACY_DAYS,PREVIOUS_PROGRAM_DAYS,PREVIOUS_TORSO_DAYS,PREVIOUS_CHEST_DAYS,HISTORY_DAYS,exerciseSets,cardioMinutes,ExerciseArt,requiredExercises,weekDates,weekSummaryFor,dateActivity,fullWeekStreak};',c);
+ vm.runInContext(app.slice(app.indexOf('const slug='),app.indexOf('const EX='))+app.slice(app.indexOf('const fmt='),app.indexOf('function prsOf'))+app.slice(app.indexOf('const markText='),app.indexOf('/* Descanso indicado'))+app.slice(app.indexOf('function doneIndex(){'),app.indexOf('function bodyRecords(){')),c);
+ vm.runInContext('globalThis.r={DAYS,TRAINING_DAYS,LEGACY_DAYS,PREVIOUS_PROGRAM_DAYS,PREVIOUS_TORSO_DAYS,PREVIOUS_CHEST_DAYS,PREVIOUS_V5_DAYS,HISTORY_DAYS,exerciseSets,cardioMinutes,ExerciseArt,todayTarget,WEEK_FOCUS,requiredExercises,weekDates,weekSummaryFor,dateActivity,fullWeekStreak};',c);
  return {...c.r,done};
 }
 test('cinco sesiones y dos descansos sin tareas obligatorias',()=>{
  const r=setup();assert.equal(r.DAYS.length,7);assert.equal(r.TRAINING_DAYS.length,5);
- assert.deepEqual(Array.from(r.DAYS.filter(d=>d.rest),d=>d.n),['Miércoles','Domingo']);
+ assert.deepEqual(Array.from(r.DAYS.filter(d=>d.rest),d=>d.n),['Jueves','Domingo']);
  for(const d of r.DAYS.filter(d=>d.rest))assert.equal(r.requiredExercises(d).length,0);
 });
 test('cinco sesiones completan la semana y la racha sin marcar descansos ni skills',()=>{
@@ -25,14 +25,18 @@ test('el historial anterior sigue visible y no completa sesiones del nuevo progr
  for(const id of r.requiredExercises(legacy))r.done[date+'|'+legacy.id+'|'+id]=true;
  assert.equal(r.dateActivity(date).sessions.length,1);assert.equal(r.dateActivity(date).sessions[0].day.id,'d1');
  assert.equal(r.weekSummaryFor().days,0);assert.equal(r.weekSummaryFor().exercises,0);
- assert.equal(new Set(r.HISTORY_DAYS.map(d=>d.id)).size,30);
+ assert.equal(new Set(r.HISTORY_DAYS.map(d=>d.id)).size,37);
 });
-test('dos días de pecho y espalda, una pierna y tres dosis de lateral y brazos',()=>{
+test('reparto V7: calistenia 2×, pecho y espalda 2×, hombro 4 días, brazo y core 3, pierna 1',()=>{
  const {TRAINING_DAYS}=setup();
- for(const [m,count] of [['pec',2],['esp',2],['pie',1],['ham',1],['dl',3],['bi',3],['tri',3],['core',3]])assert.equal(TRAINING_DAYS.filter(d=>d.blocks.some(b=>b.ex.some(e=>e.m===m))).length,count,m);
- const exercises=TRAINING_DAYS.flatMap(d=>d.blocks.flatMap(b=>b.ex));
- for(const icon of ['pull','dip','latp','rowdb','incl','rowc','rowhigh','fly','rowbar','pullover','straightarm','bench','chestpress'])assert.ok(exercises.some(e=>e.d===icon),icon);
- for(const d of TRAINING_DAYS){const icons=d.blocks.flatMap(b=>b.ex.map(e=>e.d));assert.ok(!(icons.includes('pull')&&icons.includes('latp')),'No duplicar dominadas y jalón en la misma sesión');}
+ const req=d=>d.blocks.filter(b=>!/opcional/i.test(b.t)).flatMap(b=>b.ex);
+ const days=test=>TRAINING_DAYS.filter(d=>req(d).some(test)).length;
+ for(const [ms,count] of [[['pec'],2],[['esp'],2],[['pie'],1],[['ham'],1],[['dl','da','dpo'],4],[['bi'],3],[['tri'],3],[['core'],3],[['ant'],2]])assert.equal(days(e=>ms.includes(e.m)),count,ms.join('+'));
+ assert.equal(days(e=>e.d==='pull'),2,'dominadas dos días');
+ assert.equal(days(e=>e.d==='dip'),2,'fondos dos días');
+ const names=TRAINING_DAYS.flatMap(req).map(e=>e.name);
+ for(const fav of ['Jalón al pecho','Remo con barra','Remo con mancuerna a una mano','Press banca','Press inclinado con mancuernas','Dominada lastrada','Fondos lastrados','L-sit en paralelas','Aperturas con mancuernas','Y-raise en polea','Press militar con barra','Press francés con barra EZ','Curl inverso con barra EZ','Curl martillo'])assert.ok(names.includes(fav),fav);
+ for(const d of TRAINING_DAYS){const icons=req(d).map(e=>e.d);assert.ok(!(icons.includes('preacher')&&icons.includes('curlc')),'predicador y curl en polea no coinciden: '+d.n);}
 });
 test('descarga reduce las series mostradas; cardio progresa con una descarga real',()=>{
  const r=setup();
@@ -48,7 +52,7 @@ test('todos los ejercicios tienen dos dibujos específicos, sin números inváli
  const r=setup();
  for(const d of r.DAYS)for(const b of d.blocks)for(const e of b.ex){
   assert.ok(r.ExerciseArt.specs[e.d],e.name);
-  for(const phase of [0,1])assert.doesNotMatch(r.ExerciseArt.svg(e.d,phase),/undefined|NaN/);
+  for(const phase of [0,1,'combo'])assert.doesNotMatch(r.ExerciseArt.svg(e.d,phase),/undefined|NaN/);
  }
 });
 test('la PWA precarga los nuevos archivos y el HTML portátil integra sus recursos',()=>{
@@ -69,12 +73,13 @@ test('el calendario conserva también las sesiones del programa 5+2 anterior',()
 test('volumen de prioridades y caminatas de recuperación coherentes',()=>{
  const r=setup(),totals={};
  for(const d of r.TRAINING_DAYS)for(const b of d.blocks)for(const e of b.ex)if(e.m)totals[e.m]=(totals[e.m]||0)+parseInt(r.exerciseSets(e,1));
- for(const [m,n] of Object.entries({pec:15,esp:17,dl:9,dpo:6,bi:8,tri:8,core:8}))assert.equal(totals[m],n,m);
+  for(const d of r.TRAINING_DAYS)for(const b of d.blocks)if(/opcional/i.test(b.t))for(const e of b.ex)if(e.m)totals[e.m]-=parseInt(r.exerciseSets(e,1));
+ for(const [m,n] of Object.entries({pec:18,esp:20,dl:10,da:4,dpo:6,bi:12,tri:9,ant:8,core:9,pie:10,ham:6,cal:3}))assert.equal(totals[m],n,m);
  for(const d of r.DAYS.filter(d=>d.rest)){
   assert.ok(d.blocks.some(b=>b.ex.some(e=>e.cardio!==undefined)));
-  assert.ok(d.blocks.some(b=>/Movilidad/.test(b.t)));
-  assert.ok(d.blocks.some(b=>/Estiramientos/.test(b.t)));
-  assert.ok(d.blocks.some(b=>/Tolerancia.*opcional/.test(b.t)));
+  assert.ok(d.blocks.some(b=>/Cadera/.test(b.t)),'movilidad de cadera');
+  assert.ok(d.blocks.some(b=>/Core/.test(b.t)),'core ligero');
+  assert.equal(d.s,'Movilidad de cadera + core');
  }
 });
 
@@ -96,12 +101,67 @@ test('los días de pecho V4 conservan su historial tras redistribuir los presses
  assert.equal(r.weekSummaryFor().days,0);
 });
 
-test('banca progresa como básico; pecho se reparte en 7 y 8 series',()=>{
- const r=setup(),monday=r.DAYS[0],friday=r.DAYS[4];
- const chest=d=>d.blocks.flatMap(b=>b.ex).filter(e=>e.m==='pec');
- const bench=chest(monday)[0];assert.equal(bench.name,'Press banca');assert.equal(bench.strength,true);
- assert.equal(r.exerciseSets(bench,1),'3 × 4-6');assert.equal(r.exerciseSets(bench,4),'2 × 4-5');
- assert.equal(chest(monday).reduce((n,e)=>n+parseInt(r.exerciseSets(e,1)),0),7);
- assert.equal(chest(friday).reduce((n,e)=>n+parseInt(r.exerciseSets(e,1)),0),8);
- assert.equal(chest(friday)[0].d,'chestpress');assert.ok(chest(friday).some(e=>e.d==='dip'));
+test('fuerza: cinco básicos con serie top y semanas alternas de reps y kg',()=>{
+ const r=setup(),all=r.TRAINING_DAYS.flatMap(d=>d.blocks.flatMap(b=>b.ex));
+ const strength=all.filter(e=>e.strength);
+ assert.deepEqual(Array.from(strength,e=>e.name),['Press banca','Dominada lastrada','Prensa de pierna horizontal','Press militar con barra','Remo con barra']);
+ for(const e of strength){
+  assert.match(r.exerciseSets(e,1),/^4 × 6-8 · top RPE 7/);assert.match(r.exerciseSets(e,4),/^2 × 5 · descarga/);assert.match(r.exerciseSets(e,8),/RIR 1/);
+  assert.match(e.cue,/Descansa 3 min\.$/);
+ }
+ assert.deepEqual(Object.values(r.WEEK_FOCUS),['reps','kg','reps','deload','kg','reps','kg','test']);
+});
+
+test('objetivo de hoy: semana de reps suma una rep, semana de kg sube un salto',()=>{
+ const r=setup(),all=r.TRAINING_DAYS.flatMap(d=>d.blocks.flatMap(b=>b.ex));
+ const incl=all.find(e=>e.name==='Press inclinado con mancuernas'),bench=all.find(e=>e.name==='Press banca'),pull=all.find(e=>e.name==='Dominada lastrada');
+ const t=(e,last,w)=>{const x=r.todayTarget(e,{d:'2026-01-01',...last},w);return x&&[x.kg,x.r,x.backoff||0]};
+ assert.deepEqual(t(incl,{kg:28,r:10},1),[28,11,0],'reps: misma carga, +1');
+ assert.deepEqual(t(incl,{kg:28,r:12},3),[28,12,0],'reps en el tope: mantiene');
+ assert.deepEqual(t(incl,{kg:28,r:10},2),[30,8,0],'kg: mancuernas +2, al mínimo del rango');
+ assert.deepEqual(t(incl,{kg:28,r:6},2),[28,8,0],'kg sin reps suficientes: consolida');
+ assert.deepEqual(t(incl,{kg:28,r:10},4),[26,8,0],'descarga: −10 % redondeado al salto');
+ assert.deepEqual(t(bench,{kg:80,r:6},2),[82.5,5,75],'básico kg: +2,5 y back-off');
+ assert.deepEqual(t(bench,{kg:80,r:6},1),[80,7,72.5],'básico reps: misma top, +1');
+ assert.deepEqual(t(pull,{kg:-10,r:6},2),[-7.5,5,0],'asistencia: menos asistencia');
+ assert.equal(r.todayTarget(incl,null,1),null,'sin marca no hay objetivo');
+});
+
+test('superseries: cada par va seguido en el mismo bloque y el descanso está en el segundo',()=>{
+ const r=setup();
+ const rest=e=>[...e.cue.matchAll(/(\d+)(?:\s*-\s*(\d+))?\s*(min|s)\b/g)].some(m=>+m[1]*(m[3]==='min'?60:1)>=30);
+ let pairs=0;
+ for(const d of r.TRAINING_DAYS)for(const b of d.blocks)b.ex.forEach((e,i)=>{
+  if(!e.pair)return;
+  if(e.pair.endsWith('1')){const next=b.ex[i+1];assert.ok(next&&next.pair===e.pair[0]+'2',e.name);assert.ok(!rest(e),'sin descanso en '+e.name);pairs++;}
+  else assert.ok(rest(e),'descanso en '+e.name);
+ });
+ assert.equal(pairs,7);
+});
+
+test('los bloques opcionales no cuentan para completar el día',()=>{
+ const r=setup();
+ for(const d of r.TRAINING_DAYS)assert.equal(r.requiredExercises(d).length,d.blocks.filter(b=>!/opcional/i.test(b.t)).flatMap(b=>b.ex).length,d.n);
+ for(const d of r.DAYS.filter(x=>x.rest)){assert.ok(d.blocks.some(b=>/Dominadas · práctica opcional/.test(b.t)),'práctica de dominadas opcional: '+d.n);assert.equal(r.requiredExercises(d).length,0);}
+});
+test('la semana V5 publicada sigue completa en el calendario',()=>{
+ const r=setup(),dates=r.weekDates();
+ assert.deepEqual(Array.from(r.PREVIOUS_V5_DAYS,d=>d.id),['v5-d1','v4-d2','v4-d3','v4-d4','v5-d5','v4-d6','v4-d7']);
+ for(const [i,previous] of r.PREVIOUS_V5_DAYS.entries()){
+  if(previous.rest)continue;
+  for(const id of r.requiredExercises(previous))r.done[dates[i]+'|'+previous.id+'|'+id]=true;
+  assert.equal(r.dateActivity(dates[i]).sessions.find(s=>s.day.id===previous.id).complete,true,previous.id);
+ }
+ assert.equal(r.weekSummaryFor().days,0);
+});
+
+test('los dibujos mantienen la longitud de los huesos entre posiciones',()=>{
+ const r=setup(),d=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+ const used=new Set(r.DAYS.flatMap(x=>x.blocks.flatMap(b=>b.ex.map(e=>e.d))));
+ for(const key of used){
+  const {sp,A,B}=r.ExerciseArt.frames(key);
+  const bones=[['S','hip'],['S','head'],['hp1','knee'],['knee','foot'],['hp2','knee2'],['knee2','foot2']];
+  if(!sp.fore)bones.push(['sh1','elbow'],['elbow','hand'],['sh2','elbow2'],['elbow2','hand2']);
+  for(const [x,y] of bones)assert.ok(Math.abs(d(A[x],A[y])-d(B[x],B[y]))<.6,key+' '+x+'-'+y);
+ }
 });

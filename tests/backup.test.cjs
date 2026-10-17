@@ -8,7 +8,7 @@ function app(data={prs:{},bases:{},body:[]},done={},photos=[]){
  const el=id=>{if(!elements.has(id))elements.set(id,{listeners:{},addEventListener(k,fn){this.listeners[k]=fn;}});return elements.get(id);};
  const ctx=vm.createContext({document:{getElementById:el},DB:()=>data,put:d=>{data=d;},doneDb:()=>done,putDone:d=>{done=d;},photoAll:async()=>[...images.values()],photoPut:async p=>images.set(p.d,p),
   FileReader:class{readAsText(file){this.result=file.text;readerDone=this.onload();}},
-  week:1,rail(){},dayTabs(){},sesh(){},volume(){},buildExList(){},drawChart(){},refreshPhotoDates:async()=>{},renderProgress(){},alert:message=>{if(message.startsWith('Ese archivo'))throw Error(message);}});
+  week:1,rail(){},dayTabs(){},sesh(){},volume(){},renderSpec(){},SPEC_MUSCLES:{dl:{},cal:{},bi:{},dpo:{}},buildExList(){},drawChart(){},refreshPhotoDates:async()=>{},renderProgress(){},alert:message=>{if(message.startsWith('Ese archivo'))throw Error(message);}});
  vm.runInContext(backupCode,ctx);
  return {backup:async()=>JSON.parse(JSON.stringify(await vm.runInContext('completeBackup()',ctx))),
   import:async copy=>{el('file').listeners.change({target:{files:[{text:JSON.stringify(copy)}],value:'backup.json'}});await readerDone;},week:()=>ctx.week};
@@ -28,4 +28,13 @@ test('importar conserva registros de otras fechas y la semana ya elegida en el d
  assert.equal(result.prs.exercise.length,2);assert.equal(result.body.length,2);assert.equal(result.photos.length,2);
  assert.equal(result.done.old,true);assert.equal(result.done[Object.keys(sample.done)[0]],true);
  assert.equal(result.bases.other,10);assert.equal(result.bases.example,20);assert.equal(destination.week(),3);
+});
+
+test('la especialización de 30 días viaja en la copia y se fusiona por fecha',async()=>{
+ const spec={m:'dl',start:'2026-01-01',log:{'2026-01-01':40,'2026-01-02':44}};
+ const source=app({prs:{},bases:{},body:[],spec});const copy=await source.backup();
+ assert.deepEqual(copy.spec,spec);
+ const target=app({prs:{},bases:{},body:[],spec:{m:'dl',start:'2026-01-01',log:{'2026-01-03':46}}});
+ await target.import(copy);const merged=await target.backup();
+ assert.deepEqual(merged.spec.log,{'2026-01-01':40,'2026-01-02':44,'2026-01-03':46});
 });

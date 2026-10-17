@@ -1344,3 +1344,681 @@ const PREVIOUS_CHEST_DAYS=[
     ]
   }
 ];
+
+/* V5 · semana completa publicada antes de V6 (solo para interpretar el calendario histórico). */
+const PREVIOUS_V5_DAYS=[
+  {
+    "id": "v5-d1",
+    "n": "Lunes",
+    "s": "Pecho · tensión",
+    "short": "Pecho H",
+    "tag": "Heavy",
+    "duration": "65-80 min",
+    "focus": "BANCA / PECTORAL SUPERIOR / LATERAL / ABS",
+    "delt": true,
+    "note": "Banca primero para progresar en fuerza, inclinado para la porción superior y aperturas para completar el pecho. Siete series de pecho; los fondos pasan al viernes.",
+    "blocks": [
+      {
+        "t": "Preparación · 6-8 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Movilidad de hombro y dorsal",
+            "d": "mob",
+            "sets": "1 ronda · sin fatiga",
+            "m": "",
+            "cue": "2 min suaves, 6 rotaciones torácicas por lado y 8 deslizamientos de brazos en pared. Después 2-3 aproximaciones al primer básico.",
+            "why": "Prepara el recorrido sin cansarte antes de las series efectivas."
+          }
+        ]
+      },
+      {
+        "t": "Pecho · fuerza y rango",
+        "tone": "",
+        "ex": [
+          {
+            "name": "Press banca",
+            "d": "bench",
+            "sets": "3 × 4-6",
+            "m": "pec",
+            "cue": "Pies firmes, glúteos apoyados y escápulas estables. Baja hacia el pecho sin rebote, con antebrazos casi verticales. Deja 2 reps; descansa 3 min. Usa soportes de seguridad o ayuda.",
+            "why": "Cuando completes 3 × 6 con el mismo recorrido y RIR 2, sube el incremento mínimo. Registra el peso total de barra y discos; en descarga haz 2 × 4-5 con margen.",
+            "strength": true
+          },
+          {
+            "name": "Press inclinado con mancuernas",
+            "d": "incl",
+            "sets": "2 × 6-10",
+            "m": "pec",
+            "cue": "Banco a 25-35°, baja con control y deja 2 reps. Descansa 2-3 min.",
+            "why": "Dos series hoy y dos el viernes para mantener el trabajo de pecho superior."
+          },
+          {
+            "name": "Aperturas en máquina · pec deck",
+            "d": "fly",
+            "sets": "2 × 10-15",
+            "m": "pec",
+            "cue": "Espalda apoyada, codos suaves y recorrido cómodo. Acerca los brazos sin despegar el tronco; RIR 2-3, 90 s.",
+            "why": "Añade aducción del hombro sin otro press. No fuerces el estiramiento detrás del cuerpo."
+          }
+        ]
+      },
+      {
+        "t": "Hombro y tríceps · dosis 1",
+        "tone": "pump",
+        "ex": [
+          {
+            "name": "Elevación lateral en polea",
+            "d": "lateral",
+            "sets": "3 × 12-20",
+            "m": "dl",
+            "cue": "Deja 1-2 reps en reserva. Codo suave, abre sin balanceo; 60-90 s.",
+            "why": "Tres dosis semanales para desarrollar anchura visual; no hacen falta tres días de press."
+          },
+          {
+            "name": "Extensión sobre cabeza en polea",
+            "d": "trioh",
+            "sets": "3 × 10-15",
+            "m": "tri",
+            "cue": "Codos estables y rango cómodo por encima de la cabeza. Deja 1-2 reps; 90 s.",
+            "why": "Una extensión de codo complementa los presses sin otro empuje pesado."
+          }
+        ]
+      },
+      {
+        "t": "Abdomen · carga progresiva",
+        "tone": "wide",
+        "ex": [
+          {
+            "name": "Crunch en polea o máquina abdominal",
+            "d": "crunch",
+            "sets": "3 × 8-15",
+            "m": "core",
+            "cue": "Acerca costillas a pelvis, sin tirar con los brazos ni hacer una bisagra de cadera. Deja 1-2 reps; 90 s.",
+            "why": "Al completar 3 × 15 con el mismo control, añade el incremento mínimo."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "v4-d2",
+    "n": "Martes",
+    "s": "Espalda · anchura y fuerza",
+    "short": "Espalda H",
+    "tag": "Heavy",
+    "duration": "70-85 min",
+    "focus": "DOMINADAS / REMO LIBRE / DORSAL / BÍCEPS",
+    "note": "Dominadas, remo con barra hacia el abdomen alto y remo unilateral hacia la cadera. Son 7 series de espalda: una más que antes, repartidas entre tres ejercicios.",
+    "blocks": [
+      {
+        "t": "Preparación · 6-8 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Movilidad de hombro y dorsal",
+            "d": "mob",
+            "sets": "1 ronda · sin fatiga",
+            "m": "",
+            "cue": "2 min suaves, 6 rotaciones torácicas por lado y 8 deslizamientos de brazos en pared. Después 2-3 aproximaciones al primer básico.",
+            "why": "Prepara el recorrido sin cansarte antes de las series efectivas."
+          }
+        ]
+      },
+      {
+        "t": "Espalda · tirón vertical y unilateral",
+        "tone": "",
+        "ex": [
+          {
+            "name": "Dominada lastrada",
+            "d": "pull",
+            "sets": "3 × 4-6",
+            "m": "esp",
+            "cue": "Sube sin balanceo desde un rango cómodo hasta superar la barra con la barbilla. Deja 2 reps y descansa 3 min.",
+            "why": "Registra lastre o asistencia y tu peso corporal en Progreso para interpretar la fuerza relativa.",
+            "strength": true
+          },
+          {
+            "name": "Remo inclinado con barra",
+            "d": "rowbar",
+            "sets": "2 × 8-10",
+            "m": "esp",
+            "cue": "Bisagra de cadera, rodillas suaves y tronco inmóvil. Lleva la barra al abdomen alto con codos a 45-60°; RIR 3, 2 min.",
+            "why": "No levantes el torso en cada repetición. Si la zona lumbar limita, sustituye estas mismas series por remo con pecho apoyado."
+          },
+          {
+            "name": "Remo con mancuerna a una mano",
+            "d": "rowdb",
+            "sets": "2 × 8-12 por lado",
+            "m": "esp",
+            "cue": "Mano y rodilla apoyadas, tronco estable. Lleva el codo hacia la cadera sin girar el torso; 90-120 s entre rondas.",
+            "why": "Sesgo hacia dorsal. Bajamos a dos series por lado para dar espacio al remo con barra; cuentan como dos, no cuatro."
+          }
+        ]
+      },
+      {
+        "t": "Posterior y bíceps · dosis 1",
+        "tone": "pump",
+        "ex": [
+          {
+            "name": "Pájaro en máquina",
+            "d": "rear",
+            "sets": "3 × 12-20",
+            "m": "dpo",
+            "cue": "Pecho apoyado, codos suaves y pausa al abrir. Deja 1-2 reps en reserva; 60-90 s.",
+            "why": "Deltoide posterior: complementa los remos de espalda alta."
+          },
+          {
+            "name": "Curl inclinado con mancuernas",
+            "d": "curlinc",
+            "sets": "3 × 8-12",
+            "m": "bi",
+            "cue": "Brazo quieto detrás del tronco, sin adelantar hombros. Deja 1-2 reps y descansa 90 s.",
+            "why": "Trabajo directo de bíceps después del tirón, con repeticiones controladas."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "v4-d3",
+    "n": "Miércoles",
+    "s": "Recuperación activa",
+    "short": "Recupera",
+    "tag": "Sin pesas duras",
+    "rest": true,
+    "wet": true,
+    "duration": "Según energía",
+    "focus": "MOVILIDAD / TOLERANCIA / PASOS",
+    "note": "Hoy no hay sesión de hipertrofia. Camina y recupera rangos cómodos. Ajusta o acorta estos bloques si no te recuperan; no cuentan como una sexta sesión de pesas.",
+    "blocks": [
+      {
+        "t": "Cardio · caminar",
+        "tone": "wet",
+        "ex": [
+          {
+            "name": "Caminata · base aeróbica",
+            "d": "walk",
+            "sets": "",
+            "m": "",
+            "cue": "Esfuerzo 3-4/10: puedes hablar en frases completas. Primeros y últimos 3 min suaves. Terreno llano o pendiente tolerable.",
+            "why": "Aumenta minutos antes que intensidad. Si estás muy cansado, reduce duración o camina más suave.",
+            "cardio": 0
+          }
+        ]
+      },
+      {
+        "t": "Movilidad · 8-10 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Transiciones 90/90 de cadera",
+            "d": "hip90",
+            "sets": "2 × 6 por lado",
+            "m": "",
+            "cue": "Rota despacio y apóyate con las manos si hace falta; sin pinzamiento.",
+            "why": "Movimiento suave para cadera, no un estiramiento forzado."
+          },
+          {
+            "name": "Movilidad de hombro y dorsal",
+            "d": "mob",
+            "sets": "1 ronda · 4 min",
+            "m": "",
+            "cue": "6 rotaciones torácicas por lado y 8 deslizamientos en pared. Respira, sin arquear la lumbar.",
+            "why": "Conserva rangos para presses, dominadas y remos."
+          }
+        ]
+      },
+      {
+        "t": "Estiramientos · 4-6 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Estiramiento de flexor de cadera",
+            "d": "hipstretch",
+            "sets": "2 × 20-30 s por lado",
+            "m": "",
+            "cue": "Media rodilla en el suelo, glúteo apretado y pelvis ligeramente recogida. Avanza muy poco; tensión cómoda.",
+            "why": "Sin rebotes ni dolor. Completa si te apetece con gemelo y pectoral, 20-30 s suaves cada uno."
+          }
+        ]
+      },
+      {
+        "t": "Tolerancia a la carga · opcional",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Extensión de muñeca ligera",
+            "d": "wrist",
+            "sets": "1-2 × 12-15 · opcional",
+            "m": "",
+            "cue": "Antebrazo apoyado y palma hacia abajo. Carga muy ligera, subida y bajada de 2 s; esfuerzo máximo 3/10.",
+            "why": "Trabajo general de antebrazo, no tratamiento de una lesión. Omite si provoca dolor o empeora molestias al día siguiente."
+          },
+          {
+            "name": "Elevación de gemelo suave",
+            "d": "calf",
+            "sets": "1 × 12 · opcional",
+            "m": "",
+            "cue": "A dos piernas, con apoyo de manos y sin peso añadido. Sube y baja en 2 s sin buscar fatiga.",
+            "why": "Los tendones ya reciben carga en las pesas. Un tendón doloroso necesita una pauta individual."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "v4-d4",
+    "n": "Jueves",
+    "s": "Pierna · base completa",
+    "short": "Pierna",
+    "tag": "Build",
+    "duration": "75-90 min",
+    "focus": "CUÁDRICEPS / ISQUIOS / GLÚTEOS / BRAZOS",
+    "delt": true,
+    "note": "Una sesión completa de pierna para esta etapa de prioridad torso. Los accesorios de brazos son breves y suaves: mañana vuelve el empuje.",
+    "blocks": [
+      {
+        "t": "Preparación · 6-8 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Movilidad de cadera y tobillo",
+            "d": "hip90",
+            "sets": "1 ronda · sin fatiga",
+            "m": "",
+            "cue": "6 transiciones 90/90 por lado, 8 avances de rodilla sobre el tobillo y 8 sentadillas sin peso. Después 2-3 aproximaciones a la prensa.",
+            "why": "Amplía el recorrido gradualmente, sin forzar."
+          }
+        ]
+      },
+      {
+        "t": "Pierna · rodilla y cadera",
+        "tone": "",
+        "ex": [
+          {
+            "name": "Prensa de pierna horizontal",
+            "d": "legpress",
+            "sets": "3 × 6-10",
+            "m": "pie",
+            "cue": "Pelvis apoyada, rodillas siguiendo los pies y 2 reps en reserva. Baja sin redondear la lumbar; 2-3 min.",
+            "why": "Tu principal referencia de cuádriceps."
+          },
+          {
+            "name": "Peso muerto rumano con mancuernas",
+            "d": "rdl",
+            "sets": "2 × 8-12",
+            "m": "ham",
+            "cue": "Rodillas ligeramente flexionadas, cadera atrás y pesos cerca de las piernas. Para donde mantengas la espalda neutra; RIR 2-3, 2 min.",
+            "why": "Bisagra de cadera para isquios y glúteos. Practica ligero antes de subir carga."
+          },
+          {
+            "name": "Curl femoral",
+            "d": "legcurl",
+            "sets": "2 × 10-15",
+            "m": "ham",
+            "cue": "Cadera fija y regreso lento. Deja 1-2 reps; 90 s.",
+            "why": "Flexión de rodilla: función distinta al rumano."
+          },
+          {
+            "name": "Extensión de cuádriceps",
+            "d": "legext",
+            "sets": "2 × 12-15",
+            "m": "pie",
+            "cue": "Pausa breve arriba y descenso controlado. Deja 1-2 reps; 90 s.",
+            "why": "Completa el cuádriceps con poca demanda lumbar."
+          },
+          {
+            "name": "Elevación de gemelo",
+            "d": "calf",
+            "sets": "3 × 10-15",
+            "m": "cal",
+            "cue": "Recorrido cómodo y sin rebote; 1-2 reps en reserva, 60-90 s.",
+            "why": "Carga progresiva para pantorrilla."
+          }
+        ]
+      },
+      {
+        "t": "Hombro y brazos · dosis breve",
+        "tone": "pump",
+        "ex": [
+          {
+            "name": "Elevación lateral en polea",
+            "d": "lateral",
+            "sets": "3 × 15-20",
+            "m": "dl",
+            "cue": "Deja 3-4 reps en reserva. Movimiento limpio y sin encoger hombros; 60-90 s.",
+            "why": "Tres dosis semanales para desarrollar anchura visual; no hacen falta tres días de press."
+          },
+          {
+            "name": "Curl martillo",
+            "d": "hammer",
+            "sets": "2 × 12-15",
+            "m": "bi",
+            "cue": "Agarre neutro, sin balanceo. Deja 3 reps en reserva; 60-90 s.",
+            "why": "Segunda dosis de flexores del codo: ligera, sin buscar agujetas."
+          },
+          {
+            "name": "Extensión en polea con cuerda · ligera",
+            "d": "tripd",
+            "sets": "2 × 12-15",
+            "m": "tri",
+            "cue": "Codos quietos y carga cómoda; deja 3-4 reps, 60-90 s.",
+            "why": "Segunda dosis corta. Si resta rendimiento al viernes, omite estas dos series."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "v5-d5",
+    "n": "Viernes",
+    "s": "Pecho · volumen y hombro",
+    "short": "Pecho P",
+    "tag": "Pump",
+    "duration": "85-100 min",
+    "focus": "PRESS SENTADO / INCLINADO / FONDOS / ABS",
+    "delt": true,
+    "note": "Press sentado primero para dar prioridad al empuje horizontal que prefieres, después inclinado, fondos y pullover. Ocho series repartidas entre cuatro ejercicios; no hace falta llevarlas al fallo.",
+    "blocks": [
+      {
+        "t": "Preparación · 6-8 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Movilidad de hombro y dorsal",
+            "d": "mob",
+            "sets": "1 ronda · sin fatiga",
+            "m": "",
+            "cue": "2 min suaves, 6 rotaciones torácicas por lado y 8 deslizamientos de brazos en pared. Después 2-3 aproximaciones al primer básico.",
+            "why": "Prepara el recorrido sin cansarte antes de las series efectivas."
+          }
+        ]
+      },
+      {
+        "t": "Pecho · segunda exposición",
+        "tone": "wide",
+        "ex": [
+          {
+            "name": "Press de pecho sentado en máquina",
+            "d": "chestpress",
+            "sets": "2 × 8-12",
+            "m": "pec",
+            "cue": "Ajusta el asiento para que las asas queden a la altura del pecho. Espalda apoyada, muñecas alineadas y codos algo por debajo de los hombros. Empuja al frente sin despegar el tronco; RIR 2, 2 min.",
+            "why": "Empuje horizontal para el pectoral, con énfasis esternocostal. Al lograr 2 × 12 controladas, sube la mínima placa. Compara cargas solo en la misma máquina y ajuste."
+          },
+          {
+            "name": "Press inclinado con mancuernas · pump",
+            "d": "incl",
+            "sets": "2 × 10-15",
+            "m": "pec",
+            "cue": "Misma técnica del lunes con menos peso. Deja 1-2 reps; 2 min.",
+            "why": "Segunda exposición semanal de pecho superior; dos series para dejar espacio al press sentado."
+          },
+          {
+            "name": "Fondos lastrados",
+            "d": "dip",
+            "sets": "2 × 6-10",
+            "m": "pec",
+            "cue": "Mantén un recorrido cómodo, sin rebote. Usa tu peso, asistencia o lastre para dejar 2 reps; descansa 2-3 min.",
+            "why": "Conserva fuerza en fondos. Al completar 2 × 10 limpias, añade el mínimo lastre o reduce asistencia. Registra 0 para peso corporal, positivo para lastre y negativo para asistencia."
+          },
+          {
+            "name": "Pullover con mancuerna",
+            "d": "pullover",
+            "sets": "2 × 10-15",
+            "m": "pec",
+            "cue": "Túmbate a lo largo del banco, cabeza y espalda apoyadas, pies firmes. Sujeta una mancuerna con ambas manos, codos algo flexionados. Baja detrás de la cabeza solo sin arquear la lumbar; RIR 3, 90 s.",
+            "why": "Pecho y dorsal participan. Se contabiliza aquí en pecho, sin duplicar series en espalda; no promete expansión de costillas. Registra el peso total de la única mancuerna."
+          }
+        ]
+      },
+      {
+        "t": "Hombro y tríceps · dosis 3",
+        "tone": "pump",
+        "ex": [
+          {
+            "name": "Press de hombro en máquina inclinada",
+            "d": "pressm",
+            "sets": "2 × 8-12",
+            "m": "da",
+            "cue": "Espalda apoyada, rango cómodo y 2 reps en reserva; 2 min.",
+            "why": "Solo dos series: el deltoide anterior ya trabaja con el pecho."
+          },
+          {
+            "name": "Elevación lateral en polea",
+            "d": "lateral",
+            "sets": "3 × 12-20",
+            "m": "dl",
+            "cue": "Deja 1-2 reps en reserva. Codo suave, abre sin balanceo; 60-90 s.",
+            "why": "Tres dosis semanales para desarrollar anchura visual; no hacen falta tres días de press."
+          },
+          {
+            "name": "Extensión en polea con cuerda",
+            "d": "tripd",
+            "sets": "3 × 10-15",
+            "m": "tri",
+            "cue": "Codos quietos, sin mover el tronco. Deja 1-2 reps; 90 s.",
+            "why": "Tercera dosis directa; progresa sin irritar el codo."
+          }
+        ]
+      },
+      {
+        "t": "Abdomen · segunda carga",
+        "tone": "wide",
+        "ex": [
+          {
+            "name": "Crunch en polea o máquina abdominal",
+            "d": "crunch",
+            "sets": "3 × 8-15",
+            "m": "core",
+            "cue": "Acerca costillas a pelvis, sin tirar con los brazos ni hacer una bisagra de cadera. Deja 1-2 reps; 90 s.",
+            "why": "Al completar 3 × 15 con el mismo control, añade el incremento mínimo."
+          }
+        ]
+      },
+      {
+        "t": "Cardio · caminar",
+        "tone": "wet",
+        "ex": [
+          {
+            "name": "Caminata · final suave",
+            "d": "walk",
+            "sets": "",
+            "m": "",
+            "cue": "Esfuerzo 3-4/10: puedes hablar en frases completas. Primeros y últimos 3 min suaves. Terreno llano o pendiente tolerable.",
+            "why": "Aumenta minutos antes que intensidad. Si estás muy cansado, reduce duración o camina más suave.",
+            "cardio": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "v4-d6",
+    "n": "Sábado",
+    "s": "Espalda · espesor y detalle",
+    "short": "Espalda P",
+    "tag": "Pump",
+    "duration": "75-90 min",
+    "focus": "ESPALDA ALTA / DORSAL / POSTERIOR / ABS",
+    "note": "Remo alto primero, jalón y remo hacia la cadera. Termina con dos series de brazos rectos: trabajo de dorsal con poca demanda de bíceps. Son 10 series de espalda; no añadas más al terminar.",
+    "blocks": [
+      {
+        "t": "Preparación · 6-8 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Movilidad de hombro y dorsal",
+            "d": "mob",
+            "sets": "1 ronda · sin fatiga",
+            "m": "",
+            "cue": "2 min suaves, 6 rotaciones torácicas por lado y 8 deslizamientos de brazos en pared. Después 2-3 aproximaciones al primer básico.",
+            "why": "Prepara el recorrido sin cansarte antes de las series efectivas."
+          }
+        ]
+      },
+      {
+        "t": "Espalda · espesor y dorsal",
+        "tone": "wide",
+        "ex": [
+          {
+            "name": "Remo alto con pecho apoyado",
+            "d": "rowhigh",
+            "sets": "3 × 8-12",
+            "m": "esp",
+            "cue": "Codos separados unos 45-60°, tira hacia pecho bajo y junta las escápulas sin encoger hombros. Deja 1-2 reps; 2 min.",
+            "why": "Prioridad de espesor en espalda alta: trapecio medio, romboides y deltoide posterior."
+          },
+          {
+            "name": "Jalón al pecho, agarre neutro",
+            "d": "latp",
+            "sets": "3 × 10-15",
+            "m": "esp",
+            "cue": "Tira hacia la parte alta del pecho, codos abajo y torso casi estable. Deja 1-2 reps; 90-120 s.",
+            "why": "Segunda exposición de tirón vertical. El jalón complementa tus dominadas; no necesitas hacer ambos hoy."
+          },
+          {
+            "name": "Remo sentado en polea, agarre neutro",
+            "d": "rowc",
+            "sets": "2 × 10-15",
+            "m": "esp",
+            "cue": "Codos cerca del torso hacia la cadera. Estira con control y no balancees; 90 s.",
+            "why": "Dorsal con un recorrido distinto al remo alto. Dos series bastan aquí."
+          },
+          {
+            "name": "Jalón de brazos rectos en polea",
+            "d": "straightarm",
+            "sets": "2 × 12-20",
+            "m": "esp",
+            "cue": "Codos ligeramente flexionados y fijos. Desde brazos elevados, lleva la barra hacia los muslos sin balancearte ni arquear la espalda; RIR 2-3, 60-90 s.",
+            "why": "Extensión de hombro con poca flexión del codo. Si el pullover del viernes deja fatiga que limita el recorrido, omite estas dos series ese día."
+          }
+        ]
+      },
+      {
+        "t": "Posterior y bíceps · dosis 3",
+        "tone": "pump",
+        "ex": [
+          {
+            "name": "Pájaro en máquina",
+            "d": "rear",
+            "sets": "3 × 12-20",
+            "m": "dpo",
+            "cue": "Pecho apoyado, codos suaves y pausa al abrir. Deja 1-2 reps en reserva; 60-90 s.",
+            "why": "Deltoide posterior: complementa los remos de espalda alta."
+          },
+          {
+            "name": "Curl en polea baja",
+            "d": "curlc",
+            "sets": "3 × 10-15",
+            "m": "bi",
+            "cue": "Codos estables y sin inclinarte hacia atrás. Deja 1-2 reps; 90 s.",
+            "why": "Tercera dosis de bíceps con tensión controlable."
+          }
+        ]
+      },
+      {
+        "t": "Abdomen · pelvis y control",
+        "tone": "wide",
+        "ex": [
+          {
+            "name": "Elevación de rodillas colgado",
+            "d": "hangraise",
+            "sets": "2 × 8-15",
+            "m": "core",
+            "cue": "Sube las rodillas y termina enrollando la pelvis hacia las costillas, sin balanceo. Deja 2 reps; 90 s.",
+            "why": "Si falla antes el agarre, usa silla romana. Progresa el control antes de extender más las piernas."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "v4-d7",
+    "n": "Domingo",
+    "s": "Recuperación activa",
+    "short": "Recupera",
+    "tag": "Sin pesas duras",
+    "rest": true,
+    "wet": true,
+    "duration": "Según energía",
+    "focus": "MOVILIDAD / TOLERANCIA / PASOS",
+    "note": "Hoy no hay sesión de hipertrofia. Camina y recupera rangos cómodos. Ajusta o acorta estos bloques si no te recuperan; no cuentan como una sexta sesión de pesas.",
+    "blocks": [
+      {
+        "t": "Cardio · caminar",
+        "tone": "wet",
+        "ex": [
+          {
+            "name": "Caminata · base aeróbica",
+            "d": "walk",
+            "sets": "",
+            "m": "",
+            "cue": "Esfuerzo 3-4/10: puedes hablar en frases completas. Primeros y últimos 3 min suaves. Terreno llano o pendiente tolerable.",
+            "why": "Aumenta minutos antes que intensidad. Si estás muy cansado, reduce duración o camina más suave.",
+            "cardio": 2
+          }
+        ]
+      },
+      {
+        "t": "Movilidad · 8-10 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Transiciones 90/90 de cadera",
+            "d": "hip90",
+            "sets": "2 × 6 por lado",
+            "m": "",
+            "cue": "Rota despacio y apóyate con las manos si hace falta; sin pinzamiento.",
+            "why": "Movimiento suave para cadera, no un estiramiento forzado."
+          },
+          {
+            "name": "Movilidad de hombro y dorsal",
+            "d": "mob",
+            "sets": "1 ronda · 4 min",
+            "m": "",
+            "cue": "6 rotaciones torácicas por lado y 8 deslizamientos en pared. Respira, sin arquear la lumbar.",
+            "why": "Conserva rangos para presses, dominadas y remos."
+          }
+        ]
+      },
+      {
+        "t": "Estiramientos · 4-6 min",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Estiramiento de flexor de cadera",
+            "d": "hipstretch",
+            "sets": "2 × 20-30 s por lado",
+            "m": "",
+            "cue": "Media rodilla en el suelo, glúteo apretado y pelvis ligeramente recogida. Avanza muy poco; tensión cómoda.",
+            "why": "Sin rebotes ni dolor. Completa si te apetece con gemelo y pectoral, 20-30 s suaves cada uno."
+          }
+        ]
+      },
+      {
+        "t": "Tolerancia a la carga · opcional",
+        "tone": "calm",
+        "ex": [
+          {
+            "name": "Extensión de muñeca ligera",
+            "d": "wrist",
+            "sets": "1-2 × 12-15 · opcional",
+            "m": "",
+            "cue": "Antebrazo apoyado y palma hacia abajo. Carga muy ligera, subida y bajada de 2 s; esfuerzo máximo 3/10.",
+            "why": "Trabajo general de antebrazo, no tratamiento de una lesión. Omite si provoca dolor o empeora molestias al día siguiente."
+          },
+          {
+            "name": "Elevación de gemelo suave",
+            "d": "calf",
+            "sets": "1 × 12 · opcional",
+            "m": "",
+            "cue": "A dos piernas, con apoyo de manos y sin peso añadido. Sube y baja en 2 s sin buscar fatiga.",
+            "why": "Los tendones ya reciben carga en las pesas. Un tendón doloroso necesita una pauta individual."
+          }
+        ]
+      }
+    ]
+  }
+];

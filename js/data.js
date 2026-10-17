@@ -59,9 +59,9 @@ const F={1:.88,2:.92,3:.96,4:.78,5:.96,6:1.00,7:1.03,8:1.05};
 const SR={1:'4 × 5',2:'4 × 6',3:'5 × 4',4:'2 × 5',5:'5 × 3-5',6:'5 × 4',7:'4 × 3',8:'Test 3-5RM'};
 const r125=v=>Math.round(v/1.25)*1.25,r1=v=>Math.round(v);
 const G={dl:'Hombro',dpo:'Hombro',da:'Hombro',pec:'Pecho',esp:'Espalda',
- bi:'Brazo',tri:'Brazo',pie:'Pierna',ham:'Pierna',ere:'Pierna',cal:'Pierna',core:'Core y skills'};
+ bi:'Brazo',tri:'Brazo',ant:'Brazo',pie:'Pierna',ham:'Pierna',ere:'Pierna',cal:'Pierna',core:'Core y skills'};
 const MUS={dl:'Delt. lateral',dpo:'Delt. posterior',da:'Delt. anterior',pec:'Pecho',esp:'Espalda',
- bi:'Bíceps',tri:'Tríceps',pie:'Cuádriceps',ham:'Isquios',ere:'Erectores',cal:'Gemelo',core:'Core'};
+ bi:'Bíceps',tri:'Tríceps',ant:'Antebrazo',pie:'Cuádriceps',ham:'Isquios',ere:'Erectores',cal:'Gemelo',core:'Core'};
 
 /* Escalera dragon flag: el bloque del día 7 cambia según la semana */
 const DRAGON={

@@ -25,34 +25,53 @@ fonts/                Anton, Space Grotesk (400/500/700), JetBrains Mono (400/70
 icons/                iconos PNG 192, 512 y 512 maskable
 ```
 
-## Programa V-shape · 5 + 2
+## Programa V7 · Fuerza + hipertrofia · 5 + 2
 
-Lunes: pecho pesado, lateral, tríceps y abs; martes: espalda pesada, posterior y bíceps;
-miércoles: recuperación activa; jueves: pierna completa, lateral y brazos ligeros;
-viernes: pecho de volumen, hombro, tríceps, abs y caminata; sábado: espalda de volumen,
-posterior, bíceps y abs; domingo: recuperación activa.
+Lunes: pecho + tríceps + hombro (banca con serie top, fondos lastrados, press inclinado con mancuernas,
+superserie Y-raise en polea + extensión sobre cabeza, L-sit); martes: espalda + bíceps (dominada lastrada con
+serie top, remo a una mano, remo alto con pecho apoyado, face pull, superserie curl inclinado + curl martillo,
+curl de muñeca); miércoles: pierna + brazo + core (saltos al cajón, prensa con serie top, búlgara, rumano,
+curl femoral sentado, gemelo, superserie curl en polea + extensión con cuerda, elevación de rodillas colgado);
+jueves y domingo: movilidad de cadera + core (90/90, sentadilla cosaca, flexor de cadera, L-sit, práctica
+opcional de dominadas y caminata); viernes: hombro + pecho + tríceps (press militar con barra con serie top,
+fondos lastrados de volumen, superserie press sentado + aperturas con mancuernas, lateral con parciales,
+superserie press francés + rueda abdominal); sábado: espalda + bíceps + hombro (remo con barra con serie top,
+dominada supina lastrada, jalón al pecho, superserie pájaro + lateral, superserie curl predicador + curl inverso,
+extensión de muñeca y caminata corta).
 
-Prioridades semanales de partida: pecho 15 series (incluye 2 de pullover), espalda 17, lateral 9, posterior 6,
-bíceps 8, tríceps 8 y abdomen 8. Se cuentan las series directas por músculo principal.
-Pecho V5: lunes banca 3 × 4-6, inclinado 2 × 6-10 y aperturas 2 × 10-15; viernes
-press sentado 2 × 8-12, inclinado 2 × 10-15, fondos 2 × 6-10 y pullover 2 × 10-15.
-Banca: carga total de barra y discos; press sentado: misma máquina y ajuste.
-Una sola sesión de pierna es el compromiso de esta etapa con prioridad de torso.
-Dominadas y jalón se separan entre días; los remos distinguen dorsal y espalda alta.
-El cardio pasa de 70 a 105 minutos semanales, con descarga en semana 4.
-Miércoles y domingo incluyen caminata, movilidad, estiramientos cómodos y carga
-ligera opcional de muñeca/gemelo, sin pretender tratar una lesión tendinosa.
+Series directas por semana: pecho 18, espalda 20, deltoide lateral 10, anterior 4, posterior 6,
+bíceps 12, tríceps 9, antebrazo 8, core 9, cuádriceps 10, isquios 6 y gemelo 3.
+Dominadas y fondos lastrados van dos días por semana. Los bloques con "opcional" en el título no cuentan
+para completar el día ni en el volumen.
 
-La recuperación activa no contiene casillas obligatorias: una semana completa son 5 sesiones de pesas.
-Las nuevas sesiones tienen identificadores propios; las casillas históricas conservan
-su rutina original en el calendario (incluidas V2, V3 y los días de pecho de V4) y las marcas siguen usando las mismas claves.
-En descarga se reducen tanto las series mostradas como las del gráfico de volumen.
+Progresión: semanas alternas (`WEEK_FOCUS` en `js/program.js`): 1 reps, 2 kg, 3 reps, 4 descarga, 5 kg,
+6 reps, 7 kg, 8 test. En semanas de reps se mantiene la carga y se suma una repetición; en las de kg se sube
+un salto (`inc`: 2,5 por defecto, 2 en mancuernas, 1,25 en poleas ligeras) al mínimo del rango. Cada tarjeta
+muestra el objetivo de hoy y, en los cinco básicos, el back-off. Las superseries se marcan A1/A2… y el botón
+de descanso aparece en el segundo ejercicio del par.
+Banca: carga total de barra y discos; mancuernas: kg por mano.
 
-Pulsa el dibujo de un ejercicio para ver dos posiciones ampliadas y su indicación técnica.
+La movilidad no contiene casillas obligatorias: una semana completa son 5 sesiones de pesas.
+Las sesiones V7 tienen identificadores propios (v7-d1…d7); la semana V5 publicada y las rutinas anteriores
+se conservan en `js/program-history.js` para interpretar el calendario y copias antiguas.
+
+Progreso: con KG y REPES activos, cada ejercicio tiene su panel con kg en línea (eje izquierdo) y
+repeticiones en barras (eje derecho); 1RM EST. dibuja el máximo estimado (Epley).
+
+Empezar de cero: al abrir la nueva versión por primera vez con datos guardados aparece un aviso para exportar una copia
+y borrar todo con dos toques (marcas, casillas, medidas, fotos y especialización de ese dispositivo).
+El mismo botón está en Datos. No hay borrado automático.
+
+Cada tarjeta muestra la última marca, el siguiente objetivo (doble progresión) y un botón de descanso
+con el tiempo indicado en la técnica (cuenta atrás, vibración y pitido). Progreso incluye 1RM estimado
+(Epley). Especialización 30 días (opcional): un músculo, 5 min al día durante 30 días y 10 días sin
+trabajo directo; se guarda en `gym-app-v1.spec` y viaja en la copia JSON.
+
+Pulsa el dibujo de un ejercicio para ver dos posiciones ampliadas y su indicación técnica. Los dibujos
+usan huesos de longitud fija (cinemática inversa) y el color de la subcategoría para el músculo principal.
 Las marcas guardan una serie de referencia por ejercicio y fecha. Un nuevo guardado
 la sustituye. Para dominadas/fondos: 0 = peso corporal, positivo = lastre,
-negativo = asistencia en kg; en mancuernas se anotan kg por mano, excepto en pullover,
-donde se registra el peso total de la única mancuerna.
+negativo = asistencia en kg; en mancuernas se anotan kg por mano.
 
 ## Actualizar y conservar los datos
 

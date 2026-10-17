@@ -21,10 +21,12 @@
 - Los registros pertenecen al navegador/dispositivo y origen web. La app local,
   GitHub Pages, un HTML abierto como archivo y otro navegador tienen almacenes
   distintos. No presentar una copia de localhost como copia del móvil.
-- Mantener las claves: `gym-app-v1` (marcas/bases/medidas/preferencias),
+- Mantener las claves: `gym-app-v1` (marcas/bases/medidas/preferencias/`spec` del bloque de especialización),
   `gym-done-v1` (casillas), IndexedDB `gym-media-v1`, almacén `photos`.
 - No borrar almacenamiento ni recomendar borrar datos del sitio/desinstalar para
   actualizar. Conservar el origen habitual de la app instalada.
+- Borrado de registros: solo desde la app (aviso de nueva versión o Datos → Empezar de cero), con
+  dos toques del usuario. Nunca borrado automático al actualizar.
 - Copias: **Datos → Exportar JSON**; alternativa **Ver / copiar JSON**. Incluyen
   marcas, casillas, medidas y fotos. **Importar JSON** fusiona por fecha; las
   entradas importadas prevalecen cuando coinciden ejercicio/fecha.
@@ -61,6 +63,15 @@ git diff --check
   al probar botones. Usar datos ficticios en pruebas de importación/restauración.
 - Los archivos `research-*`, `js/movement-atlas.js` y `tools/*research*` son borradores
   locales de otra exploración; no forman parte del despliegue actual.
+- Rutina vigente V7 (5 + 2): pecho y espalda 2×, hombro 4 días, brazo/core 3×, pierna 1×,
+  movilidad de cadera jueves y domingo. Básicos con serie top: banca, dominada lastrada, prensa,
+  press militar y remo con barra. Dominadas y fondos lastrados 2× por semana (el usuario quiere más
+  calistenia). Semanas alternas de reps y kg (`WEEK_FOCUS`). Favoritos del usuario: jalón al pecho,
+  remo con barra, remo a una mano, banca, inclinado con mancuernas, aperturas con mancuernas,
+  calistenia lastrada; quiere aprender L-sit, más grosor de brazo y braquiorradial (curl martillo,
+  curl inverso, press francés) y Y-raise para el hombro. No repetir curls parecidos el mismo día.
+- Diseño: se mantiene el mundo visual actual (decisión del usuario, oct. 2026); solo se
+  mejoran los dibujos. Contexto de producto en `PRODUCT.md`.
 - Preferencias actuales: interfaz oscura, colores por subcategoría, tarjetas
   pendientes tenues/translúcidas y completadas con color/brillo; selector de días
   fijo al desplazarse. Tarjetas compactas con una frase; pulsar dibujo o texto abre
