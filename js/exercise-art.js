@@ -17,13 +17,16 @@ const ExerciseArt=(()=>{
    a:pose([80,44],[80,62],[80,106],[58,40],[50,17],[72,128],[72,146],[102,40],[110,17],[88,128],[88,146]),
    b:pose([80,14],[80,34],[80,78],[46,40],[50,17],[72,104],[72,130],[114,40],[110,17],[88,104],[88,130]),
    equipment:'M22 150V17H138V150',weight:'bar-front',focus:'back',labels:['Brazos extendidos','Sube sin balanceo'],arrow:'M150 104V52m-6 7 6-7 6 7'},
-  dip:{view:'front',a:pose([77,22],[78,41],[81,83],[61,65],[61,86],[68,107],[89,130],[99,65],[99,86],[82,109],[103,130]),b:pose([77,48],[78,67],[83,103],[55,64],[61,86],[69,124],[91,145],[105,64],[99,86],[83,125],[105,145]),equipment:'M38 86H68M91 86H125M43 86V147M119 86V147',focus:'chest',labels:['Apoyo estable','Baja en tu rango cómodo'],arrow:'M142 48V91m-6-7 6 7 6-7'},
-  incl:{a:pose([110,43],[101,61],[60,103],[69,73],[68,48],[76,120],[69,146],[128,79],[133,53],[82,122],[80,146]),b:pose([110,43],[101,61],[60,103],[88,36],[80,13],[76,120],[69,146],[115,34],[121,13],[82,122],[80,146]),equipment:incline,weight:'dumbbell',focus:'chest',labels:['Mancuernas cerca del pecho','Empuja hacia arriba'],arrow:'M30 76V32m-6 7 6-7 6 7'},
+  dip:{L:{torso:44,ua:24,fa:22,thigh:32,shin:30,neck:17},fs:1,
+   a:pose([96,19],[88,35],[70,77],[87,57],[86,80],[64,108],[40,122],[85,57],[84,80],[67,110],[44,124]),
+   b:pose([112,52],[102,66],[74,100],[80,59],[86,80],[60,128],[36,138],[78,59],[84,80],[63,130],[40,140]),
+   equipment:'M86 87V151M74 151H98',weight:'dip-bar',focus:'chest',labels:['Brazos bloqueados, tronco algo inclinado','Baja hasta que el hombro pase el codo'],arrow:'M138 26V70m-6-7 6 7 6-7'},
+  incl:{L:{thigh:30,shin:34},a:pose([110,43],[101,61],[60,103],[69,73],[68,48],[32,106],[30,146],[128,79],[133,53],[36,108],[38,146]),b:pose([110,43],[101,61],[60,103],[88,36],[80,13],[32,106],[30,146],[115,34],[121,13],[36,108],[38,146]),equipment:'M50 116 108 60M52 114H74M64 114V146M98 70V146',weight:'dumbbell',focus:'chest',labels:['Mancuernas cerca del pecho','Empuja hacia arriba'],arrow:'M30 76V32m-6 7 6-7 6 7'},
   rowm:{a:pose([98,34],[95,53],[102,102],[67,66],[42,71],[76,115],[72,145]),b:pose([98,34],[95,53],[102,102],[122,77],[89,83],[76,115],[72,145]),equipment:'M89 54 82 96M84 83V147M72 108H117M109 108V147M24 140 24 33 57 65',weight:'handle',focus:'back',labels:['Deja estirar la espalda','Codos atrás, pecho apoyado'],arrow:'M37 101H73m-7-6 7 6-7 6'},
   lateral:{view:'front',a:{...stand,elbow:[62,70],hand:[52,92],elbow2:[97,68],hand2:[102,92]},b:{...stand,elbow:[62,70],hand:[52,92],elbow2:[112,45],hand2:[137,48]},equipment:'M20 12V149M14 148H36M21 136H34M22 124H34',weight:'cable-lateral',focus:'shoulders',labels:['Agarre junto a la cadera','Abre sin encoger hombros'],arrow:'M119 107Q146 94 147 66m-6 7 6-7 4 8'},
   legpress:{a:pose([44,48],[46,66],[65,107],[50,87],[57,108],[89,64],[123,87]),b:pose([44,48],[46,66],[65,107],[50,87],[57,108],[110,94],[147,82]),equipment:'M28 45 46 111H77M36 117H80M17 147H145M38 114V147M91 140 150 98M118 57 136 108',focus:'quads',labels:['Rodillas flexionadas','Empuja sin bloquear rodillas'],arrow:'M85 40H126m-7-6 7 6-7 6'},
-  legcurl:{L:{thigh:33,shin:33},a:{...seated,knee:[115,105],foot:[148,105]},b:{...seated,knee:[115,105],foot:[106,137]},equipment:upright+'M117 107V145M98 145H135M76 99H100',focus:'hamstrings',labels:['Piernas extendidas','Flexiona con cadera apoyada'],arrow:'M150 119Q148 145 125 148m5-7-5 7 8 1'},
-  legext:{L:{thigh:33,shin:33},a:{...seated,knee:[115,105],foot:[113,138]},b:{...seated,knee:[115,105],foot:[147,98]},equipment:upright+'M117 107V145',focus:'quads',labels:['Rodillas flexionadas','Extiende con control'],arrow:'M132 139Q153 129 151 109m-6 7 6-7 4 8'},
+  legcurl:{L:{thigh:33,shin:33},a:{...seated,elbow:[90,74],hand:[98,98],elbow2:[86,74],hand2:[94,98],knee:[115,105],foot:[148,105],knee2:[111,107],foot2:[144,106]},b:{...seated,elbow:[90,74],hand:[98,98],elbow2:[86,74],hand2:[94,98],knee:[115,105],foot:[106,137],knee2:[111,107],foot2:[102,138]},equipment:upright+'M117 107V145M98 145H135M76 99H100',focus:'hamstrings',labels:['Piernas extendidas','Flexiona con cadera apoyada'],arrow:'M150 119Q148 145 125 148m5-7-5 7 8 1'},
+  legext:{L:{thigh:33,shin:33},a:{...seated,elbow:[90,74],hand:[98,98],elbow2:[86,74],hand2:[94,98],knee:[115,105],foot:[113,138],knee2:[111,107],foot2:[109,139]},b:{...seated,elbow:[90,74],hand:[98,98],elbow2:[86,74],hand2:[94,98],knee:[115,105],foot:[147,98],knee2:[111,107],foot2:[143,99]},equipment:upright+'M117 107V145',focus:'quads',labels:['Rodillas flexionadas','Extiende con control'],arrow:'M132 139Q153 129 151 109m-6 7 6-7 4 8'},
   backext:{a:pose([125,110],[112,97],[83,84],[102,116],[92,106],[62,113],[40,142]),b:pose([116,36],[105,52],[83,84],[118,68],[104,79],[62,113],[40,142]),equipment:'M34 138 80 87M69 94 88 77M77 92V147M23 147H121M30 130 47 142',focus:'back',labels:['Bisagra desde la cadera','Alinea tronco y piernas'],arrow:'M140 101Q152 64 133 42m0 7 0-7 7 2'},
   calf:{a:{...side,toe:[92,145],toe2:[86,145]},b:{...side,head:[84,12],shoulder:[80,31],hip:[78,77],elbow:[82,54],hand:[84,77],elbow2:[76,54],hand2:[77,77],knee:[81,104],foot:[80,131],knee2:[75,104],foot2:[74,131],toe:[92,145],toe2:[86,145]},equipment:'M60 146H104V152H60Z',weight:'dumbbell-side',focus:'calves',labels:['Talones abajo, pausa 2 s','Sube sobre las puntas'],arrow:'M122 138V100m-6 7 6-7 6 7'},
   crunch:{L:{torso:42,ua:22,fa:20,thigh:31,shin:30,neck:18},
@@ -88,6 +91,39 @@ const ExerciseArt=(()=>{
   b:pose([39,97],[55,100],[103,100],[50,75],[52,51],[136,108],[139,140],[54,74],[56,50],[130,109],[128,140]),
   equipment:'M28 110H120M36 110V148M112 110V148',weight:'ez-side',focus:'arms',labels:['Barra detrás de la frente, codos arriba','Extiende sin abrir los codos'],arrow:'M18 84Q18 56 42 44m-8-1 8 1-4 7'};
  specs.revcurl={a:{...side,hand:[84,90],hand2:[78,90]},b:{...side,hand:[102,52],hand2:[96,52]},equipment:'',weight:'ez-side',focus:'forearm',labels:['Agarre prono, codos pegados','Sube sin balanceo, baja en 2 s'],arrow:'M122 96Q134 72 114 50m1 8-1-8 8 1'};
+ specs.inclbar={...specs.incl,weight:'barbell-side',labels:['Barra al pecho alto','Empuja hacia arriba']};
+ specs.benchdb={...specs.bench,equipment:'M28 110H120M36 110V148M112 110V148',path:false,weight:'dumbbell',labels:['Mancuernas a los lados del pecho','Empuja hasta casi juntarlas']};
+ specs.curlez={...specs.revcurl,focus:'arms',labels:['Agarre supino, codos pegados','Sube sin balanceo, baja en 2 s']};
+ specs.farmer={a:{...side,hand:[83,94],hand2:[77,94]},b:{...side,knee:[92,114],foot:[102,144],knee2:[70,116],foot2:[60,144],hand:[83,94],hand2:[77,94]},facing:1,equipment:'',weight:'dumbbell-side',focus:'forearm',labels:['Pesado a los lados, hombros abajo','Pasos cortos sin inclinarte'],arrow:'M112 56H144m-7-6 7 6-7 6'};
+ specs.squat={L:{torso:45,ua:22,fa:21,thigh:34,shin:33,neck:18},fs:1,facing:1,
+  a:pose([80,22],[78,40],[76,86],[64,58],[72,40],[82,116],[78,146],[62,58],[70,40],[80,116],[74,146]),
+  b:pose([96,58],[86,74],[56,112],[72,92],[82,74],[94,118],[78,146],[70,92],[80,74],[92,120],[74,146]),
+  equipment:'',weight:'barbell-side',focus:'quads',labels:['Barra en los trapecios, pecho alto','Baja hasta romper el paralelo'],arrow:'M136 44V88m-6-7 6 7 6-7'};
+ specs.goblet={L:{torso:45,ua:22,fa:20,thigh:34,shin:33,neck:18},facing:1,
+  a:pose([80,22],[78,40],[76,86],[90,62],[96,48],[82,116],[78,146],[86,62],[92,48],[80,116],[74,146]),
+  b:pose([84,56],[78,74],[60,114],[94,92],[100,80],[96,116],[80,146],[90,92],[96,80],[94,118],[76,146]),
+  equipment:'',weight:'single-dumbbell-up',focus:'quads',labels:['Mancuerna pegada al pecho','Baja profundo con el pecho alto'],arrow:'M136 44V88m-6-7 6 7 6-7'};
+ specs.hack={L:{torso:45,ua:22,fa:21,thigh:34,shin:33,neck:18},fs:1,facing:1,
+  a:pose([68,24],[70,42],[78,86],[80,60],[76,44],[94,114],[104,142],[78,60],[74,44],[92,116],[100,142]),
+  b:pose([76,58],[78,76],[86,120],[88,94],[84,78],[118,110],[104,142],[86,94],[82,78],[116,112],[100,142]),
+  equipment:'M60 22 80 140M92 148 128 136M100 145V152',focus:'quads',labels:['Espalda pegada al respaldo','Baja profundo, rodillas tras los pies'],arrow:'M140 40V84m-6-7 6 7 6-7'};
+ specs.hipthrust={L:{torso:40,ua:20,fa:20,thigh:34,shin:34,neck:17},fs:-1,
+  a:pose([28,94],[44,102],[70,132],[58,118],[72,126],[100,110],[106,146],[56,118],[70,126],[98,112],[104,146]),
+  b:pose([28,94],[44,102],[84,104],[62,94],[82,98],[114,102],[108,146],[60,94],[80,98],[112,104],[106,146]),
+  equipment:'M12 110H50M20 110V150M44 110V150',weight:'barbell-side',focus:'hamstrings',labels:['Espalda alta en el banco, cadera abajo','Sube hasta alinear tronco y muslos'],arrow:'M140 136V100m-6 7 6-7 6 7'};
+ specs.lungeiso={L:{torso:44,ua:24,fa:23,thigh:34,shin:33,neck:18},facing:1,
+  a:{...pose([81,24],[79,42],[76,86],[82,64],[80,88],[92,114],[102,146],[76,64],[74,88],[58,114],[36,138]),toe2:[46,147]},
+  b:{...pose([78,42],[76,60],[72,104],[80,82],[78,106],[104,106],[102,146],[74,82],[72,106],[60,138],[34,140]),toe2:[44,148]},
+  equipment:'',weight:'dumbbell-side',focus:'quads',labels:['Paso largo, tronco erguido','Baja y aguanta quieto'],arrow:'M136 52V96m-6-7 6 7 6-7'};
+ specs.plank={L:{torso:44,ua:22,fa:21,thigh:30,shin:28,neck:15},facing:1,
+  a:pose([124,118],[110,124],[68,130],[110,146],[131,146],[40,144],[16,128]),
+  b:{...pose([124,118],[110,124],[68,128],[110,146],[131,146],[39,134],[12,140]),toe:[17,147],toe2:[17,147]},
+  equipment:'',focus:'core',labels:['Antebrazos bajo los hombros','Rodillas arriba: cuerpo en bloque'],arrow:'M40 122V100m-6 7 6-7 6 7'};
+ specs.sideplank={view:'front',L:{torso:44,ua:24,fa:14,thigh:30,shin:28,neck:15},
+  a:pose([126,94],[112,105],[64,134],[106,80],[102,56],[36,142],[8,145],[118,134],[130,140],[38,139],[10,142]),
+  b:pose([128,86],[114,98],[70,118],[108,74],[104,50],[44,130],[18,141],[118,128],[130,136],[46,127],[20,138]),
+  equipment:'',focus:'core',labels:['Antebrazo bajo el hombro, pies juntos','Cadera arriba, brazo al techo'],arrow:'M64 146V126m-6 7 6-7 6 7'};
+ specs.joints={a:{...side,elbow:[103,44],hand:[126,44],elbow2:[98,44],hand2:[121,44]},b:{...side,elbow:[103,44],hand:[104,21],elbow2:[98,44],hand2:[99,21]},equipment:'',focus:'forearm',labels:['Brazos al frente, puño suave','Flexiona el codo y gira la muñeca'],arrow:'M138 50Q140 24 118 16m8 1-8-1 5-6'};
  /* ---------- geometría ---------- */
  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],add=(a,b)=>[a[0]+b[0],a[1]+b[1]],mul=(a,k)=>[a[0]*k,a[1]*k];
  const len=v=>Math.hypot(v[0],v[1]),dist=(a,b)=>len(sub(a,b)),unit=v=>{const l=len(v)||1;return[v[0]/l,v[1]/l]};
@@ -119,23 +155,35 @@ const ExerciseArt=(()=>{
   const leg=(hp,kn,ft)=>ik(hp,ft,L.thigh,L.shin,kn);
   const [elbow,hand]=arm(sh1,raw.elbow,raw.hand),[elbow2,hand2]=arm(sh2,raw.elbow2,raw.hand2);
   const [knee,foot]=leg(hp1,raw.knee,raw.foot),[knee2,foot2]=leg(hp2,raw.knee2,raw.foot2);
-  return {front,axis,n,S,hip,head,sh1,sh2,hp1,hp2,elbow,hand,elbow2,hand2,knee,foot,knee2,foot2,toe:raw.toe,toe2:raw.toe2};
+  return {front,axis,n,S,hip,head,sh1,sh2,hp1,hp2,elbow,hand,elbow2,hand2,knee,foot,knee2,foot2,toe:raw.toe,toe2:raw.toe2,fs:sp.fs};
  }
 
- /* ---------- dibujo ---------- */
- const K=1.32,INK='#C4C4D8',BODY='#46465C',FAR='#2B2B3A',FARINK='#64647C',METAL='#D6D6E2',EQUIP='#5E5E78',HOT='var(--art-hot,#FF5148)';
+ /* ---------- dibujo: pictograma sólido gris, proporciones atléticas ---------- */
+ const METAL='#D6D6E2',EQUIP='#5E5E78',HOT='var(--art-hot,#FF5148)';
+ const NEAR='#9D9CAE',FAR='#4F4E62',CUT='#121219';
  const poly=pts=>pts.map(P).join(' ');
- // Segmento cónico: más ancho en el origen, con remates facetados.
- function limb(a,b,wa,wb){
-  wa*=K;wb*=K;
-  const u=unit(sub(b,a)),n=perp(u),ca=add(a,mul(u,-wa*.35)),cb=add(b,mul(u,wb*.35));
-  return [add(a,mul(n,wa/2)),add(b,mul(n,wb/2)),cb,add(b,mul(n,-wb/2)),add(a,mul(n,-wa/2)),ca];
+ function hull(pts){
+  const p=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]),c=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);
+  const lo=[],up=[];
+  for(const q of p){while(lo.length>1&&c(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q)}
+  for(const q of p.reverse()){while(up.length>1&&c(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q)}
+  return lo.slice(0,-1).concat(up.slice(0,-1));
  }
+ const ring=(c,r,n=16)=>Array.from({length:n},(_,i)=>[c[0]+Math.cos(i/n*2*Math.PI)*r,c[1]+Math.sin(i/n*2*Math.PI)*r]);
+ // Cápsula cónica: envolvente de dos círculos, más ancha en el origen.
+ const capsule=(a,b,ra,rb)=>hull([...ring(a,ra),...ring(b,rb)]);
+ // Contorno cerrado suavizado (Catmull-Rom → Bézier).
+ function smoothPath(pts){
+  const n=pts.length,g=i=>pts[(i+n)%n];let d='M'+P(pts[0]);
+  for(let i=0;i<n;i++){const p0=g(i-1),p1=g(i),p2=g(i+1),p3=g(i+2);d+='C'+P([p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6])+' '+P([p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6])+' '+P(p2)}
+  return d+'Z';
+ }
+ // Tronco en V: hombros anchos, dorsal, cintura estrecha.
  function torso(f){
-  const {S,hip,n,axis,front}=f,T=dist(S,hip),at=t=>add(hip,mul(axis,T*t));
-  if(front)return [add(S,mul(n,K*13)),add(at(.72),mul(n,K*14)),add(hip,mul(n,K*7.5)),add(hip,mul(n,K*-7.5)),add(at(.72),mul(n,K*-14)),add(S,mul(n,K*-13)),add(S,mul(axis,3))];
-  const side=frontSide(f);
-  return [add(S,mul(n,K*6*side)),add(at(.72),mul(n,K*9.5*side)),add(at(.28),mul(n,K*6.5*side)),add(hip,mul(n,K*6*side)),add(hip,mul(n,K*-7*side)),add(at(.55),mul(n,K*-8.5*side)),add(S,mul(n,K*-7*side)),add(S,mul(axis,3))];
+  const {S,hip,n,axis,front}=f,T=dist(S,hip),at=t=>add(hip,mul(axis,T*t)),o=(p,k)=>add(p,mul(n,k));
+  if(front)return [o(S,14.5),o(at(.8),15.5),o(at(.55),12.5),o(at(.2),9.2),o(hip,10.5),o(hip,-10.5),o(at(.2),-9.2),o(at(.55),-12.5),o(at(.8),-15.5),o(S,-14.5),o(add(S,mul(axis,3)),-6),o(add(S,mul(axis,3)),6)];
+  const s=frontSide(f);
+  return [o(S,6.5*s),o(at(.78),10*s),o(at(.45),7.4*s),o(at(.14),7*s),o(hip,7.6*s),o(hip,-8.4*s),o(at(.35),-6.6*s),o(at(.7),-8.8*s),o(S,-7*s),add(S,mul(axis,3.5))];
  }
  // En perfil, el pecho mira hacia donde están las manos (salvo indicación).
  function frontSide(f){
@@ -143,75 +191,75 @@ const ExerciseArt=(()=>{
   const mid=lerp(f.hand,f.hand2,.5),c=cross(f.axis,sub(mid,f.hip));
   return f.fs=(Math.abs(c)<4?(f.face||1):(c>=0?1:-1));
  }
- function hexHead(c,r=10){return Array.from({length:6},(_,i)=>{const a=Math.PI/6+i*Math.PI/3;return[c[0]+Math.cos(a)*r,c[1]+Math.sin(a)*r]})}
- function footShape(ankle,toe){return limb(ankle,toe,6,3.5)}
  function autoToe(f,foot,knee,facing){
   if(foot[1]<134)return null;
   const dx=foot[0]-(f.hip[0]);const dir=Math.abs(dx)>8?Math.sign(dx):facing;
   return dir?[foot[0]+dir*11,foot[1]+4]:null;
  }
- function shapes(f,sp){
-  const far=[],near=[],facing=sp.facing||(sp.view==='front'?0:1);
+ // Radios por segmento [origen, final]; el lado lejano un poco más fino.
+ const R={ua:[6.4,4.7],fa:[4.7,3.3],th:[8.7,5.7],sh:[5.8,3.6],ft:[3.2,2.1]};
+ function parts(f,sp){
+  const facing=sp.facing||(sp.view==='front'?0:1),k=f.front?1:.92;
   const toe2=f.toe2||(sp.view!=='front'&&autoToe(f,f.foot2,f.knee2,facing)),toe=f.toe||(sp.view!=='front'&&autoToe(f,f.foot,f.knee,facing));
-  const farArm=[limb(f.sh2,f.elbow2,8,6.5),limb(f.elbow2,f.hand2,6.5,4.5)],farLeg=[limb(f.hp2,f.knee2,10.5,7.5),limb(f.knee2,f.foot2,7.5,5)];
-  const nearArm=[limb(f.sh1,f.elbow,9,7),limb(f.elbow,f.hand,7,5)],nearLeg=[limb(f.hp1,f.knee,11.5,8),limb(f.knee,f.foot,8,5.5)];
-  if(toe2)farLeg.push(footShape(f.foot2,toe2));if(toe)nearLeg.push(footShape(f.foot,toe));
-  if(f.front){near.push(...farArm,...farLeg)}else far.push(...farArm,...farLeg);
-  near.push(torso(f),...nearLeg,...nearArm,hexHead(f.head));
-  return {far,near,parts:{farArm,farLeg,nearArm,nearLeg}};
+  const seg=(a,b,r,s=1)=>({a,b,ra:r[0]*s,rb:r[1]*s});
+  const legs=(hp,kn,ft,tt,s)=>({th:seg(hp,kn,R.th,s),sh:seg(kn,ft,R.sh,s),ft:tt?seg(ft,tt,R.ft,s):null});
+  const arms=(sh,el,hd,s)=>({ua:seg(sh,el,R.ua,s),fa:seg(el,hd,R.fa,s)});
+  return {farLeg:legs(f.hp2,f.knee2,f.foot2,toe2,k),farArm:arms(f.sh2,f.elbow2,f.hand2,k),nearLeg:legs(f.hp1,f.knee,f.foot,toe,1),nearArm:arms(f.sh1,f.elbow,f.hand,1)};
  }
- const fillPoly=(pts,fill,extra='')=>`<polygon points="${poly(pts)}" fill="${fill}"${extra}/>`;
- function hot(f,sp,parts){
-  const T=dist(f.S,f.hip),at=t=>add(f.hip,mul(f.axis,T*t)),n=f.n,glow=` style="fill:${HOT};filter:drop-shadow(0 0 3px ${HOT})"`,dim=` style="fill:${HOT};opacity:.5"`;
-  const seg=(s,t0,t1,grow=1.5)=>{const [a,b]=[lerp(s[0],s[4],.5),lerp(s[1],s[3],.5)],u=lerp(a,b,t0),v=lerp(a,b,t1),wa=dist(s[0],s[4])+grow,wb=dist(s[1],s[3])+grow;return limb(u,v,wa*(1-t0)+wb*t0,wa*(1-t1)+wb*t1)};
-  let h='';
+ const cap=(s,fill,extra='')=>s?`<polygon points="${poly(capsule(s.a,s.b,s.ra,s.rb))}" fill="${fill}"${extra}/>`:'';
+ const cut=` stroke="${CUT}" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke"`;
+ // Tramo t0..t1 de un segmento, algo más ancho, para resaltar el músculo.
+ const span=(s,t0,t1,grow=.6)=>({a:lerp(s.a,s.b,t0),b:lerp(s.a,s.b,t1),ra:s.ra+(s.rb-s.ra)*t0+grow,rb:s.ra+(s.rb-s.ra)*t1+grow});
+ function hot(f,sp,p){
+  const T=dist(f.S,f.hip),at=t=>add(f.hip,mul(f.axis,T*t)),n=f.n,o=(q,k)=>add(q,mul(n,k));
+  const glow=` style="fill:${HOT};filter:drop-shadow(0 0 2.5px ${HOT})"`,dim=` style="fill:${HOT};opacity:.55"`;
+  const shape=pts=>`<path d="${smoothPath(pts)}"${glow}/>`;
+  const limbHot=(far,near,t0,t1,g)=>(far?cap(span(far,t0,t1,g),'',dim):'')+cap(span(near,t0,t1,g),'',glow);
   switch(sp.focus){
    case 'chest':
-    if(f.front){for(const s of[1,-1])h+=fillPoly([add(at(.97),mul(n,K*1.5*s)),add(at(.97),mul(n,K*12*s)),add(at(.72),mul(n,K*12.5*s)),add(at(.64),mul(n,K*2*s))],'',glow)}
-    else{const s=frontSide(f);h+=fillPoly([add(at(.96),mul(n,K*5*s)),add(at(.72),mul(n,K*9.8*s)),add(at(.5),mul(n,K*7.6*s)),add(at(.56),mul(n,K*1*s)),add(at(.92),mul(n,.5*s))],'',glow)}
-    break;
+    if(f.front)return [1,-1].map(s=>shape([o(at(.96),2*s),o(at(.96),12.5*s),o(at(.76),14*s),o(at(.62),8*s),o(at(.64),2*s)])).join('');
+    {const s=frontSide(f);return shape([o(at(.95),5.5*s),o(at(.78),9.4*s),o(at(.56),7*s),o(at(.6),2*s),o(at(.92),1.5*s)])}
    case 'back':
-    if(f.front){for(const s of[1,-1])h+=fillPoly([add(at(.9),mul(n,K*12*s)),add(at(.7),mul(n,K*14.5*s)),add(at(.2),mul(n,K*8.5*s)),add(at(.42),mul(n,K*3*s)),add(at(.78),mul(n,K*5*s))],'',glow)}
-    else{const s=-frontSide(f);h+=fillPoly([add(at(.97),mul(n,K*6*s)),add(at(.55),mul(n,K*9*s)),add(at(.22),mul(n,K*7*s)),add(at(.3),mul(n,K*1*s)),add(at(.9),mul(n,K*1*s))],'',glow)}
-    break;
+    if(f.front)return [1,-1].map(s=>shape([o(at(.86),13*s),o(at(.62),12.6*s),o(at(.26),9*s),o(at(.4),4*s),o(at(.72),6*s)])).join('');
+    {const s=-frontSide(f);return shape([o(at(.95),6.6*s),o(at(.68),8.4*s),o(at(.32),6.2*s),o(at(.38),1.5*s),o(at(.88),1.5*s)])}
    case 'core':{
-    const s=f.front?0:frontSide(f),w=K*(f.front?5.5:3.2),c=t=>add(at(t),mul(n,f.front?0:5.6*s));
-    h+=fillPoly([add(c(.62),mul(n,w)),add(c(.1),mul(n,w)),add(c(.1),mul(n,-w)),add(c(.62),mul(n,-w))],'',glow);
-    for(const t of[.24,.37,.5])h+=`<path d="M${P(add(c(t),mul(n,w)))}L${P(add(c(t),mul(n,-w)))}" stroke="${BODY}" stroke-width="1.3"/>`;
-    break;}
-   case 'shoulders':
-    h+=fillPoly(seg(parts.farArm[0],0,.5,3),'',dim)+fillPoly(seg(parts.nearArm[0],0,.5,3),'',glow);break;
-   case 'arms':
-    h+=fillPoly(seg(parts.farArm[0],.12,1,1),'',dim)+fillPoly(seg(parts.nearArm[0],.12,1,1),'',glow);break;
-   case 'forearm':
-    h+=fillPoly(seg(parts.nearArm[1],0,.9,1),'',glow);break;
-   case 'quads':case 'hamstrings':
-    h+=fillPoly(seg(parts.farLeg[0],.08,.95,1),'',dim)+fillPoly(seg(parts.nearLeg[0],.08,.95,1),'',glow);break;
-   case 'calves':
-    h+=fillPoly(seg(parts.farLeg[1],.05,.8,1),'',dim)+fillPoly(seg(parts.nearLeg[1],.05,.8,1),'',glow);break;
-   case 'legs':
-    h+=fillPoly(seg(parts.nearLeg[0],.08,.95,1),'',glow)+fillPoly(seg(parts.nearLeg[1],.05,.8,1),'',glow);break;
-   case 'hips':
-    h+=`<circle cx="${r1(f.hip[0])}" cy="${r1(f.hip[1])}" r="7.5"${glow}/>`;break;
+    const s=f.front?0:frontSide(f),w=f.front?5.6:3,c=t=>o(at(t),f.front?0:4.4*s);
+    let h=shape([o(c(.6),w),o(c(.12),w),o(c(.12),-w),o(c(.6),-w)]);
+    for(const t of[.24,.36,.48])h+=`<path d="M${P(o(c(t),w))}L${P(o(c(t),-w))}" stroke="${CUT}" stroke-width="1.1" opacity=".55"/>`;
+    return h;}
+   case 'shoulders':return (f.front?`<circle cx="${r1(f.sh2[0])}" cy="${r1(f.sh2[1])}" r="6.6"${glow}/>`:`<circle cx="${r1(f.sh2[0])}" cy="${r1(f.sh2[1])}" r="5.8"${dim}/>`)+`<circle cx="${r1(f.sh1[0])}" cy="${r1(f.sh1[1])}" r="6.6"${glow}/>`+limbHot(p.farArm.ua,p.nearArm.ua,0,.35,.4);
+   case 'arms':return limbHot(p.farArm.ua,p.nearArm.ua,.18,1,-.2);
+   case 'forearm':return cap(span(p.nearArm.fa,0,.85,.2),'',glow);
+   case 'quads':case 'hamstrings':return limbHot(p.farLeg.th,p.nearLeg.th,.1,.92,-.3);
+   case 'calves':return limbHot(p.farLeg.sh,p.nearLeg.sh,.05,.75,0);
+   case 'legs':return cap(span(p.nearLeg.th,.1,.92,-.3),'',glow)+cap(span(p.nearLeg.sh,.05,.75,0),'',glow);
+   case 'hips':return `<circle cx="${r1(f.hip[0])}" cy="${r1(f.hip[1])}" r="7"${glow}/>`;
   }
-  return h;
+  return '';
  }
  function figure(f,sp){
-  const {far,near,parts}=shapes(f,sp);
-  const outline=list=>list.map(p=>fillPoly(p,INK,` stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"`)).join('');
-  let h=far.map(p=>fillPoly(p,FAR,` stroke="${FARINK}" stroke-width="1.6" stroke-linejoin="round"`)).join('');
-  h+=outline(near)+near.map(p=>fillPoly(p,BODY)).join('');
-  if(f.front)h+=`<path d="M${P(add(f.S,mul(f.axis,-6)))}L${P(add(f.hip,mul(f.axis,6)))}" stroke="#5C5C74" stroke-width="1.2"/>`;
-  h+=hot(f,sp,parts);
-  const eye=f.front?add(f.head,[0,-1]):add(f.head,mul(f.n,frontSide(f)*3.5));
-  h+=`<circle cx="${r1(eye[0])}" cy="${r1(eye[1])}" r="1.3" fill="${METAL}"/>`;
-  for(const j of[f.elbow,f.knee])h+=`<circle cx="${r1(j[0])}" cy="${r1(j[1])}" r="1.6" fill="#17171F"/>`;
-  return h;
+  const p=parts(f,sp),T=torso(f),neck={a:f.S,b:lerp(f.S,f.head,.62),ra:4,rb:3.6};
+  const limbs=(set,fill,extra)=>[set.th,set.sh,set.ft,set.ua,set.fa].map(s=>cap(s,fill,extra)).join('');
+  const head=`<circle cx="${r1(f.head[0])}" cy="${r1(f.head[1])}" r="8.4" fill="${NEAR}"/>`;
+  const delt=sh=>`<circle cx="${r1(sh[0])}" cy="${r1(sh[1])}" r="${f.front?6.2:5.8}" fill="${NEAR}"/>`;
+  let h='';
+  if(f.front){
+   h+=`<path d="${smoothPath(T)}" fill="${NEAR}"/>`+cap(neck,NEAR)+head;
+   h+=limbs({th:p.farLeg.th,sh:p.farLeg.sh,ft:p.farLeg.ft},NEAR,cut)+limbs({th:p.nearLeg.th,sh:p.nearLeg.sh,ft:p.nearLeg.ft},NEAR,cut);
+   h+=limbs(p.farArm,NEAR,cut)+limbs(p.nearArm,NEAR,cut)+delt(f.sh1)+delt(f.sh2);
+  }else{
+   h+=limbs(p.farLeg,FAR)+limbs(p.farArm,FAR);
+   h+=`<path d="${smoothPath(T)}" fill="${NEAR}"/>`+cap(neck,NEAR)+head;
+   h+=limbs(p.nearLeg,NEAR,cut)+delt(f.sh1)+limbs(p.nearArm,NEAR,cut);
+   const eye=add(f.head,mul(f.n,frontSide(f)*3.4));
+   h+=`<circle cx="${r1(eye[0])}" cy="${r1(eye[1]-1)}" r="1.3" fill="${CUT}"/>`;
+  }
+  return h+hot(f,sp,p);
  }
- // Posición inicial como silueta suave detrás de la final: se lee como movimiento, no como ruido.
+ // Posición inicial como silueta tenue detrás de la final: se lee como movimiento, no como ruido.
  function ghost(f,sp){
-  const {far,near}=shapes(f,sp);
-  return `<g fill="#9C9CB4" opacity=".2">${[...far,...near].map(p=>`<polygon points="${poly(p)}"/>`).join('')}</g>`;
+  const p=parts(f,sp),all=[...Object.values(p.farLeg),...Object.values(p.farArm),...Object.values(p.nearLeg),...Object.values(p.nearArm)];
+  return `<g fill="#FFFFFF" opacity=".1"><path d="${smoothPath(torso(f))}"/>${all.map(s=>cap(s,'#FFFFFF')).join('')}<circle cx="${r1(f.head[0])}" cy="${r1(f.head[1])}" r="8.2"/></g>`;
  }
  const cable=(from,to)=>`<path d="M${P(from)}L${P(to)}" stroke="#7A7A92" stroke-width="1.3"/>`;
  const grip=(p,q)=>`<path d="M${P(p)}L${P(q)}" stroke="${METAL}" stroke-width="3.6" stroke-linecap="round"/>`;
@@ -220,6 +268,8 @@ const ExerciseArt=(()=>{
   const w=sp.weight;let h='';
   if(w==='dumbbell'||w==='hammer')for(const p of[f.hand2,f.hand])h+=dumbbell(p,w==='hammer'?90:0);
   if(w==='single-dumbbell')h+=dumbbell(f.hand);
+  if(w==='single-dumbbell-up')h+=dumbbell(f.hand,90);
+  if(w==='dip-bar')h+=`<circle cx="86" cy="82" r="5.5" fill="#26263A" stroke="${METAL}" stroke-width="2"/>`;
   if(w==='dumbbell-side'){for(const p of[f.hand2,f.hand])h+=`<g transform="translate(${P(p)})"><path d="M-5-7h10v14h-10z" fill="#26263A" stroke="${METAL}" stroke-width="1.4"/></g>`}
   if(w==='barbell-side'){
    const c=lerp(f.hand,f.hand2,.5);
@@ -288,7 +338,7 @@ const ExerciseArt=(()=>{
   let path='';
   if(sp.path&&withGhost){let d='';for(let i=0;i<=12;i++){const t=i/12,p=lerp(A.hand,B.hand,t),bow=Math.sin(t*Math.PI)*-6;d+=(i?'L':'M')+P([p[0]+bow*.6,p[1]])}path=`<path d="${d}" stroke="${HOT}" stroke-opacity=".7" stroke-width="1.4" stroke-dasharray="2 2.5" fill="none"/>`}
   const thumb=phase==='combo';
-  const arrow=`<path d="${sp.arrow}" stroke="${HOT}" stroke-width="${thumb?4:3.4}" fill="none" stroke-linecap="square" stroke-linejoin="miter" style="filter:drop-shadow(0 0 2px ${HOT})"/>`;
+  const arrow=`<path d="${sp.arrow}" stroke="${HOT}" stroke-width="${thumb?3.6:3}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   return `<svg viewBox="${fitBox(key)}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${sp.rot?(thumb?"":GRID):(thumb?FLOOR_LINE:GRID+FLOOR)}<g${sp.rot?` transform="rotate(${sp.rot} 80 80)"`:""}><path d="${sp.equipment}" stroke="${EQUIP}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" fill="none"/>${withGhost?ghost(A,sp):''}${path}${figure(end,sp)}${weights(sp,end)}${arrow}</g></svg>`;
  }
  return {svg,specs,frames};

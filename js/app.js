@@ -66,21 +66,68 @@ if(smode==='localStorage'&&navigator.storage&&navigator.storage.persist){
 const slug=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 /* La identidad de la casilla puede sobrevivir a un cambio de ejercicio/nombre. */
 const doneExerciseId=e=>e.doneAs||slug(e.name);
+/* ================= rutina personalizada ================= */
+/* Cambios del usuario sobre la rutina base, en gym-app-v1 → plan:
+   swap {'día|hueco': ejercicio}, drop {'día|hueco': fecha}, add {día: [{c: ejercicio, since: fecha}]}.
+   El ejercicio nuevo hereda la casilla del hueco (doneAs): las sesiones pasadas siguen completas. */
+const BASE_BLOCKS={};DAYS.forEach(d=>BASE_BLOCKS[d.id]=d.blocks);
+const CAT={};
+CATALOG.forEach(e=>{CAT[slug(e.name)]={...e,id:slug(e.name)}});
+DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
+  const id=slug(e.name);if(!e.m||CAT[id]||e.cardio!==undefined)return;
+  const {pair,strength,doneAs,...rest}=e;CAT[id]={...rest,id,routine:true,big:!!strength};
+})));
+const cleanPlan=p=>({swap:{...(p?.swap||{})},drop:{...(p?.drop||{})},add:{...(p?.add||{})}});
+const slotKey=(dayId,e)=>dayId+'|'+(e.slot||doneExerciseId(e));
+function planChanges(p,dayId){
+  const own=k=>!dayId||k.startsWith(dayId+'|');
+  return Object.keys(p.swap).filter(own).length+Object.keys(p.drop).filter(own).length
+    +Object.entries(p.add).filter(([d])=>!dayId||d===dayId).reduce((n,[,l])=>n+l.length,0);
+}
+function applyPlan(p){
+  DAYS.forEach(d=>{
+    const blocks=BASE_BLOCKS[d.id].map(b=>{
+      const ex=b.ex.map(e=>{
+        const slot=doneExerciseId(e),k=d.id+'|'+slot;
+        if(p.drop[k])return null;
+        const c=CAT[p.swap[k]];
+        if(!c||c.id===slug(e.name))return e;
+        const strength=!!e.strength&&!!c.big,{routine,big,...base}=c;
+        return {...base,strength,pair:e.pair,doneAs:slot,slot,orig:e.name};
+      }).filter(Boolean);
+      // Una superserie sin pareja vuelve a ser un ejercicio normal.
+      const letters=ex.map(e=>e.pair&&e.pair[0]);
+      const t=/^Fuerza · /.test(b.t)&&ex.length===1&&ex[0].orig?'Fuerza · '+ex[0].name.toLowerCase():b.t;
+      return {...b,t,ex:ex.map((e,i)=>e.pair&&letters.filter(l=>l===letters[i]).length<2?{...e,pair:undefined}:e)};
+    }).filter(b=>b.ex.length);
+    const extra=(p.add[d.id]||[]).filter(a=>CAT[a.c]).map(a=>{const {routine,big,id,...base}=CAT[a.c];return {...base,since:a.since,added:a.c}});
+    if(extra.length)blocks.push({t:'Añadidos',tone:'wide',ex:extra});
+    d.blocks=blocks;
+  });
+}
+/* fin rutina personalizada */
 const EX={}; // slug -> {name, grp}
 const BASIC=new Set();
-DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>{
-  if(!e.m)return;
-  const id=slug(e.name);
-  if(!EX[id]) EX[id]={name:e.name,grp:G[e.m]||'Otros'};
-  if(e.strength||e.base||b.t.indexOf('Fuerza')===0) BASIC.add(id);
-})));
-BASIC.forEach(id=>{ if(EX[id]) EX[id].grp='Básicos'; });
-/* marcas antiguas de rutinas anteriores: se conservan en el grupo Archivo */
-Object.keys(DB().prs||{}).forEach(id=>{
-  if(!EX[id])EX[id]={name:id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase()),grp:'Archivo'};
-});
+applyPlan(cleanPlan(DB().plan));
+function registerExercises(){
+  const reg=(e,b)=>{
+    if(!e.m)return;
+    const id=slug(e.name);
+    if(!EX[id]||EX[id].grp==='Archivo') EX[id]={name:e.name,grp:G[e.m]||'Otros'};
+    if(e.strength||e.base||b.t.indexOf('Fuerza')===0) BASIC.add(id);
+  };
+  DAYS.forEach(d=>d.blocks.forEach(b=>b.ex.forEach(e=>reg(e,b))));
+  Object.values(BASE_BLOCKS).forEach(bs=>bs.forEach(b=>b.ex.forEach(e=>reg(e,b))));
+  BASIC.forEach(id=>{ if(EX[id]) EX[id].grp='Básicos'; });
+  /* marcas de ejercicios del catálogo o de rutinas anteriores (grupo Archivo) */
+  Object.keys(DB().prs||{}).forEach(id=>{
+    if(EX[id])return;
+    EX[id]=CAT[id]?{name:CAT[id].name,grp:G[CAT[id].m]||'Otros'}:{name:id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase()),grp:'Archivo'};
+  });
+  if(Object.values(EX).some(e=>e.grp==='Archivo')&&!GROUPS.includes('Archivo'))GROUPS.push('Archivo');
+}
 const GROUPS=['Básicos','Pecho','Espalda','Hombro','Brazo','Pierna','Core y skills'];
-if(Object.values(EX).some(e=>e.grp==='Archivo'))GROUPS.push('Archivo');
+registerExercises();
 
 /* ================= métricas ================= */
 const fmt=n=>Math.round(n*10)/10;
@@ -97,15 +144,16 @@ function weekDates(anchor=new Date()){
   const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
   return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return dateKey(d)});
 }
-function requiredExercises(d){
+/* Con fecha: un ejercicio añadido después no deja incompletas las sesiones anteriores. */
+function requiredExercises(d,date){
   if(d.rest)return [];
   return d.blocks.flatMap(b=>/opcional/i.test(b.t)?[]:b.ex
-    .filter(e=>!/opcional/i.test(e.sets||''))
+    .filter(e=>!/opcional/i.test(e.sets||'')&&!(date&&e.since&&date<e.since))
     .map(doneExerciseId));
 }
 function dayComplete(d){
-  const ids=requiredExercises(d),done=doneDb();
-  return ids.length>0&&weekDates().some(date=>ids.every(id=>done[date+'|'+d.id+'|'+id]));
+  const done=doneDb();
+  return weekDates().some(date=>{const ids=requiredExercises(d,date);return ids.length>0&&ids.every(id=>done[date+'|'+d.id+'|'+id])});
 }
 function prsOf(id){const d=DB();return (d.prs[id]||[]).slice().sort((a,b)=>a.d.localeCompare(b.d));}
 function bestOf(id){const l=prsOf(id);if(!l.length)return null;return l.reduce((b,e)=>
@@ -222,7 +270,7 @@ function sesh(){
       h+=`<div class="ex${completed?' done':''}"><div class="exrow">
         <button class="dia" data-movement="${bi}-${ei}" aria-label="Ver movimiento: ${esc(dispName)}">${ExerciseArt.svg(e.d,'combo')}<small>VER TÉCNICA ↗</small></button>
         <button class="exbody exercise-details" data-movement="${bi}-${ei}" aria-label="Ver detalles: ${esc(dispName)}" aria-haspopup="dialog">
-          <span class="exname">${e.pair?`<i class="pair">${e.pair}</i>`:''}${dispName}</span>
+          <span class="exname">${e.pair?`<i class="pair">${e.pair}</i>`:''}${dispName}${e.orig||e.added?`<i class="swapmark">${e.added?'añadido':'cambio'}</i>`:''}</span>
           <span class="exmeta">${dispSets}</span>
           ${lastLine}<span class="cue">${esc(shortCue)}.</span>
         </button><div class="exactions">${doneBtn}${prBtn}${restBtn}</div></div>
@@ -239,7 +287,16 @@ function sesh(){
     });
     h+='</div>';
   });
+  const changes=planChanges(cleanPlan(DB().plan),d.id);
+  h+=`<div class="plan-tools"><button class="btn ghost" id="addEx">+ Añadir ejercicio</button>${changes?`<button class="btn ghost" id="resetDay">Restaurar ${d.n.toLowerCase()} original · ${changes} ${changes>1?'cambios':'cambio'}</button>`:''}</div>`;
   host.innerHTML=h;
+  document.getElementById('addEx').addEventListener('click',()=>openPicker({mode:'add',day:d.id}));
+  const reset=document.getElementById('resetDay');
+  if(reset)reset.addEventListener('click',()=>armConfirm(reset,'Toca otra vez para restaurar',()=>editPlan(p=>{
+    for(const k of Object.keys(p.swap))if(k.startsWith(d.id+'|'))delete p.swap[k];
+    for(const k of Object.keys(p.drop))if(k.startsWith(d.id+'|'))delete p.drop[k];
+    delete p.add[d.id];
+  })));
   host.querySelectorAll('[data-movement]').forEach(b=>b.addEventListener('click',()=>{
     const [bi,ei]=b.dataset.movement.split('-').map(Number),e=d.blocks[bi].ex[ei],spec=ExerciseArt.specs[e.d]||ExerciseArt.specs.mob;
     const ph=e.dyn==='dragon'?DRAGON[dragonPhase(week)]:null;
@@ -254,6 +311,11 @@ function sesh(){
     const why=document.getElementById('movementWhy');
     why.textContent=(ph?ph.why:e.why)||'';
     why.hidden=!why.textContent;
+    movementCtx={day:d.id,e};
+    const orig=document.getElementById('origBtn'),drop=document.getElementById('dropBtn');
+    orig.hidden=!e.orig;orig.textContent=e.orig?'Volver a '+e.orig:'';
+    delete drop.dataset.armed;drop.classList.remove('armed');drop.textContent=e.added?'Quitar añadido':'Quitar del día';
+    document.getElementById('swapBtn').hidden=!!e.added||e.cardio!==undefined;
     document.getElementById('movementDialog').showModal();
   }));
   host.querySelectorAll('[data-done]').forEach(b=>b.addEventListener('click',()=>{
@@ -277,6 +339,69 @@ function sesh(){
     put(d);sesh();renderProgress();buildExList();drawChart();
   }));
 }
+
+/* ================= editar rutina: cambiar, quitar y añadir ================= */
+let movementCtx=null,pickCtx=null,pickChip='';
+const PICK_CHIPS=[['top','Recomendados'],['pec','Pecho'],['esp','Espalda'],['dl da dpo','Hombro'],['bi','Bíceps'],['tri','Tríceps'],['ant','Antebrazo'],['pie','Cuádriceps'],['ham ere','Isquios'],['cal','Gemelo'],['core','Core'],['all','Todos']];
+function editPlan(fn){
+  const d=DB(),p=cleanPlan(d.plan);fn(p);d.plan=p;put(d);
+  applyPlan(p);registerExercises();
+  dayTabs();sesh();volume();renderProgress();buildGroups();buildExList();drawChart();
+}
+/* Primer toque arma el botón; el segundo, en 5 s, confirma. */
+function armConfirm(btn,label,fn){
+  if(btn.dataset.armed){fn();return;}
+  btn.dataset.armed='1';const old=btn.textContent;btn.textContent=label;btn.classList.add('armed');
+  setTimeout(()=>{delete btn.dataset.armed;btn.textContent=old;btn.classList.remove('armed');},5000);
+}
+function openPicker(ctx){
+  pickCtx=ctx;
+  const m=ctx.e?.m||'';
+  pickChip=(PICK_CHIPS.find(([k])=>k.split(' ').includes(m))||PICK_CHIPS[0])[0];
+  document.getElementById('pickTitle').textContent=ctx.mode==='swap'?'Cambiar '+ctx.e.name:'Añadir al '+DAYS.find(x=>x.id===ctx.day).n.toLowerCase();
+  document.getElementById('pickSearch').value='';
+  renderPicker();
+  document.getElementById('pickDialog').showModal();
+}
+function renderPicker(){
+  const q=slug(document.getElementById('pickSearch').value||''),day=DAYS.find(x=>x.id===pickCtx.day);
+  const inDay=new Set(day.blocks.flatMap(b=>b.ex.map(e=>slug(e.name))));
+  document.getElementById('pickChips').innerHTML=PICK_CHIPS.map(([k,l])=>`<button type="button" data-chip="${k}" aria-pressed="${k===pickChip}">${l}</button>`).join('');
+  const list=Object.values(CAT).filter(c=>!inDay.has(c.id)
+    &&(q?c.id.includes(q):pickChip==='all'||(pickChip==='top'?c.top:pickChip.split(' ').includes(c.m))))
+    .sort((a,b)=>(b.top?1:0)-(a.top?1:0)||a.name.localeCompare(b.name,'es'));
+  document.getElementById('pickList').innerHTML=list.length?list.map(c=>`<button type="button" class="pick-row" data-pick="${c.id}">
+    <span class="pick-art">${ExerciseArt.svg(c.d,'combo')}</span>
+    <span class="pick-text"><b>${esc(c.name)}${c.top?'<i>★</i>':''}</b><small>${esc(MUS[c.m]||'')} · ${esc(c.sets)}${c.routine?' · en tu rutina':''}</small><em>${esc(c.why)}</em></span></button>`).join('')
+    :'<p class="pick-empty">No hay ejercicios con ese filtro.</p>';
+  document.querySelectorAll('#pickChips [data-chip]').forEach(b=>b.addEventListener('click',()=>{pickChip=b.dataset.chip;document.getElementById('pickSearch').value='';renderPicker();}));
+  document.querySelectorAll('#pickList [data-pick]').forEach(b=>b.addEventListener('click',()=>{
+    const c=b.dataset.pick,ctx=pickCtx;
+    document.getElementById('pickDialog').close();document.getElementById('movementDialog').close();
+    editPlan(p=>{
+      if(ctx.mode==='swap'){
+        const k=slotKey(ctx.day,ctx.e),base=BASE_BLOCKS[ctx.day].flatMap(x=>x.ex).find(x=>slotKey(ctx.day,x)===k);
+        if(base&&slug(base.name)===c)delete p.swap[k];else p.swap[k]=c;
+      }else (p.add[ctx.day]||(p.add[ctx.day]=[])).push({c,since:today()});
+    });
+  }));
+}
+document.getElementById('pickSearch').addEventListener('input',renderPicker);
+document.getElementById('swapBtn').addEventListener('click',()=>openPicker({mode:'swap',day:movementCtx.day,e:movementCtx.e}));
+document.getElementById('origBtn').addEventListener('click',()=>{
+  const {day:dayId,e}=movementCtx;document.getElementById('movementDialog').close();
+  editPlan(p=>{delete p.swap[slotKey(dayId,e)]});
+});
+document.getElementById('dropBtn').addEventListener('click',ev=>{
+  const btn=ev.currentTarget,{day:dayId,e}=movementCtx;
+  armConfirm(btn,'Toca otra vez para quitar',()=>{
+    document.getElementById('movementDialog').close();
+    editPlan(p=>{
+      if(e.added){p.add[dayId]=(p.add[dayId]||[]).filter(a=>a.c!==e.added);if(!p.add[dayId].length)delete p.add[dayId];}
+      else{const k=slotKey(dayId,e);delete p.swap[k];p.drop[k]=today();}
+    });
+  });
+});
 
 /* ================= series por semana ================= */
 const nsets=s=>{const m=String(s).match(/^\s*(\d+)\s*[×x]/);return m?parseInt(m[1]):0};
@@ -431,7 +556,7 @@ function exerciseLabel(dayId,id){
   return id.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());
 }
 function sessionStats(date,d,index=doneIndex()){
-  const set=index[date]?.[d.id]||new Set(),required=requiredExercises(d);
+  const set=index[date]?.[d.id]||new Set(),required=requiredExercises(d,date);
   const requiredSet=new Set(required),doneRequired=required.filter(id=>set.has(id));
   const optional=[...set].filter(id=>!requiredSet.has(id));
   return {date,day:d,started:set.size>0,total:required.length,done:doneRequired.length,
@@ -825,6 +950,7 @@ document.getElementById('file').addEventListener('change',ev=>{
         if(!cur.spec)cur.spec=inc.spec;
         else if(cur.spec.start===inc.spec.start&&cur.spec.m===inc.spec.m)cur.spec.log={...(cur.spec.log||{}),...(inc.spec.log||{})};
       }
+      if(inc.plan&&typeof inc.plan==='object'&&!planChanges(cleanPlan(cur.plan)))cur.plan=cleanPlan(inc.plan);
       if(Array.isArray(inc.body)){
         const body={};(cur.body||[]).forEach(e=>{if(e?.d)body[e.d]=e});
         inc.body.forEach(e=>{if(e?.d)body[e.d]=e});cur.body=Object.values(body).sort((a,b)=>a.d.localeCompare(b.d));
@@ -835,6 +961,7 @@ document.getElementById('file').addEventListener('change',ev=>{
       }
       if(Array.isArray(inc.photos))for(const p of inc.photos){if(p?.d&&typeof p.data==='string'&&p.data.startsWith('data:image/'))await photoPut(p);}
       week=Math.min(8,Math.max(1,parseInt(DB().aestheticProgramWeek)||1));
+      applyPlan(cleanPlan(DB().plan));registerExercises();
       rail();dayTabs();sesh();volume();renderSpec();buildExList();drawChart();await refreshPhotoDates();renderProgress();
       alert('Copia completa importada y fusionada sin borrar tus datos actuales.');
     }catch(e){alert('Ese archivo no tiene el formato esperado.');}
@@ -846,11 +973,12 @@ document.getElementById('file').addEventListener('change',ev=>{
 /* ================= empezar de cero ================= */
 /* Borra marcas, casillas, medidas, fotos y el bloque de especialización de ESTE dispositivo. Solo con dos toques del usuario. */
 async function wipeAll(){
+  const plan=DB().plan; // la rutina personalizada no es un registro: se conserva
   try{localStorage.removeItem(KEY);localStorage.removeItem(DONE_KEY);}catch(e){}
   mem=null;doneMem={};mediaMem={};
   const db=await mediaDb();
   if(db)await new Promise(resolve=>{const tx=db.transaction(MEDIA_STORE,'readwrite');tx.objectStore(MEDIA_STORE).clear();tx.oncomplete=()=>resolve();tx.onerror=()=>resolve();});
-  put(cleanDb({v6Seen:true,aestheticProgramWeek:1}));putDone({});
+  put(cleanDb({v6Seen:true,aestheticProgramWeek:1,...(plan?{plan}:{})}));putDone({});
   location.reload();
 }
 /* Primer toque arma el botón; el segundo, en 5 s, borra. */

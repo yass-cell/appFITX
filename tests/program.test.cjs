@@ -3,10 +3,10 @@ const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 function setup(){
  const done={};const c={doneDb:()=>done,allPrEvents:()=>[]};vm.createContext(c);
- for(const p of ['js/data.js','js/program-history.js','js/program.js','js/exercise-art.js'])vm.runInContext(read(p),c,{filename:p});
+ for(const p of ['js/data.js','js/program-history.js','js/program.js','js/catalog.js','js/exercise-art.js'])vm.runInContext(read(p),c,{filename:p});
  const app=read('js/app.js');
  vm.runInContext(app.slice(app.indexOf('const slug='),app.indexOf('const EX='))+app.slice(app.indexOf('const fmt='),app.indexOf('function prsOf'))+app.slice(app.indexOf('const markText='),app.indexOf('/* Descanso indicado'))+app.slice(app.indexOf('function doneIndex(){'),app.indexOf('function bodyRecords(){')),c);
- vm.runInContext('globalThis.r={DAYS,TRAINING_DAYS,LEGACY_DAYS,PREVIOUS_PROGRAM_DAYS,PREVIOUS_TORSO_DAYS,PREVIOUS_CHEST_DAYS,PREVIOUS_V5_DAYS,HISTORY_DAYS,exerciseSets,cardioMinutes,ExerciseArt,todayTarget,WEEK_FOCUS,requiredExercises,weekDates,weekSummaryFor,dateActivity,fullWeekStreak};',c);
+ vm.runInContext('globalThis.r={DAYS,TRAINING_DAYS,LEGACY_DAYS,PREVIOUS_PROGRAM_DAYS,PREVIOUS_TORSO_DAYS,PREVIOUS_CHEST_DAYS,PREVIOUS_V5_DAYS,PREVIOUS_V7_DAYS,HISTORY_DAYS,exerciseSets,cardioMinutes,ExerciseArt,todayTarget,WEEK_FOCUS,CATALOG,CAT,applyPlan,cleanPlan,planChanges,slotKey,MUS,requiredExercises,weekDates,weekSummaryFor,dateActivity,fullWeekStreak};',c);
  return {...c.r,done};
 }
 test('cinco sesiones y dos descansos sin tareas obligatorias',()=>{
@@ -25,13 +25,13 @@ test('el historial anterior sigue visible y no completa sesiones del nuevo progr
  for(const id of r.requiredExercises(legacy))r.done[date+'|'+legacy.id+'|'+id]=true;
  assert.equal(r.dateActivity(date).sessions.length,1);assert.equal(r.dateActivity(date).sessions[0].day.id,'d1');
  assert.equal(r.weekSummaryFor().days,0);assert.equal(r.weekSummaryFor().exercises,0);
- assert.equal(new Set(r.HISTORY_DAYS.map(d=>d.id)).size,37);
+ assert.equal(new Set(r.HISTORY_DAYS.map(d=>d.id)).size,44);
 });
-test('reparto V7: calistenia 2×, pecho y espalda 2×, hombro 4 días, brazo y core 3, pierna 1',()=>{
+test('reparto V8: calistenia 2×, pecho y espalda 2×, hombro y core 4 días, brazo 3, pierna 1',()=>{
  const {TRAINING_DAYS}=setup();
  const req=d=>d.blocks.filter(b=>!/opcional/i.test(b.t)).flatMap(b=>b.ex);
  const days=test=>TRAINING_DAYS.filter(d=>req(d).some(test)).length;
- for(const [ms,count] of [[['pec'],2],[['esp'],2],[['pie'],1],[['ham'],1],[['dl','da','dpo'],4],[['bi'],3],[['tri'],3],[['core'],3],[['ant'],2]])assert.equal(days(e=>ms.includes(e.m)),count,ms.join('+'));
+ for(const [ms,count] of [[['pec'],2],[['esp'],2],[['pie'],1],[['ham'],1],[['dl','da','dpo'],4],[['bi'],3],[['tri'],3],[['core'],4],[['ant'],2]])assert.equal(days(e=>ms.includes(e.m)),count,ms.join('+'));
  assert.equal(days(e=>e.d==='pull'),2,'dominadas dos días');
  assert.equal(days(e=>e.d==='dip'),2,'fondos dos días');
  const names=TRAINING_DAYS.flatMap(req).map(e=>e.name);
@@ -74,7 +74,7 @@ test('volumen de prioridades y caminatas de recuperación coherentes',()=>{
  const r=setup(),totals={};
  for(const d of r.TRAINING_DAYS)for(const b of d.blocks)for(const e of b.ex)if(e.m)totals[e.m]=(totals[e.m]||0)+parseInt(r.exerciseSets(e,1));
   for(const d of r.TRAINING_DAYS)for(const b of d.blocks)if(/opcional/i.test(b.t))for(const e of b.ex)if(e.m)totals[e.m]-=parseInt(r.exerciseSets(e,1));
- for(const [m,n] of Object.entries({pec:18,esp:20,dl:10,da:4,dpo:6,bi:12,tri:9,ant:8,core:9,pie:10,ham:6,cal:3}))assert.equal(totals[m],n,m);
+ for(const [m,n] of Object.entries({pec:19,esp:20,dl:14,da:4,dpo:6,bi:12,tri:9,ant:8,core:12,pie:13,ham:3,cal:3}))assert.equal(totals[m],n,m);
  for(const d of r.DAYS.filter(d=>d.rest)){
   assert.ok(d.blocks.some(b=>b.ex.some(e=>e.cardio!==undefined)));
   assert.ok(d.blocks.some(b=>/Cadera/.test(b.t)),'movilidad de cadera');
@@ -155,6 +155,27 @@ test('la semana V5 publicada sigue completa en el calendario',()=>{
  assert.equal(r.weekSummaryFor().days,0);
 });
 
+test('la semana V7 publicada sigue completa en el calendario',()=>{
+ const r=setup(),dates=r.weekDates();
+ assert.deepEqual(Array.from(r.PREVIOUS_V7_DAYS,d=>d.id),['v7-d1','v7-d2','v7-d3','v7-d4','v7-d5','v7-d6','v7-d7']);
+ assert.ok(r.PREVIOUS_V7_DAYS[2].blocks.some(b=>b.ex.some(e=>e.d==='boxjump')),'la V7 conserva los saltos');
+ for(const [i,previous] of r.PREVIOUS_V7_DAYS.entries()){
+  if(previous.rest)continue;
+  for(const id of r.requiredExercises(previous))r.done[dates[i]+'|'+previous.id+'|'+id]=true;
+  assert.equal(r.dateActivity(dates[i]).sessions.find(s=>s.day.id===previous.id).complete,true,previous.id);
+ }
+ assert.equal(r.weekSummaryFor().days,0);
+});
+test('pierna con máquinas, isométrico, planchas y calentamiento articular',()=>{
+ const r=setup(),all=d=>d.blocks.flatMap(b=>b.ex),keys=d=>all(d).map(e=>e.d);
+ const leg=r.DAYS.find(d=>d.n==='Miércoles');
+ for(const k of ['lungeiso','legpress','legext','bss','legcurl','calf'])assert.ok(keys(leg).includes(k),k);
+ assert.ok(!r.DAYS.some(d=>keys(d).includes('boxjump')),'sin saltos al cajón');
+ assert.equal(all(leg).find(e=>e.d==='calf').inc,2,'gemelo con mancuernas');
+ for(const d of r.TRAINING_DAYS)assert.equal(d.blocks[0].ex[0].d,'joints',d.n);
+ assert.ok(keys(r.DAYS.find(d=>d.n==='Sábado')).includes('plank'));
+ for(const d of r.DAYS.filter(x=>x.rest))assert.ok(keys(d).includes('sideplank'),d.n);
+});
 test('los dibujos mantienen la longitud de los huesos entre posiciones',()=>{
  const r=setup(),d=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
  const used=new Set(r.DAYS.flatMap(x=>x.blocks.flatMap(b=>b.ex.map(e=>e.d))));
@@ -164,4 +185,45 @@ test('los dibujos mantienen la longitud de los huesos entre posiciones',()=>{
   if(!sp.fore)bones.push(['sh1','elbow'],['elbow','hand'],['sh2','elbow2'],['elbow2','hand2']);
   for(const [x,y] of bones)assert.ok(Math.abs(d(A[x],A[y])-d(B[x],B[y]))<.6,key+' '+x+'-'+y);
  }
+});
+
+test('catálogo: nombres únicos, dibujo propio, músculo y series válidos',()=>{
+ const r=setup(),slug=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+ const routine=new Set(r.DAYS.flatMap(d=>d.blocks.flatMap(b=>b.ex.map(e=>slug(e.name)))));
+ const seen=new Set();
+ assert.ok(r.CATALOG.length>=45);
+ for(const c of r.CATALOG){
+  const id=slug(c.name);
+  assert.ok(!seen.has(id)&&!routine.has(id),'duplicado: '+c.name);seen.add(id);
+  assert.ok(r.ExerciseArt.specs[c.d],'dibujo: '+c.name);
+  assert.ok(r.MUS[c.m],'músculo: '+c.name);
+  assert.match(c.sets,/^\d+ × /,c.name);
+  for(const phase of [0,1,'combo'])assert.doesNotMatch(r.ExerciseArt.svg(c.d,phase),/undefined|NaN/);
+ }
+ for(const name of ['Press de hombro en máquina','Press militar con mancuernas sentado','Sentadilla hack en máquina','Curl bayesiano en polea','Hip thrust con barra'])assert.ok(seen.has(slug(name)),name);
+});
+test('rutina personalizada: cambiar conserva la casilla, quitar y añadir no rompen el historial',()=>{
+ const r=setup(),date=r.weekDates()[0],later=r.weekDates()[1],mon=r.DAYS[0],p=r.cleanPlan();
+ const bench=mon.blocks.flatMap(b=>b.ex).find(e=>e.d==='bench'),lat=mon.blocks.flatMap(b=>b.ex).find(e=>e.d==='latdb');
+ for(const id of r.requiredExercises(mon))r.done[date+'|'+mon.id+'|'+id]=true;
+ p.swap[r.slotKey(mon.id,bench)]='press-inclinado-con-barra';
+ p.swap[r.slotKey(mon.id,lat)]='lu-raise';
+ p.add[mon.id]=[{c:'crunch-en-polea',since:later}];
+ r.applyPlan(p);
+ const ex=mon.blocks.flatMap(b=>b.ex),incl=ex.find(e=>e.name==='Press inclinado con barra');
+ assert.ok(incl.strength,'un básico hereda la serie top');assert.equal(incl.doneAs,'press-banca');
+ assert.ok(!ex.find(e=>e.name==='Lu raise').strength);
+ assert.equal(ex.find(e=>e.name==='Lu raise').pair,'A1','la superserie se mantiene');
+ assert.equal(r.dateActivity(date).sessions[0].complete,true,'la sesión anterior sigue completa');
+ assert.ok(r.requiredExercises(mon,later).includes('crunch-en-polea'));
+ assert.equal(r.planChanges(p,mon.id),3);
+ p.drop[r.slotKey(mon.id,ex.find(e=>e.d==='trioh'))]=date;r.applyPlan(p);
+ assert.equal(mon.blocks.flatMap(b=>b.ex).find(e=>e.name==='Lu raise').pair,undefined,'sin pareja deja de ser superserie');
+ r.applyPlan(r.cleanPlan());
+ assert.ok(mon.blocks.flatMap(b=>b.ex).some(e=>e.name==='Press banca'),'restaurar vuelve a la rutina base');
+});
+test('hombro a tope: lateral en máquina tres días y press inclinado en máquina',()=>{
+ const r=setup(),has=(d,name)=>d.blocks.some(b=>b.ex.some(e=>e.name===name));
+ assert.equal(r.TRAINING_DAYS.filter(d=>has(d,'Elevación lateral en máquina')).map(d=>d.n).join(),'Lunes,Viernes,Sábado');
+ assert.ok(has(r.DAYS.find(d=>d.n==='Viernes'),'Press inclinado en máquina'));
 });

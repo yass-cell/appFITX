@@ -538,3 +538,25 @@ nav{background:#09090Dee;backdrop-filter:blur(14px);border-top-color:#2B2533}nav
 /* Suelo de legibilidad: etiquetas funcionales a 11 px como mínimo. */
 .kicker,.training-hero .kicker,.edition,.plan-number p,.raillabel span,.lbl,.chip,.stat span,.sectionhead>span,.callegend span,.textbtn,.chartmodes .lbl{font-size:11px}
 @media(max-width:560px){.training-hero .kicker,.plan-number p{font-size:11px}}
+/* V8 · editar rutina y catálogo */
+.swapmark{display:inline-block;margin-left:7px;font:700 10px/1 'JetBrains Mono',monospace;font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--wide);border:1px solid #4A3D6E;padding:3px 5px 2px;border-radius:2px;vertical-align:2px}
+.plan-tools{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.plan-tools .btn{font-size:13px;padding:11px 14px 9px}
+.plan-tools .btn.armed,.movement-edit .btn.armed{background:#B82A30;border-color:#B82A30;color:#fff}
+.movement-edit{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.movement-edit .btn{font-size:13px;padding:11px 14px 9px}
+.pick-dialog{--art-hot:var(--wide)}
+.pick-search{width:100%;background:#14141E;border:1px solid #32303F;color:var(--chalk);font:15px 'Space Grotesk',sans-serif;padding:11px 12px;border-radius:3px;margin-bottom:10px}
+.pick-search:focus-visible{outline:2px solid var(--wide);outline-offset:1px}
+.pick-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px;scrollbar-width:none}
+.pick-chips button{flex:0 0 auto;font:700 11px/1 'JetBrains Mono',monospace;letter-spacing:.05em;text-transform:uppercase;background:#14141E;color:var(--dim);border:1px solid #32303F;padding:9px 10px;border-radius:2px;cursor:pointer}
+.pick-chips button[aria-pressed="true"]{color:#060608;background:var(--wide);border-color:var(--wide)}
+.pick-list{display:grid;gap:6px}
+.pick-row{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;text-align:left;background:#101017;border:1px solid #26252F;border-radius:3px;padding:8px;color:var(--chalk);cursor:pointer;font:inherit}
+.pick-row:hover,.pick-row:focus-visible{border-color:var(--wide);outline:none}
+.pick-art{width:64px;height:64px;background:#0B0B10;border-radius:2px;display:block}.pick-art svg{width:100%;height:100%;display:block}
+.pick-text{display:grid;gap:2px;min-width:0}
+.pick-text b{font-size:14px;font-weight:700}.pick-text b i{font-style:normal;color:var(--pump);margin-left:6px}
+.pick-text small{font:11px/1.4 'JetBrains Mono',monospace;color:var(--wide)}
+.pick-text em{font-style:normal;font-size:12px;line-height:1.45;color:var(--dim)}
+.pick-empty{color:var(--dim);font-size:13px}

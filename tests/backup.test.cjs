@@ -8,7 +8,7 @@ function app(data={prs:{},bases:{},body:[]},done={},photos=[]){
  const el=id=>{if(!elements.has(id))elements.set(id,{listeners:{},addEventListener(k,fn){this.listeners[k]=fn;}});return elements.get(id);};
  const ctx=vm.createContext({document:{getElementById:el},DB:()=>data,put:d=>{data=d;},doneDb:()=>done,putDone:d=>{done=d;},photoAll:async()=>[...images.values()],photoPut:async p=>images.set(p.d,p),
   FileReader:class{readAsText(file){this.result=file.text;readerDone=this.onload();}},
-  week:1,rail(){},dayTabs(){},sesh(){},volume(){},renderSpec(){},SPEC_MUSCLES:{dl:{},cal:{},bi:{},dpo:{}},buildExList(){},drawChart(){},refreshPhotoDates:async()=>{},renderProgress(){},alert:message=>{if(message.startsWith('Ese archivo'))throw Error(message);}});
+  week:1,cleanPlan:p=>({swap:{...(p?.swap||{})},drop:{...(p?.drop||{})},add:{...(p?.add||{})}}),planChanges:p=>Object.keys(p.swap).length+Object.keys(p.drop).length+Object.keys(p.add).length,applyPlan(){},registerExercises(){},rail(){},dayTabs(){},sesh(){},volume(){},renderSpec(){},SPEC_MUSCLES:{dl:{},cal:{},bi:{},dpo:{}},buildExList(){},drawChart(){},refreshPhotoDates:async()=>{},renderProgress(){},alert:message=>{if(message.startsWith('Ese archivo'))throw Error(message);}});
  vm.runInContext(backupCode,ctx);
  return {backup:async()=>JSON.parse(JSON.stringify(await vm.runInContext('completeBackup()',ctx))),
   import:async copy=>{el('file').listeners.change({target:{files:[{text:JSON.stringify(copy)}],value:'backup.json'}});await readerDone;},week:()=>ctx.week};

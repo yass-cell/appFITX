@@ -11,10 +11,11 @@ const exercise=(name,d,sets,m,cue,why,extra={})=>({name,d,sets,m,cue,why,...extr
 const block=(t,tone,ex)=>({t,tone,ex});
 const DUMB={inc:2};   // mancuernas: salto de 2 kg por mano
 const SMALL={inc:1.25}; // polea ligera: salto mínimo
-const upperWarmup=block('Preparación · 6-8 min','calm',[
+const jointWarmup=exercise('Calentamiento articular · codos y muñecas','joints','1 ronda · sin fatiga','','10 círculos de muñeca en cada sentido, 10 giros de antebrazo con el puño cerrado, 10 flexiones y extensiones de codo y 10 aperturas de dedos. Termina con 15-20 reps de curl y de extensión en polea muy ligera.','Codos, muñecas y antebrazos calientes antes de cargar barra, dominadas y fondos: menos molestias en los tendones.');
+const upperWarmup=block('Preparación · 8-10 min','calm',[jointWarmup,
  exercise('Movilidad de hombro y dorsal','mob','1 ronda · sin fatiga','','2 min suaves, 6 rotaciones torácicas por lado y 8 deslizamientos de brazos en pared. Después 2-3 aproximaciones al primer ejercicio.','Prepara el recorrido sin cansarte antes de las series efectivas.')]);
-const lowerWarmup=block('Preparación · cadera 8 min','calm',[
- exercise('Movilidad de cadera y tobillo','hip90','1 ronda · sin fatiga','','6 transiciones 90/90 por lado, 5 sentadillas cosacas por lado y 8 avances de rodilla sobre el tobillo. Después 3-4 aproximaciones a la prensa.','Abre la cadera antes de cargarla: más rango en la búlgara y en el rumano.')]);
+const lowerWarmup=block('Preparación · cadera 10 min','calm',[jointWarmup,
+ exercise('Movilidad de cadera y tobillo','hip90','1 ronda · sin fatiga','','6 transiciones 90/90 por lado, 5 sentadillas cosacas por lado y 8 avances de rodilla sobre el tobillo. Añade 10 círculos de rodilla y de tobillo. Después 3-4 aproximaciones a la prensa.','Abre la cadera y las rodillas antes de cargarlas: más rango y rodillas cómodas en la búlgara.')]);
 const strengthCue=lift=>`Calienta con 3-4 aproximaciones. Primero la serie top, la más pesada del día; después 3 series con el porcentaje indicado menos de carga. ${lift} Descansa 3 min.`;
 const strengthWhy='Semana de reps: misma carga en la top y una repetición más. Semana de kg: sube un salto y mantén las reps. Registra la serie top: el gráfico de 1RM estimado muestra la progresión.';
 const walk=slot=>block('Cardio · caminar','wet',[
@@ -24,24 +25,25 @@ const mobilityDay=(id,n,slot)=>({id,n,s:'Movilidad de cadera + core',short:'Movi
  exercise('Transiciones 90/90 de cadera','hip90','2 × 6 por lado','','Rota despacio sin apoyar las manos si puedes; pausa 2 s en cada lado.','Rotación interna y externa: la base de una cadera móvil.'),
  exercise('Sentadilla cosaca','cossack','2 × 5 por lado','','Pies muy abiertos, baja sobre una pierna con la otra estirada y el talón apoyado. Sube sin prisa.','Aductores y cadera en rango largo; prepara piernas ágiles para cambios de dirección.'),
  exercise('Estiramiento de flexor de cadera','hipstretch','2 × 30 s por lado','','Media rodilla en el suelo, glúteo apretado y pelvis recogida. Avanza muy poco.','Contrarresta las horas sentado y libera la extensión de cadera.')]),
- block('Core · 8 min','calm',[
- exercise('L-sit · práctica','lsit','4 × 10-20 s','','En paralelas o en el suelo con apoyos: hombros abajo, piernas recogidas o estiradas según tu nivel.','Práctica técnica de la skill: suma segundos, no fatiga.')]),
+ block('Core · 10 min','calm',[
+ exercise('L-sit · práctica','lsit','4 × 10-20 s','','En paralelas o en el suelo con apoyos: hombros abajo, piernas recogidas o estiradas según tu nivel.','Práctica técnica de la skill: suma segundos, no fatiga.'),
+ exercise('Plancha lateral','sideplank','2 × 20-40 s por lado','','Antebrazo bajo el hombro y pies juntos. Sube la cadera hasta que cuerpo y piernas formen una línea; respira sin dejarla caer.','Oblicuos y glúteo medio: un core que aguanta de lado, no solo de frente.')]),
  block('Dominadas · práctica opcional','calm',[
  exercise('Dominadas sin lastre · práctica','pull','4 × 3-5 · opcional','','Repeticiones perfectas y lejos del fallo: para con 3-4 en la recámara. 2 min entre series.','Más frecuencia de dominadas sin fatiga: el patrón mejora y la fuerza del martes y el sábado sube antes.')]),
  walk(slot)]});
 const NEW_DAYS=[
- {id:'v7-d1',n:'Lunes',s:'Pecho + tríceps + hombro',short:'Pecho',tag:'Fuerza',duration:'65-75 min',focus:'BANCA / FONDOS / INCLINADO / Y-RAISE / TRÍCEPS + L-SIT',delt:true,note:'Banca con serie top, fondos lastrados e inclinado con mancuernas. Después Y-raise para el hombro, tríceps sobre la cabeza y L-sit.',blocks:[upperWarmup,
+ {id:'v8-d1',n:'Lunes',s:'Pecho + tríceps + hombro',short:'Pecho',tag:'Fuerza',duration:'65-75 min',focus:'BANCA / FONDOS / INCLINADO / LATERAL EN MÁQUINA / TRÍCEPS + L-SIT',delt:true,note:'Banca con serie top, fondos lastrados e inclinado con mancuernas. Después lateral en máquina para el hombro, tríceps sobre la cabeza y L-sit.',blocks:[upperWarmup,
  block('Fuerza · banca','',[
  exercise('Press banca','bench','','pec',strengthCue('Pies firmes, glúteos apoyados y escápulas estables; baja al pecho bajo sin rebote. Usa soportes de seguridad o ayuda.'),strengthWhy+' Anota el peso total de barra y discos.',{strength:true})]),
  block('Pecho · calistenia y rango','',[
  exercise('Fondos lastrados','dip','3 × 6-10','pec','Tronco algo inclinado, baja hasta que el hombro quede un poco por debajo del codo y sube sin rebote. Deja 1-2 reps; 2 min.','Calistenia lastrada dos veces por semana: pecho bajo y tríceps. Registra 0 para peso corporal, positivo para lastre y negativo para asistencia.'),
  exercise('Press inclinado con mancuernas','incl','3 × 8-12','pec','Banco a 25-35°, baja hasta notar el estiramiento y empuja sin chocar las mancuernas. Deja 1-2 reps; 2 min.','Pecho alto con más recorrido que la barra. Anota kg por mancuerna.',DUMB)]),
  block('Superserie A · hombro + tríceps','pump',[
- exercise('Y-raise en polea','yraise','3 × 12-15','dl','Dos poleas bajas cruzadas. Sube los brazos en diagonal formando una Y por encima de la cabeza, pulgares arriba y sin encoger hombros. Pasa a A2 sin descanso.','Deltoide lateral y trapecio bajo en un rango que las elevaciones normales no cargan: hombro más ancho y sano.',{...SMALL,pair:'A1'}),
+ exercise('Elevación lateral en máquina','latdb','4 × 12-20','dl','Codos contra las almohadillas, sube hasta la línea del hombro con 1 s arriba y baja en 2 s. Sin encoger los hombros. Pasa a A2 sin descanso.','El ejercicio que más ensancha el hombro: estable, sin balanceo y fácil de llevar al fallo. Primera de tres dosis semanales.',{...SMALL,pair:'A1'}),
  exercise('Extensión sobre cabeza en polea','trioh','3 × 10-15','tri','De espaldas a la polea, codos arriba y costillas controladas. Extiende sin mover los hombros. Descansa 90 s y repite A1.','La cabeza larga del tríceps crece más con el brazo por encima de la cabeza: brazo más ancho.',{...SMALL,pair:'A2'})]),
  block('Core · skill','wide',[
  exercise('L-sit en paralelas','lsit','3 × 10-20 s','core','Hombros abajo y brazos bloqueados; piernas recogidas, una estirada o las dos según tu nivel. 90 s.','Fuerza de core y la skill que quieres aprender. Al llegar a 3 × 20 s, pasa a la siguiente progresión.')])]},
- {id:'v7-d2',n:'Martes',s:'Espalda + bíceps',short:'Espalda',tag:'Fuerza',duration:'65-75 min',focus:'DOMINADAS LASTRADAS / REMO A UNA MANO / REMO ALTO / FACE PULL / BÍCEPS',note:'Espalda a full: dominada lastrada con serie top, remo a una mano y remo alto para el espesor. Face pull para el hombro y bíceps con martillo para el braquiorradial.',blocks:[upperWarmup,
+ {id:'v8-d2',n:'Martes',s:'Espalda + bíceps',short:'Espalda',tag:'Fuerza',duration:'65-75 min',focus:'DOMINADAS LASTRADAS / REMO A UNA MANO / REMO ALTO / FACE PULL / BÍCEPS',note:'Espalda a full: dominada lastrada con serie top, remo a una mano y remo alto para el espesor. Face pull para el hombro y bíceps con martillo para el braquiorradial.',blocks:[upperWarmup,
  block('Fuerza · dominada','',[
  exercise('Dominada lastrada','pull','','esp',strengthCue('Agarre prono algo más ancho que los hombros. Sube sin balanceo hasta superar la barra con la barbilla y baja hasta casi extender. Si aún no haces 4 limpias, usa asistencia.'),strengthWhy+' Registra 0 para peso corporal, positivo para lastre y negativo para asistencia.',{strength:true})]),
  block('Espalda · espesor','wide',[
@@ -53,35 +55,36 @@ const NEW_DAYS=[
  exercise('Curl martillo','hammer','3 × 8-12','bi','Agarre neutro, codos quietos y sin balanceo; baja en 2 s. Descansa 90 s y repite B1.','Braquial y braquiorradial: el brazo se ve más grueso de frente y el antebrazo más ancho.',{...DUMB,pair:'B2'})]),
  block('Antebrazo','wide',[
  exercise('Curl de muñeca con mancuerna','wrist','3 × 12-20','ant','Antebrazo apoyado y palma arriba. Deja rodar la mancuerna hasta los dedos y sube flexionando la muñeca. Deja 1-2 reps; 60 s.','Flexores del antebrazo: volumen directo que los remos no dan.',DUMB)])]},
- {id:'v7-d3',n:'Miércoles',s:'Pierna + brazo + core',short:'Pierna',tag:'Build',duration:'75-85 min',focus:'SALTOS / PRENSA / BÚLGARA / ISQUIOS / BRAZOS / CORE',note:'Pierna una vez, bien hecha: saltos para piernas ágiles, prensa con serie top, búlgara y dos de isquio. Después una superserie corta de brazos y core colgado.',blocks:[lowerWarmup,
- block('Potencia · piernas ágiles','',[
- exercise('Saltos al cajón','boxjump','3 × 5','pie','Salta con los brazos, aterriza suave con las rodillas siguiendo los pies y baja andando del cajón. Cajón a una altura que domines; 90 s.','Velocidad y potencia de pierna. Pocas repeticiones, siempre frescas.')]),
+ {id:'v8-d3',n:'Miércoles',s:'Pierna + brazo + core',short:'Pierna',tag:'Build',duration:'75-85 min',focus:'ZANCADA ISOMÉTRICA / PRENSA / CUÁDRICEPS / BÚLGARA / GEMELO / BRAZOS',note:'Pierna una vez, sobre todo con máquinas: zancada isométrica para activar, prensa con serie top, cuádriceps sentado, búlgara, femoral y gemelo con mancuernas. Después una superserie corta de brazos y core colgado.',blocks:[lowerWarmup,
+ block('Activación · isométrico','',[
+ exercise('Zancada isométrica','lungeiso','3 × 30-45 s por pierna','pie','Paso largo, tronco erguido. Baja hasta que la rodilla trasera quede a un palmo del suelo y aguanta quieto, con la rodilla delantera siguiendo el pie. Anota los segundos en reps y los kg por mancuerna si añades peso; 60 s.','Rodillas y tendones fuertes, y cuádriceps encendido antes de la prensa. Cuentan como tres series, no seis.',DUMB)]),
  block('Fuerza · prensa','',[
  exercise('Prensa de pierna horizontal','legpress','','pie',strengthCue('Pelvis apoyada, rodillas siguiendo los pies y bajada sin redondear la lumbar.'),strengthWhy,{strength:true})]),
  block('Pierna · volumen','',[
+ exercise('Extensión de cuádriceps sentado','legext','3 × 10-15','pie','Espalda apoyada y rodilla alineada con el eje de la máquina. Extiende hasta bloquear con 1 s de pausa arriba y baja en 2-3 s. Deja 1-2 reps; 90 s.','Cuádriceps aislado: la línea de encima de la rodilla que define la pierna.'),
  exercise('Sentadilla búlgara con mancuernas','bss','3 × 8-12 por pierna','pie','Pie trasero sobre el banco, tronco algo inclinado y rodilla delantera siguiendo el pie. Baja con control; RIR 2, 90-120 s.','Cuádriceps, glúteo y equilibrio a una pierna. Cuentan como tres series, no seis.',DUMB),
- exercise('Peso muerto rumano con mancuernas','rdl','3 × 8-12','ham','Rodillas suaves, cadera atrás y pesos pegados a las piernas. Baja hasta donde mantengas la espalda neutra; RIR 2, 2 min.','Isquios y glúteo estirados bajo carga.',DUMB),
  exercise('Curl femoral sentado','legcurl','3 × 10-15','ham','Cadera flexionada, muslo sujeto y regreso lento. Deja 1-2 reps; 90 s.','Sentado, el isquio trabaja más estirado y crece más que tumbado.'),
- exercise('Elevación de gemelo','calf','3 × 10-15','cal','Pausa de 2 s abajo con el talón estirado y sube sin rebote. Deja 1-2 reps; 60-90 s.','La pausa abajo importa más que la carga.')]),
+ exercise('Elevación de gemelo con mancuernas','calf','3 × 12-20','cal','De pie en un escalón con una mancuerna en cada mano, o a una pierna con una sola. Pausa de 2 s abajo con el talón estirado y sube sin rebote. Deja 1-2 reps; 60 s.','La pausa abajo importa más que la carga. Anota kg por mancuerna.',DUMB)]),
  block('Superserie C · brazos','wide',[
  exercise('Curl en polea baja','curlc','3 × 10-15','bi','Codos quietos junto al cuerpo y bajada en 2 s. Pasa a C2 sin descanso.','Tensión constante en el bíceps; el único curl en polea de la semana.',{...SMALL,pair:'C1'}),
  exercise('Extensión en polea con cuerda','tripd','3 × 10-15','tri','Codos pegados, abre la cuerda abajo y sube despacio. Descansa 60-90 s y repite C1.','Cabeza lateral del tríceps con tensión constante.',{...SMALL,pair:'C2'})]),
  block('Core · colgado','wide',[
  exercise('Elevación de rodillas colgado','hangraise','3 × 8-15','core','Sube las rodillas y termina enrollando la pelvis hacia las costillas, sin balanceo. Deja 2 reps; 90 s.','Al hacer 3 × 15 limpias, estira una pierna; después las dos.')])]},
- mobilityDay('v7-d4','Jueves',0),
- {id:'v7-d5',n:'Viernes',s:'Hombro + pecho + tríceps',short:'Hombro',tag:'Fuerza',duration:'70-80 min',focus:'PRESS MILITAR / FONDOS / PRESS + APERTURAS / LATERAL / PRESS FRANCÉS',delt:true,note:'Press militar con serie top: el ejercicio de hombro que más fuerza construye. Fondos lastrados, pecho con aperturas, lateral con parciales y press francés para un brazo más ancho.',blocks:[upperWarmup,
+ mobilityDay('v8-d4','Jueves',0),
+ {id:'v8-d5',n:'Viernes',s:'Hombro + pecho + tríceps',short:'Hombro',tag:'Fuerza',duration:'75-85 min',focus:'PRESS MILITAR / FONDOS / INCLINADO EN MÁQUINA / LATERAL + Y-RAISE / PRESS FRANCÉS',delt:true,note:'Día de hombro: press militar con serie top, press inclinado en máquina para el deltoide anterior y el pecho alto, y laterales en máquina con parciales más Y-raise. Fondos, aperturas y press francés completan.',blocks:[upperWarmup,
  block('Fuerza · press militar','',[
  exercise('Press militar con barra','ohp','','da',strengthCue('De pie, glúteos y abdomen apretados, barra desde la clavícula hasta bloquear sobre la cabeza; la cabeza pasa por debajo de la barra sin arquear la lumbar.'),strengthWhy+' Anota el peso total de barra y discos.',{strength:true})]),
  block('Pecho · calistenia y bombeo','',[
  exercise('Fondos lastrados · volumen','dip','3 × 8-12','pec','Algo más ligeros que el lunes: recorrido completo y controlado, sin rebote. Deja 1-2 reps; 2 min.','Segunda dosis semanal de calistenia lastrada.'),
- exercise('Press de pecho sentado en máquina','chestpress','2 × 8-12','pec','Asas a la altura del pecho, espalda apoyada y codos algo por debajo de los hombros. Pasa a D2 sin descanso.','Empuje estable para acumular volumen. Compara cargas solo en la misma máquina.',{pair:'D1'}),
+ exercise('Press inclinado en máquina','chestpress','3 × 8-12','pec','Asiento para que las asas salgan a la altura del pecho alto. Empuja hacia arriba y al frente sin bloquear y baja en 2 s. Pasa a D2 sin descanso.','Deltoide anterior y pecho alto con carga estable: llévalo cerca del fallo sin ayudante. Compara cargas solo en la misma máquina.',{pair:'D1'}),
  exercise('Aperturas con mancuernas','flydb','3 × 10-15','pec','Tumbado en banco plano, codos suaves y fijos. Abre hasta notar el estiramiento del pecho y cierra en arco sin chocar las mancuernas. Descansa 2 min y repite D1.','Pecho en estiramiento con carga: bombeo y crecimiento. Anota kg por mancuerna.',{...DUMB,pair:'D2'})]),
- block('Hombro · lateral','pump',[
- exercise('Elevación lateral en polea · inclinado','lateral','4 × 12-20','dl','Sujétate al poste e inclínate alejándote de la polea. En la última serie, al fallar, 8-10 medias repeticiones desde abajo. 60-90 s.','Las parciales suman tensión cuando el recorrido completo ya no sale.',SMALL)]),
+ block('Hombro · lateral a tope','pump',[
+ exercise('Elevación lateral en máquina','latdb','4 × 12-20','dl','Igual que el lunes, pero en la última serie, al fallar, 8-10 medias repeticiones desde abajo. 60-90 s.','Las parciales suman tensión cuando el recorrido completo ya no sale. Segunda dosis semanal.',{...SMALL}),
+ exercise('Y-raise en polea','yraise','3 × 12-15','dl','Dos poleas bajas cruzadas. Sube los brazos en diagonal formando una Y por encima de la cabeza, pulgares arriba y sin encoger hombros. 60 s.','Deltoide lateral y trapecio bajo en un rango que las elevaciones normales no cargan: hombro más ancho y sano.',SMALL)]),
  block('Superserie E · tríceps + core','wide',[
  exercise('Press francés con barra EZ','skull','3 × 8-12','tri','Tumbado, codos hacia el techo y algo inclinados hacia atrás; baja la barra detrás de la frente y extiende sin abrir los codos. Pasa a E2 sin descanso.','Cabeza larga del tríceps con carga pesada: el tríceps es dos tercios del grosor del brazo.',{pair:'E1'}),
  exercise('Rueda abdominal','abwheel','3 × 6-12','core','De rodillas, costillas abajo y glúteo apretado; rueda hasta donde no se arquee la lumbar y vuelve. Descansa 90 s y repite E1.','Antiextensión: el core fuerte que sostiene banca, press militar y dominadas.',{pair:'E2'})])]},
- {id:'v7-d6',n:'Sábado',s:'Espalda + bíceps + hombro',short:'Espalda 2',tag:'Pump',duration:'65-75 min',focus:'REMO CON BARRA / DOMINADAS SUPINAS / JALÓN / HOMBRO / BÍCEPS',delt:true,note:'Segundo día de espalda: remo con barra con serie top para el espesor, dominadas supinas lastradas y jalón al pecho. Hombro posterior y lateral, y curl predicador con curl inverso para el braquiorradial.',blocks:[upperWarmup,
+ {id:'v8-d6',n:'Sábado',s:'Espalda + bíceps + hombro',short:'Espalda 2',tag:'Pump',duration:'65-75 min',focus:'REMO CON BARRA / DOMINADAS SUPINAS / JALÓN / HOMBRO / BÍCEPS / PLANCHA',delt:true,note:'Segundo día de espalda: remo con barra con serie top para el espesor, dominadas supinas lastradas y jalón al pecho. Hombro posterior y lateral en máquina, curl predicador con curl inverso para el braquiorradial y plancha para cerrar.',blocks:[upperWarmup,
  block('Fuerza · remo','',[
  exercise('Remo con barra','rowbar','','esp',strengthCue('Bisagra de cadera, espalda neutra y barra hacia el ombligo sin dar tirones con el tronco.'),strengthWhy,{strength:true})]),
  block('Espalda · calistenia y anchura','wide',[
@@ -89,18 +92,20 @@ const NEW_DAYS=[
  exercise('Jalón al pecho','latp','3 × 10-12','esp','Agarre algo más ancho que los hombros. Tira hacia la parte alta del pecho con los codos abajo y el torso casi quieto. Deja 1-2 reps; 90 s.','Volumen de dorsal tras las dominadas, con carga fácil de progresar.')]),
  block('Superserie F · hombro','pump',[
  exercise('Pájaro en máquina','rear','3 × 15-20','dpo','Pecho apoyado, codos suaves y pausa al abrir. Pasa a F2 sin descanso.','Deltoide posterior: hombro grande visto de lado y de espaldas.',{...SMALL,pair:'F1'}),
- exercise('Elevación lateral con mancuernas','latdb','3 × 12-20','dl','Codos suaves, sube hasta la línea del hombro y baja en 2 s. Descansa 60-90 s y repite F1.','Tercera dosis de lateral de la semana.',{...DUMB,pair:'F2'})]),
+ exercise('Elevación lateral en máquina','latdb','3 × 12-20','dl','Codos contra las almohadillas, sube hasta la línea del hombro y baja en 2 s. Descansa 60-90 s y repite F1.','Tercera dosis de lateral en máquina de la semana.',{...SMALL,pair:'F2'})]),
  block('Superserie G · bíceps + braquiorradial','wide',[
  exercise('Curl predicador','preacher','3 × 8-12','bi','Brazo apoyado, baja hasta casi extender sin soltar la tensión y sube sin despegar el codo. Pasa a G2.','Cabeza corta del bíceps; el apoyo impide hacer trampa.',{pair:'G1'}),
  exercise('Curl inverso con barra EZ','revcurl','3 × 10-15','ant','Agarre prono, codos pegados al cuerpo; sube sin balanceo y baja en 2 s. Descansa 90 s y repite G1.','Braquiorradial y braquial: antebrazo grueso y brazo más ancho visto de frente.',{pair:'G2'})]),
  block('Antebrazo','wide',[
  exercise('Extensión de muñeca con mancuerna','wrist','2 × 15-20','ant','Antebrazo apoyado y palma abajo; sube y baja en 2 s. Deja 2 reps; 60 s.','Extensores del antebrazo: equilibran el agarre.',DUMB)]),
+ block('Core · plancha','wide',[
+ exercise('Plancha','plank','3 × 30-60 s','core','Antebrazos bajo los hombros, glúteo y abdomen apretados, costillas abajo. Empuja el suelo y no dejes caer la cadera. Al aguantar 60 s, pon un disco en la espalda; anota segundos en reps y kg del disco; 60 s.','Antiextensión con carga: el core que sostiene el remo, el press y las dominadas.')]),
  walk(1)]},
- mobilityDay('v7-d7','Domingo',2)
+ mobilityDay('v8-d7','Domingo',2)
 ];
 DAYS.splice(0,DAYS.length,...NEW_DAYS);
 const TRAINING_DAYS=DAYS.filter(d=>!d.rest);
-const HISTORY_DAYS=[...LEGACY_DAYS,...PREVIOUS_PROGRAM_DAYS,...PREVIOUS_TORSO_DAYS,...PREVIOUS_CHEST_DAYS,...PREVIOUS_V5_DAYS,...DAYS];
+const HISTORY_DAYS=[...LEGACY_DAYS,...PREVIOUS_PROGRAM_DAYS,...PREVIOUS_TORSO_DAYS,...PREVIOUS_CHEST_DAYS,...PREVIOUS_V5_DAYS,...PREVIOUS_V7_DAYS,...DAYS];
 Object.assign(PH,{1:'Suma reps · técnica, RPE 7',2:'Sube kg · +1 salto',3:'Suma reps · +1 rep',4:'Descarga · menos series',5:'Sube kg · top de 4-5',6:'Suma reps · +1 rep',7:'Sube kg · top de 3-4',8:'Test · 1RM estimado'});
 Object.assign(SR,strengthSets);
 function exerciseSets(e,w){

@@ -43,6 +43,7 @@
 - HTML/CSS/JS nativos; sin framework, backend ni CDN. Fuentes locales y uso offline.
 - `index.html`: entrada publicada. `js/data.js`: datos y rutina histórica inicial.
 - `js/program-history.js`: definiciones históricas; `js/program.js`: rutina actual.
+- `js/catalog.js`: alternativas para cambiar o añadir ejercicios desde la app.
 - `js/exercise-art.js`: SVG locales de dos posiciones; `js/app.js`: interfaz y datos.
 - `sw.js`: caché versionada y todos los recursos necesarios en `ASSETS`.
 - Rutas relativas `./…` para funcionar bajo `/appFITX/` en Pages.
@@ -63,13 +64,23 @@ git diff --check
   al probar botones. Usar datos ficticios en pruebas de importación/restauración.
 - Los archivos `research-*`, `js/movement-atlas.js` y `tools/*research*` son borradores
   locales de otra exploración; no forman parte del despliegue actual.
-- Rutina vigente V7 (5 + 2): pecho y espalda 2×, hombro 4 días, brazo/core 3×, pierna 1×,
+- Rutina vigente V8 (5 + 2; ids `v8-d*`, la V7 queda en `PREVIOUS_V7_DAYS`): pecho y espalda 2×, hombro 4 días, brazo 3×, core 4×, pierna 1×,
   movilidad de cadera jueves y domingo. Básicos con serie top: banca, dominada lastrada, prensa,
   press militar y remo con barra. Dominadas y fondos lastrados 2× por semana (el usuario quiere más
   calistenia). Semanas alternas de reps y kg (`WEEK_FOCUS`). Favoritos del usuario: jalón al pecho,
   remo con barra, remo a una mano, banca, inclinado con mancuernas, aperturas con mancuernas,
-  calistenia lastrada; quiere aprender L-sit, más grosor de brazo y braquiorradial (curl martillo,
-  curl inverso, press francés) y Y-raise para el hombro. No repetir curls parecidos el mismo día.
+  calistenia lastrada; hombro a tope: elevación lateral en máquina lunes, viernes y sábado y press
+  inclinado en máquina el viernes; quiere aprender L-sit, más grosor de brazo y braquiorradial (curl martillo,
+  curl inverso, press francés) y Y-raise (viernes) para el hombro. No repetir curls parecidos el mismo día.
+  Pierna sobre todo con máquinas: prensa, cuádriceps sentado, búlgara, femoral y gemelo con
+  mancuernas; zancada isométrica en lugar de saltos al cajón. Planchas (sábado y movilidad) y
+  calentamiento articular de codos, muñecas y antebrazos al inicio de cada sesión.
+- Rutina editable desde la app: ficha → Cambiar ejercicio / Quitar del día; al final del día
+  + Añadir ejercicio / Restaurar. Se guarda en `gym-app-v1.plan` ({swap, drop, add}) por id de día
+  (`v8-d*`): si cambian los ids, migrar el plan. El ejercicio nuevo hereda la casilla del hueco
+  (`doneAs`) y los añadidos llevan `since`, así las sesiones pasadas siguen completas. Empezar de
+  cero conserva el plan. Catálogo de alternativas en `js/catalog.js` (`top` recomendado, `big` puede
+  ocupar una serie top); cada entrada necesita un dibujo en `js/exercise-art.js`.
 - Diseño: se mantiene el mundo visual actual (decisión del usuario, oct. 2026); solo se
   mejoran los dibujos. Contexto de producto en `PRODUCT.md`.
 - Preferencias actuales: interfaz oscura, colores por subcategoría, tarjetas
